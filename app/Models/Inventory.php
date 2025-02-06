@@ -12,6 +12,13 @@ class Inventory extends Model
         'quantity',
         'code_item'
     ];
- 
+
     protected $table = 'inventories';
+    protected $primaryKey = 'id_inventories';
+
+    // Define the relationship with OrderItem
+    public function orderItems()
+    {
+        return $this->hasMany(order_items::class, 'inventories_id');
+    }
 }

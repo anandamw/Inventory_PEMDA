@@ -10,7 +10,6 @@ use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 
-// Removed redundant route definition for '/dashboard'
 
 
 Route::middleware('guest')->group(function () {
@@ -34,12 +33,11 @@ Route::middleware('guest')->group(function () {
 
 // auth middleware 
 Route::middleware(['auth'])->group(function () {
-
-
-    Route::post('/save', [SaveController::class, 'save']);
+    
+    Route::get('/item', [InventoryController::class, 'index']);
+    Route::post('/save', [SaveController::class, 'store']);
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
-    Route::get('/item', [InventoryController::class, 'index']);
     Route::get('/inventory', [InventoryController::class, 'index']);
     Route::post('/inventory/store', [InventoryController::class, 'store']);
     Route::post('/inventory/{id}/update', [InventoryController::class, 'update']);
