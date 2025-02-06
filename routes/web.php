@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 
 // Removed redundant route definition for '/dashboard'
@@ -32,6 +33,9 @@ Route::middleware('guest')->group(function () {
 
 // auth middleware 
 Route::middleware(['auth'])->group(function () {
+
+
+    Route::get('/user', [UserController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/item', [InventoryController::class, 'index']);
     Route::get('/inventory', [InventoryController::class, 'index']);

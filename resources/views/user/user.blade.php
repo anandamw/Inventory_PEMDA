@@ -1,92 +1,131 @@
 @extends('components.template')
 
 @section('content')
-        <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
-            <div class="container-fluid">
-              <!-- row -->
-    
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-header">
-                      <h4 class="card-title">Profile Datatable</h4>
-                      <a href="" class="btn btn-success">Create Data</a>
-                    </div>
-                    <div class="card-body">
-                      <div class="table-responsive">
-                        <table
-                          id="example3"
-                          class="display"
-                          style="min-width: 845px"
-                        >
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>Pict</th>
-                              <th>Item</th>
-                              <th>kode</th>
-                              <th>Gender</th>
-                              <th>Bidang</th>
-                              <th>Mobile</th>
-                              <th>Email</th>
-                              <th>QR</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>
-                                <img
-                                  class="rounded-circle"
-                                  width="35"
-                                  src="images/profile/small/pic10.jpg"
-                                  alt=""
-                                />
-                              </td>
-                              <td>Shou Itou</td>
-                              <td>20001876151912</td>
-                              <td>Female</td>
-                              <td>Kominfo</td>
-                              <td>
-                                <a href="javascript:void(0);"
-                                  ><strong>123 456 7890</strong></a
-                                >
-                              </td>
-                              <td>
-                                <a href="javascript:void(0);"
-                                  ><strong>info@example.com</strong></a
-                                >
-                              </td>
-                              <td>img_QR</td>
-                              <td>
-                                <div class="d-flex">
-                                  <a
-                                    href="#"
-                                    class="btn btn-primary shadow btn-xs sharp me-1"
-                                    ><i class="fas fa-pencil-alt"></i
-                                  ></a>
-                                  <a
-                                    href="#"
-                                    class="btn btn-danger shadow btn-xs sharp"
-                                    ><i class="fa fa-trash"></i
-                                  ></a>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--**********************************
-                Content body end
+    <!--**********************************
+                Content body start
             ***********************************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Card kiri atas: Detail User -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="card-title">Data User</h4>
+                            <a href="table-datatable-basic-create.html"
+                                class="btn btn-primary btn-info d-flex align-items-center justify-content-center">
+                                <span class="btn-icon-start text-info">
+                                    <i class="fa fa-plus color-info"></i>
+                                </span>
+                                Add
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="example" class="display" style="min-width: 845px">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Name</th>
+                                            <th>NIP</th>
+                                            <th>Role</th>
+                                            <th>Start date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>ajon kdo</td>
+                                            <td>1256721</td>
+                                            <td>Admin</td>
+                                            <td>2011/04/25</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Garrett Winters</td>
+                                            <td>1256722</td>
+                                            <td>Accountant</td>
+                                            <td>2011/07/25</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Ashton Cox</td>
+                                            <td>1256723</td>
+                                            <td>Junior Technical Author</td>
+                                            <td>2009/01/12</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Airi Satou</td>
+                                            <td>1256725</td>
+                                            <td>Accountant</td>
+                                            <td>2008/11/28</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Brielle Williamson</td>
+                                            <td>1256726</td>
+                                            <td>Integration Specialist</td>
+                                            <td>2012/12/02</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

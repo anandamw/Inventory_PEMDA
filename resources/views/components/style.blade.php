@@ -4,7 +4,7 @@
 <link rel="shortcut icon" type="image/png" href="{{ asset('') }}assets/images/favicon.png" />
 <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
 <!-- Datatable -->
-{{-- <link href="{{ asset('') }}assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" /> --}}
+<link href="{{ asset('') }}assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <!-- Custom Stylesheet -->
 <link href="{{ asset('') }}assets/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet" />
 <link href="{{ asset('') }}assets/css/style.css" rel="stylesheet" />
