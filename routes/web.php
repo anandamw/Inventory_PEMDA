@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 
@@ -35,6 +36,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth'])->group(function () {
 
 
+    Route::post('/save', [SaveController::class, 'save']);
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/item', [InventoryController::class, 'index']);

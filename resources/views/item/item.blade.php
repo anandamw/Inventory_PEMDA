@@ -19,6 +19,8 @@
                                                 <input type="file" class="update-flie">
                                                 <i class="fa fa-camera"></i>
                                             </div>
+
+                                            <h1>{{ auth()->user()->id }}</h1>
                                         </div>
                                         <div class="author-info">
                                             <h6 class="title">{{ auth()->user()->name }}</h6>
@@ -65,12 +67,15 @@
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>{{ $item->updated_at }}</td>
                                                 <td>
-                                                    <button class="btn btn-warning btn-sm addToCart"
-                                                        data-id="{{ $item->id }}" data-code="{{ $item->code_item }}"
+                                                    <div class="shopping-cart   addToCart" data-id="{{ $item->code_item }}"
+                                                        data-code="{{ $item->code_item }}"
                                                         data-name="{{ $item->item_name }}"
                                                         data-img="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
-                                                        data-price="{{ $item->price }}">Tambah
-                                                    </button>
+                                                        data-price="{{ $item->price }}">
+                                                        <a class="btn btn-primary" href="javascript:void(0);;"><i
+                                                                class="fa fa-shopping-basket me-2"></i>Cart</a>
+                                                    </div>
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -114,6 +119,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -124,11 +131,11 @@
             const ordersTableBody = document.getElementById('orders'); // Tabel keranjang
             const noDataRow = document.querySelector('.no-data'); // Baris teks "Tidak ada data"
             const totalItemsElement = document.getElementById('totalItems'); // Total item
-            const totalPriceElement = document.getElementById('totalPrice'); // Total harga
+
             const submitButton = document.getElementById('submitCart'); // Tombol submit
 
             let totalItems = 0;
-            let totalPrice = 0;
+
 
             // Cek awal apakah ada data atau tidak
             if (ordersTableBody.children.length === 1) { // Hanya ada satu baris (baris no-data)
@@ -137,34 +144,48 @@
 
             addToCartButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Mengambil data atribut dari tombol yang diklik
                     const id = this.getAttribute('data-id');
                     const code = this.getAttribute('data-code');
                     const name = this.getAttribute('data-name');
                     const img = this.getAttribute('data-img');
                     const price = parseInt(this.getAttribute('data-price'));
 
+                    // Cek apakah item sudah ada di dalam keranjang
+                    const existingRow = ordersTableBody.querySelector(`tr[data-id="${id}"]`);
+                    if (existingRow) {
+                        // Jika sudah ada, tingkatkan quantity-nya saja
+                        const quantityInput = existingRow.querySelector('.quantity');
+                        quantityInput.value = parseInt(quantityInput.value) + 1;
+                        updateTotal();
+                        return; // Hentikan proses agar tidak menambahkan row baru
+                    }
+
                     // Membuat elemen baru untuk baris tabel keranjang
                     const newRow = document.createElement('tr');
+                    newRow.setAttribute('data-id',
+                        id); // Tambahkan atribut data-id untuk tracking item unik
 
                     newRow.innerHTML = `
-                        <td class="py-2">${totalItems + 1}</td>
-                        <td class="py-2"><strong>#${code}</strong></td>
-                        <td class="py-2">
-                            <img src="${img}" alt="Product Photo" width="50">
-                        </td>
-                        <td class="py-2">${name}</td>
-                        <td class="py-2 text-center">
-                            <div class="input-group quantity-control">
-                                <button class="btn btn-outline-primary btn-sm decrement" type="button">-</button>
-                                <input type="number" class="form-control text-center quantity" value="1" min="1">
-                                <button class="btn btn-outline-primary btn-sm increment" type="button">+</button>
-                            </div>
-                        </td>
-                        <td class="py-2">
-                            <button class="btn btn-danger btn-sm removeItem">Hapus</button>
-                        </td>
-                    `;
+            <td class="py-2">${totalItems + 1}</td>
+            <td class="py-2"><strong>#${code}</strong></td>
+            <td class="py-2">
+                <img src="${img}" alt="Product Photo" width="50">
+            </td>
+            <td class="py-2">${name}</td>
+            <td class="py-2 text-center">
+                <div class="input-group quantity-control">
+                    <button class="btn btn-outline-primary btn-sm decrement" type="button">-</button>
+                    <input type="number" class="form-control text-center quantity" value="1" min="1">
+                    <button class="btn btn-outline-primary btn-sm increment" type="button">+</button>
+                </div>
+            </td>
+          <td class="py-2">
+    <button class="btn btn-danger btn-sm removeItem">
+        <i class="fa fa-trash me-2"></i> Hapus
+    </button>
+</td>
+
+        `;
 
                     // Menambahkan baris baru ke tabel keranjang
                     ordersTableBody.appendChild(newRow);
@@ -174,11 +195,10 @@
 
                     // Update total item dan total harga
                     totalItems += 1;
-                    totalPrice += price;
+
                     updateTotal();
 
-                    // Mengaktifkan tombol submit
-                    submitButton.disabled = false;
+
                 });
             });
 
@@ -194,7 +214,7 @@
 
                     // Update total item dan total harga
                     totalItems -= 1;
-                    totalPrice -= price;
+
                     updateTotal();
 
                     // Jika tabel keranjang kosong, tampilkan pesan "Tidak ada data"
@@ -229,14 +249,56 @@
             // Fungsi untuk memperbarui total item dan total harga
             function updateTotal() {
                 totalItemsElement.innerText = totalItems;
-                totalPriceElement.innerText = totalPrice;
+
             }
 
-            // Event listener untuk submit data
             submitButton.addEventListener('click', function() {
-                alert('Data keranjang berhasil disubmit!');
-                // Di sini, Anda bisa menambahkan kode untuk mengirimkan data ke server
+                const cartItems = [];
+
+                document.querySelectorAll('#orders tr[data-id]').forEach(row => {
+                    const id = row.getAttribute('data-id');
+                    const quantityInput = row.querySelector('.quantity');
+
+                    if (!quantityInput) {
+                        console.error("Elemen input quantity tidak ditemukan pada row:", row);
+                        return;
+                    }
+
+                    cartItems.push({
+                        id,
+                        quantity: quantityInput.value,
+                    });
+                });
+
+                // Cek apakah elemen meta CSRF token ada
+                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfTokenElement) {
+                    console.error("CSRF token tidak ditemukan di halaman.");
+                    return;
+                }
+                const csrfToken = csrfTokenElement.getAttribute('content');
+
+                console.log("Data yang dikirim:", cartItems);
+
+                fetch('/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            items: cartItems
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        window.location.reload();
+                    })
+                    .catch(error => console.error('Error:', error));
             });
+
+
         });
     </script>
 @endsection
