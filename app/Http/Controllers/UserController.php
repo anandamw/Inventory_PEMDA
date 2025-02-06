@@ -10,4 +10,13 @@ class UserController extends Controller
     {
         return view('user.user');
     }
+
+
+    public function create()
+{
+    return view('user.user_create');
+}
+
+
+
 }

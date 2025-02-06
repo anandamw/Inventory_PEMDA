@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/create', [UserController::class, 'create']);
+
+    Route::get('/history', [HistoryController::class, 'index']);
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/item', [InventoryController::class, 'index']);
     Route::get('/inventory', [InventoryController::class, 'index']);
