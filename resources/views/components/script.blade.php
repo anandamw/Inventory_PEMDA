@@ -32,7 +32,7 @@
     $(document).ready(function() {
         var table = $('#mytable').DataTable({
             "paging": true,
-            "searching": false,
+            "searching": true,
             "info": true,
             "lengthChange": false,
             "pageLength": 3,
