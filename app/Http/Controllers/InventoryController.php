@@ -14,10 +14,16 @@ class InventoryController extends Controller
      */
     public function index()
     {
+        $headerText = 'Data Inventory';
         $items = Inventory::all();
-        return view('item.item', compact('items'));
+        return view('item.item', compact('items'), compact('headerText'));
     }
 
+    public function create()
+{
+    $headerText = 'Add Item';
+    return view('item.item_create', compact('headerText'));  // Pastikan untuk membuat view dengan nama 'item.create'
+}
 
     public function store(Request $request)
     {

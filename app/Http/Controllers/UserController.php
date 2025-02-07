@@ -8,13 +8,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('user.user');
+        $headerText = 'Data User';
+        return view('user.user', compact('headerText'));
     }
 
 
     public function create()
 {
-    return view('user.user_create');
+    $headerText = 'Create User';
+    return view('user.user_create', compact('headerText'));
 }
 
 

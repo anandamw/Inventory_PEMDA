@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inventories', function (Blueprint $table) {
-            $table->unsignedBigInteger("id_inventories")->autoIncrement();
-            $table->string("code_item");
-            $table->string("item_name");
-            $table->string("img_item")->nullable();
-            $table->integer("quantity");
+        Schema::create('orders', function (Blueprint $table) {
+            $table->unsignedBigInteger("id_orders")->autoIncrement();
+            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->decimal('total_price', 10, 2);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inventories');
+        Schema::dropIfExists('orders');
     }
 };

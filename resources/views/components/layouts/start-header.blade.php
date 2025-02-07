@@ -7,7 +7,7 @@
             <div class="collapse navbar-collapse justify-content-between">
                 <div class="header-left">
                     <div class="dashboard_bar">
-                        Dashboard
+                        {{ $headerText }} 
                     </div>
                 </div>
                 <div class="navbar-nav header-right">
@@ -124,51 +124,6 @@
                                                 </li>
                                                 <li>
                                                     <div class="timeline-panel">
-                                                        <div class="media me-2 media-info">
-                                                            KG
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Resport created successfully</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-success">
-                                                            <i class="fa fa-home"></i>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2">
-                                                            <img alt="image" width="50"
-                                                                src="images/avatar/1.jpg">
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-danger">
-                                                            KG
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Resport created successfully</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
                                                         <div class="media me-2 media-primary">
                                                             <i class="fa fa-home"></i>
                                                         </div>
@@ -190,7 +145,7 @@
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button"
                                     data-bs-toggle="dropdown">
-                                    <img src="images/profile/pic1.jpg" alt="">
+                                    <img src="{{asset('')}}assets/images/profile/pic1.jpg" alt="">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" style="">
                                     <a href="app-profile.html" class="dropdown-item ai-icon ">
@@ -209,7 +164,7 @@
                                         </svg>
                                         <span class="ms-2">Profile </span>
                                     </a>
-                                    <a href="page-login.html" class="dropdown-item ai-icon">
+                                    <a href="/logout" class="dropdown-item ai-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                             viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

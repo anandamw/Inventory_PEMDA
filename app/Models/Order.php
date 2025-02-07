@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class History extends Model
+class Order extends Model
 {
     protected $guarded = [''];
-    protected $table = 'history';
+    protected $table = 'orders';
 }

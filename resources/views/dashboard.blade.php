@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-12 col-xxl-12 col-sm-6 wow fadeInRight" data-wow-delay="0.3s">
+                        <div class="col-xl-12 col-xxl-12 col-sm-12 wow fadeInRight" data-wow-delay="0.3s">
                             <div class="card digital-cash">
                                 <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0 heading">About</h4>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
 
-
+                
 
                 <div class="col-xl-12">
                     <div class="card">

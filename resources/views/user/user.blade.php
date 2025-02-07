@@ -2,8 +2,8 @@
 
 @section('content')
     <!--**********************************
-                Content body start
-            ***********************************-->
+                    Content body start
+                ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -23,103 +23,35 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example" class="display" style="min-width: 845px">
-                                  <thead>
-                                    <tr>
-                                      <th>No</th>
-                                      <th>Profile</th>
-                                      <th>Name</th>
-                                      <th>NIP</th>
-                                      <th>Start date</th>
-                                      <th>Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>1</td>
-                                      <td>Gambar</td>
-                                      <td>ajon kdo</td>
-                                      <td>1256721</td>
-                                      <td>Admin</td>
-                                      <td>
-                                        <div class="d-flex justify-content-center">
-                                          <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
-                                            <i class="fas fa-pencil-alt"></i>
-                                          </a>
-                                          <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                            <i class="fa fa-trash"></i>
-                                          </a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>2</td>
-                                      <td>Gambar</td>
-                                      <td>Garrett Winters</td>
-                                      <td>1256722</td>
-                                      <td>Accountant</td>
-                                      <td>
-                                        <div class="d-flex justify-content-center">
-                                          <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
-                                            <i class="fas fa-pencil-alt"></i>
-                                          </a>
-                                          <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                            <i class="fa fa-trash"></i>
-                                          </a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>3</td>
-                                      <td>Gambar</td>
-                                      <td>Ashton Cox</td>
-                                      <td>1256723</td>
-                                      <td>Junior Technical Author</td>
-                                      <td>
-                                        <div class="d-flex justify-content-center">
-                                          <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
-                                            <i class="fas fa-pencil-alt"></i>
-                                          </a>
-                                          <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                            <i class="fa fa-trash"></i>
-                                          </a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>4</td>
-                                      <td>Gambar</td>
-                                      <td>Airi Satou</td>
-                                      <td>1256725</td>
-                                      <td>Accountant</td>
-                                      <td>
-                                        <div class="d-flex justify-content-center">
-                                          <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
-                                            <i class="fas fa-pencil-alt"></i>
-                                          </a>
-                                          <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                            <i class="fa fa-trash"></i>
-                                          </a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>5</td>
-                                      <td>Gambar</td>
-                                      <td>Brielle Williamson</td>
-                                      <td>1256726</td>
-                                      <td>Integration Specialist</td>
-                                      <td>
-                                        <div class="d-flex justify-content-center">
-                                          <a href="#" class="btn btn-primary shadow btn-xs sharp me-1">
-                                            <i class="fas fa-pencil-alt"></i>
-                                          </a>
-                                          <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                            <i class="fa fa-trash"></i>
-                                          </a>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Profile</th>
+                                            <th>Name</th>
+                                            <th>NIP</th>
+                                            <th>Start date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Gambar</td>
+                                            <td>ajon kdo</td>
+                                            <td>1256721</td>
+                                            <td>Admin</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-primary shadow btn-xs sharp me-1"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i
+                                                            class="fas fa-pencil-alt"></i></button>
+                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -128,4 +60,43 @@
             </div>
         </div>
     </div>
+
+
+     <!-- Modal -->
+     <div class="modal fade" id="exampleModalCenter">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Edit User</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal">
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="card-body">
+                  <form action="" method="POST" enctype="multipart/form-data">
+                      @csrf
+                      <div class="row">
+                          <!-- Kolom Kanan: Input Data -->
+                          <div class="col-md-12">
+                              <div class="mb-3">
+                                  <label for="name" class="form-label">Name</label>
+                                  <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama....." style="opacity: 0.6;" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="nip" class="form-label">NIP</label>
+                                  <input type="text" class="form-control" id="nip" name="nip" placeholder="Masukkan NIP....." style="opacity: 0.6;" required>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>    
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
 @endsection

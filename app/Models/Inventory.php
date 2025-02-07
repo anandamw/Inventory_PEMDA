@@ -12,4 +12,6 @@ class Inventory extends Model
         'quantity',
         'code_item'
     ];
+ 
+    protected $table = 'inventories';
 }

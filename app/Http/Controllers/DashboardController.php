@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
 
 
-
-        return view('dashboard');
+        $headerText = 'Dashboard';
+        return view('dashboard', compact('headerText'));
     }
 }

@@ -11,7 +11,8 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        return view('history.history');
+        $headerText = 'Data History';
+        return view('history.history' , compact('headerText'));
     }
 
     /**
