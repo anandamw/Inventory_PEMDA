@@ -131,19 +131,54 @@
             cursor: pointer;
             text-decoration: underline;
         }
+
+        .scroll-up-indicator {
+            position: fixed;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 1.5s infinite alternate ease-in-out;
+            z-index: 100;
+        }
+
+        .scroll-icon {
+            width: 60px;
+            filter: hue-rotate(0deg);
+            transition: filter 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translate(-50%, 0);
+            }
+
+            100% {
+                transform: translate(-50%, -20px);
+            }
+        }
     </style>
 </head>
 
 <body>
     <div id="particles-js"></div>
 
-    <div class="home-content" id="home-content">
+    <div class="home-content text-center" id="home-content">
         <img src="{{ asset('') }}assets/images/pemda.png" alt="Logishub Logo" class="home-logo" width="150"
             height="auto">
         <h1>Welcome to Logishub</h1>
-        <p>Logishub provides innovative solutions to streamline logistics processes. Scroll down to start the QR Code
-            scanner.</p>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <p>LogisHub - Platform web pemerintah untuk pengambilan barang yang cepat, mudah, dan terdata,
+                        mengurangi birokrasi serta meningkatkan efisiensi.</p>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-up-indicator">
+            <img id="scroll-icon" src="{{ asset('') }}assets/images/Scroll.png" alt="Scroll Up" class="scroll-icon">
+        </div>
     </div>
+
 
     <div class="scanner-card" id="scanner-card">
         <div class="card shadow-lg p-4">
@@ -167,6 +202,14 @@
         </div>
     </div>
 
+
+    <script>
+        let hue = 0;
+        setInterval(() => {
+            hue = (hue + 30) % 360;
+            document.getElementById('scroll-icon').style.filter = `hue-rotate(${hue}deg)`;
+        }, 1000);
+    </script>
     <script>
         // Menonaktifkan efek partikel pada perangkat mobile
         if (window.innerWidth > 767) {
@@ -227,7 +270,7 @@
                                     } else {
                                         $("#qr-reader-results").append(
                                             "<br><span class='text-warning'>No redirection URL provided.</span>"
-                                            );
+                                        );
                                     }
                                 },
                                 error: function(xhr) {
