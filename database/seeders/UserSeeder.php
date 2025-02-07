@@ -32,18 +32,19 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($users as $userData) {
-            $token = Str::random(15);
-
+            $jsonDATAtoken = [
+                'token' => '123123'
+            ];
             $user = User::create([
                 'name' => $userData['name'],
                 'nip' => $userData['nip'],
                 'role' => $userData['role'],
-                'token' => $token,
-                'password' => bcrypt($token), // Enkripsi password
+                'token' => $jsonDATAtoken['token'],
+                'password' => bcrypt(123123123), // Enkripsi password
             ]);
 
             // Encode token untuk QR Code
-            $jsonData = json_encode(['token' => $token]);
+            $jsonData = json_encode($jsonDATAtoken);
 
             // Tentukan path penyimpanan QR Code
             $path = public_path('Pictures/qrcode');

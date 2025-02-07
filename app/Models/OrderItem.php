@@ -8,7 +8,7 @@ use App\Models\Inventory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Database\Eloquent\Model;
 
-class order_items extends Model
+class OrderItem extends Model
 {
 
     protected $table = 'order_items';  // Explicitly define the table name if needed
@@ -16,7 +16,7 @@ class order_items extends Model
 
 
     // The attributes that are mass assignable.
-    protected $fillable = ['users_id', 'inventories_id', 'quantity'];
+    protected $fillable = ['users_id', 'inventories_id', 'quantity', 'status'];
 
     // Define the relationships
     public function user()

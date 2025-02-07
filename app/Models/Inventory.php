@@ -19,6 +19,6 @@ class Inventory extends Model
     // Define the relationship with OrderItem
     public function orderItems()
     {
-        return $this->hasMany(order_items::class, 'inventories_id');
+        return $this->hasMany(OrderItem::class, 'inventories_id');
     }
 }

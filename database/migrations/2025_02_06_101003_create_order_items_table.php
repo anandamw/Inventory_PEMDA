@@ -22,6 +22,8 @@ return new class extends Migration
 
             $table->integer('quantity');
 
+            $table->enum('status', ['pending', 'success', 'failed', 'cancelled', 'process'])->default('pending');
+
             $table->timestamps();
         });
     }
