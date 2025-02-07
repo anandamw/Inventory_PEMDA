@@ -2,8 +2,8 @@
 
 @section('content')
     <!--**********************************
-                    Content body start
-                ***********************************-->
+                                                                                                            Content body start
+                                                                                                        ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -29,28 +29,38 @@
                                             <th>Profile</th>
                                             <th>Name</th>
                                             <th>NIP</th>
-                                            <th>Start date</th>
+                                            <th>Role</th>
+                                            <th>Qrcode Download</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Gambar</td>
-                                            <td>ajon kdo</td>
-                                            <td>1256721</td>
-                                            <td>Admin</td>
-                                            <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-primary shadow btn-xs sharp me-1"
-                                                        data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i
-                                                            class="fas fa-pencil-alt"></i></button>
-                                                    <a href="#" class="btn btn-danger shadow btn-xs sharp">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @foreach ($users as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td><img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                                        alt="" width="50"></td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->nip }}</td>
+                                                <td>{{ $item->role }}</td>
+                                                <td>
+                                                    <a href="{{ asset('Pictures/qrcode/' . $item->name) }}.png" download> >>
+                                                        Qrcode
+                                                        Download</a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-center">
+                                                        <button type="button"
+                                                            class="btn btn-primary shadow btn-xs sharp me-1"
+                                                            data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i
+                                                                class="fas fa-pencil-alt"></i></button>
+                                                        <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -62,41 +72,42 @@
     </div>
 
 
-     <!-- Modal -->
-     <div class="modal fade" id="exampleModalCenter">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Edit User</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal">
-                  </button>
-              </div>
-              <div class="modal-body">
-                <div class="card-body">
-                  <form action="" method="POST" enctype="multipart/form-data">
-                      @csrf
-                      <div class="row">
-                          <!-- Kolom Kanan: Input Data -->
-                          <div class="col-md-12">
-                              <div class="mb-3">
-                                  <label for="name" class="form-label">Name</label>
-                                  <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama....." style="opacity: 0.6;" required>
-                              </div>
-                              <div class="mb-3">
-                                  <label for="nip" class="form-label">NIP</label>
-                                  <input type="text" class="form-control" id="nip" name="nip" placeholder="Masukkan NIP....." style="opacity: 0.6;" required>
-                              </div>
-                          </div>
-                      </div>
-                  </form>
-              </div>    
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-          </div>
-      </div>
-  </div>
-
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <!-- Kolom Kanan: Input Data -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            placeholder="Masukkan nama....." style="opacity: 0.6;" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nip" class="form-label">NIP</label>
+                                        <input type="text" class="form-control" id="nip" name="nip"
+                                            placeholder="Masukkan NIP....." style="opacity: 0.6;" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

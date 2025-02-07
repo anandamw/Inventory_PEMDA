@@ -10,8 +10,8 @@
                         <div class="card-header">
                             <h5 class="card-title">Add User</h5>
                         </div>
-                        <form action="/user/store" method="POST">
-                            <div class="card-body">
+                        <div class="card-body">
+                            <form action="/user/store" method="POST">
                                 @csrf
                                 <div class="row">
                                     <!-- Kolom Kanan: Input Data -->
@@ -37,14 +37,14 @@
                                         </div>
                                     </div>
                                 </div>
+                            </form>
+                        </div>
+                        <div class="card-footer d-sm-flex justify-content-between align-items-center">
+                            <div class="ms-auto">
+                                <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                                <button type="submit" class="btn btn-primary">Add</button>
                             </div>
-                            <div class="card-footer d-sm-flex justify-content-between align-items-center">
-                                <div class="ms-auto">
-                                    <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

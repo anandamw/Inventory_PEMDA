@@ -21,10 +21,11 @@ class User extends Authenticatable
         'name',
         'nip',
         'role',
+        'token',
         'password',
         'profile'
     ];
-    
+
     public function orderItems()
     {
         return $this->hasMany(order_items::class, 'inventories_id');

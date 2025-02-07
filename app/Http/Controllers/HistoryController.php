@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\order_items;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -12,7 +13,8 @@ class HistoryController extends Controller
     public function index()
     {
         $headerText = 'Data History';
-        return view('history.history' , compact('headerText'));
+        $historys = order_items::all();
+        return view('history.history', compact('headerText', 'historys'));
     }
 
     /**

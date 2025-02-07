@@ -237,14 +237,17 @@
 
         $(document).ready(function() {
             var lastResult = "";
-            var countResults = 0;
 
             function onScanSuccess(decodedText) {
+                console.log("🔍 Scanned Data: ", decodedText); // Debug scanned data
+
                 if (decodedText !== lastResult) {
-                    countResults++;
                     lastResult = decodedText;
                     $("#qr-reader-results").html("<strong>Scanned Data:</strong> " + decodedText);
+
+                    let token;
                     try {
+<<<<<<< HEAD
                         var data = JSON.parse(decodedText);
                         var name = data.name;
                         var nip = data.nip;
@@ -286,10 +289,59 @@
                             $("#qr-reader-results").append(
                                 "<br><span class='text-danger'>Invalid data format.</span>");
                         }
+=======
+                        console.log("🛠️ Trying to parse JSON...");
+                        let data = JSON.parse(decodedText);
+                        token = data.token;
+                        console.log("✅ JSON parsed successfully: ", token);
+>>>>>>> 38a5397 (update)
                     } catch (e) {
-                        console.error("JSON Parsing Error:", e);
+                        console.log("⚠️ JSON Parsing Error:", e);
+                        console.log("🛠️ Assuming raw token format...");
+                        token = decodedText;
+                    }
+
+                    if (token) {
+                        console.log("✅ Token extracted: ", token);
+                        $("#qr-reader-results").append("<br><strong>Token:</strong> " + token);
+
+                        $.ajax({
+                            url: "/scan-qr-code",
+                            method: "POST",
+                            data: {
+                                token: token,
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            beforeSend: function() {
+                                console.log("📡 Sending token to server...");
+                            },
+                            success: function(response) {
+                                console.log("✅ Server Response: ", response);
+                                if (response.redirect_url) {
+                                    console.log("🔗 Redirecting to:", response.redirect_url);
+                                    window.location.href = response.redirect_url;
+                                } else {
+                                    console.log("⚠️ No redirection URL provided.");
+                                    $("#qr-reader-results").append(
+                                        "<br><span class='text-warning'>No redirection URL provided.</span>"
+                                    );
+                                }
+                            },
+                            error: function(xhr) {
+                                console.error("❌ AJAX Error:", xhr);
+                                var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
+                                    "Unknown error occurred.";
+                                $("#qr-reader-results").append(
+                                    "<br><span class='text-danger'>Error: " + errorMessage +
+                                    "</span>"
+                                );
+                            }
+                        });
+                    } else {
+                        console.log("❌ Invalid token format!");
                         $("#qr-reader-results").append(
-                            "<br><span class='text-danger'>Invalid QR Code format.</span>");
+                            "<br><span class='text-danger'>Invalid token format.</span>"
+                        );
                     }
                 }
             }
@@ -299,6 +351,8 @@
                 qrbox: 250
             });
             html5QrcodeScanner.render(onScanSuccess);
+
+
 
             $(window).on("scroll", function() {
                 if ($(window).scrollTop() > 200) {

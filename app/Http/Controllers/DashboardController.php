@@ -12,6 +12,10 @@ class DashboardController extends Controller
 
 
         $headerText = 'Dashboard';
+
+
+        toast('Selamat datang di layanan Logishub', 'info');
+
         return view('dashboard', compact('headerText'));
     }
 }

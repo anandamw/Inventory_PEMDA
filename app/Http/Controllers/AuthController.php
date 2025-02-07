@@ -23,81 +23,54 @@ class AuthController extends Controller
 
     public function scanQrCode(Request $request)
     {
-        // Debug log untuk melihat data yang diterima
-        \Log::info("Received QR Code Data: ", $request->all());
+        \Log::info("📥 Received QR Code Data: ", $request->all());
 
-        // Validasi input QR Code
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'nip' => 'required|string',
-            'password' => 'nullable|string',
+            'token' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            \Log::error("Validation Failed: ", $validator->errors()->toArray());
+            \Log::error("❌ Validation Failed: Token is required!");
             return response()->json([
                 'status' => 'error',
-                'message' => 'Invalid or missing data.',
-                'errors' => $validator->errors()
+                'message' => 'Token tidak boleh kosong.'
             ], 400);
         }
 
-        try {
-            $name = $request->input('name');
-            $nip = $request->input('nip');
-            $password = $request->input('password');
+        $token = $request->input('token');
+        \Log::info("🔍 Searching for user with token: $token");
 
-            // Cek apakah pengguna dengan NIP ini sudah ada
-            $user = User::where('nip', $nip)->first();
+        // Cari user berdasarkan token
+        $user = User::where('token', $token)->first();
 
-            if ($user) {
-                // Jika ditemukan, lakukan login
-                if (Hash::check($password, $user->password)) {
-                    Auth::login($user);
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'Login successful.',
-                        'redirect_url' => route('home')
-                    ]);
-                } else {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Invalid password.'
-                    ], 401);
-                }
-            } else {
-                // Jika tidak ditemukan, buat user baru dan login
-                $user = User::create([
-                    'name' => $name,
-                    'nip' => $nip,
-                    'password' => Hash::make($password),
-                    'role' => 'user'
-                ]);
-
-                Auth::login($user);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Registration successful. You are now logged in.',
-                    'redirect_url' => route('home')
-                ]);
-            }
-        } catch (QueryException $e) {
-            \Log::error("Database Error: " . $e->getMessage());
+        if (!$user) {
+            \Log::error("❌ Token not found in database!");
             return response()->json([
                 'status' => 'error',
-                'message' => 'Database error occurred.',
-                'error' => $e->getMessage()
-            ], 500);
-        } catch (\Exception $e) {
-            \Log::error("Unexpected Error: " . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An unexpected error occurred.',
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => 'Token tidak valid atau pengguna tidak ditemukan.'
+            ], 401);
         }
+
+        // Pastikan token tidak kosong di database
+        if (empty($user->token)) {
+            \Log::error("❌ Token found in database, but it's empty!");
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token di database kosong. Tidak bisa login.'
+            ], 401);
+        }
+
+        \Log::info("✅ Token valid! Logging in user: " . $user->id);
+        Auth::login($user);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login berhasil!',
+            'redirect_url' => route('home')
+        ]);
     }
+
+
 
     public function logout()
     {

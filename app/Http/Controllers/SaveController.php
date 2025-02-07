@@ -29,6 +29,7 @@ class SaveController extends Controller
                 ]);
             }
 
+            toast('Berhasil mengambil barang', 'success');
             return response()->json(['success' => true, 'message' => 'Pesanan berhasil disimpan!']);
         } catch (\Exception $e) {
             \Log::error("Error saving order: " . $e->getMessage());

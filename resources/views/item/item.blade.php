@@ -59,6 +59,7 @@
                                             <th>Stok</th>
                                             <th>Date</th>
                                             <th>Action</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,9 +96,11 @@
                                                             </svg>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalGrid">Edit</button>
+                                                            <button type="button" class="dropdown-item"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modalGrid">Edit</button>
                                                             <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </td>
@@ -146,11 +149,8 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-
-
-         <!-- Modal -->
-         <div class="modal fade" id="modalGrid">
+    <<<<<<< HEAD <!-- Modal -->
+        <div class="modal fade" id="modalGrid">
             <div class="modal-dialog modal-lg" role="document"> <!-- Added modal-lg class here -->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -166,25 +166,30 @@
                                 <div class="col-md-8">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Item</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan Nama Item....." style="opacity: 0.6;" required>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            placeholder="Masukkan Nama Item....." style="opacity: 0.6;" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="stock" class="form-label">Quantity</label>
-                                        <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan Quantity....." style="opacity: 0.6;" required>
+                                        <input type="number" class="form-control" id="stock" name="stock"
+                                            placeholder="Masukkan Quantity....." style="opacity: 0.6;" required>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Kolom Kanan: Input Gambar dengan Drag & Drop -->
                                 <div class="col-md-4 text-center">
                                     <label class="form-label d-block">Item Picture</label>
-                                    <div class="card p-1 shadow-sm d-flex align-items-center"> 
-                                        <div id="dropZone" class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
+                                    <div class="card p-1 shadow-sm d-flex align-items-center">
+                                        <div id="dropZone"
+                                            class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
                                             style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;">
-                                            <img id="previewImage" src="https://via.placeholder.com/100" alt="Drag & Drop" class="img-thumbnail"
+                                            <img id="previewImage" src="https://via.placeholder.com/100"
+                                                alt="Drag & Drop" class="img-thumbnail"
                                                 style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
-                                            <input type="file" id="formFile" name="profile_picture" accept="image/*" hidden onchange="previewFile(event)">
+                                            <input type="file" id="formFile" name="profile_picture" accept="image/*"
+                                                hidden onchange="previewFile(event)">
                                         </div>
-                                    </div>                                                                                
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -196,55 +201,53 @@
                 </div>
             </div>
         </div>
-        
 
 
 
-=======
->>>>>>> bdee02d780b9c5876b583bfa6b5d24b09e8cee60
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const addToCartButtons = document.querySelectorAll(".addToCart");
-            const ordersTableBody = document.getElementById("orders");
-            const noDataRow = document.querySelector(".no-data");
-            const totalItemsElement = document.getElementById("totalItems");
-            const submitButton = document.getElementById("submitCart");
 
-            function updateTotal() {
-                let totalItems = 0;
-                document.querySelectorAll("#orders tr[data-id]").forEach(row => {
-                    totalItems += parseInt(row.querySelector(".quantity").value, 10);
-                });
-                totalItemsElement.innerText = totalItems;
-            }
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const addToCartButtons = document.querySelectorAll(".addToCart");
+                const ordersTableBody = document.getElementById("orders");
+                const noDataRow = document.querySelector(".no-data");
+                const totalItemsElement = document.getElementById("totalItems");
+                const submitButton = document.getElementById("submitCart");
 
-            function checkEmptyCart() {
-                if (ordersTableBody.querySelectorAll("tr[data-id]").length === 0) {
-                    noDataRow.style.display = "table-row";
-                } else {
-                    noDataRow.style.display = "none";
+                function updateTotal() {
+                    let totalItems = 0;
+                    document.querySelectorAll("#orders tr[data-id]").forEach(row => {
+                        totalItems += parseInt(row.querySelector(".quantity").value, 10);
+                    });
+                    totalItemsElement.innerText = totalItems;
                 }
-            }
 
-            addToCartButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const id = this.getAttribute("data-id");
-                    const code = this.getAttribute("data-code");
-                    const name = this.getAttribute("data-name");
-                    const img = this.getAttribute("data-img");
-                    const price = parseInt(this.getAttribute("data-price"), 10);
-
-                    const existingRow = ordersTableBody.querySelector(`tr[data-id="${id}"]`);
-                    if (existingRow) {
-                        const quantityInput = existingRow.querySelector(".quantity");
-                        quantityInput.value = parseInt(quantityInput.value, 10) + 1;
-                        updateTotal();
-                        return;
+                function checkEmptyCart() {
+                    if (ordersTableBody.querySelectorAll("tr[data-id]").length === 0) {
+                        noDataRow.style.display = "table-row";
+                    } else {
+                        noDataRow.style.display = "none";
                     }
+                }
 
-                    const newRow = document.createElement("tr");
-                    newRow.setAttribute("data-id", id);
-                    newRow.innerHTML = `
+                addToCartButtons.forEach(button => {
+                    button.addEventListener("click", function() {
+                        const id = this.getAttribute("data-id");
+                        const code = this.getAttribute("data-code");
+                        const name = this.getAttribute("data-name");
+                        const img = this.getAttribute("data-img");
+                        const price = parseInt(this.getAttribute("data-price"), 10);
+
+                        const existingRow = ordersTableBody.querySelector(`tr[data-id="${id}"]`);
+                        if (existingRow) {
+                            const quantityInput = existingRow.querySelector(".quantity");
+                            quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+                            updateTotal();
+                            return;
+                        }
+
+                        const newRow = document.createElement("tr");
+                        newRow.setAttribute("data-id", id);
+                        newRow.innerHTML = `
                         <td class="py-2">${ordersTableBody.children.length}</td>
                         <td class="py-2"><strong>#${code}</strong></td>
                         <td class="py-2"><img src="${img}" alt="Product Photo" width="50"></td>
@@ -261,93 +264,92 @@
                         </td>
                     `;
 
-                    ordersTableBody.appendChild(newRow);
-                    checkEmptyCart();
-                    updateTotal();
+                        ordersTableBody.appendChild(newRow);
+                        checkEmptyCart();
+                        updateTotal();
+                    });
                 });
-            });
 
-            ordersTableBody.addEventListener("click", function(e) {
-                if (e.target.classList.contains("removeItem")) {
-                    e.target.closest("tr").remove();
-                    checkEmptyCart();
-                    updateTotal();
-                }
-
-                if (e.target.classList.contains("increment")) {
-                    const quantityInput = e.target.closest("tr").querySelector(".quantity");
-                    quantityInput.value = parseInt(quantityInput.value, 10) + 1;
-                    updateTotal();
-                }
-
-                if (e.target.classList.contains("decrement")) {
-                    const quantityInput = e.target.closest("tr").querySelector(".quantity");
-                    if (parseInt(quantityInput.value, 10) > 1) {
-                        quantityInput.value = parseInt(quantityInput.value, 10) - 1;
+                ordersTableBody.addEventListener("click", function(e) {
+                    if (e.target.classList.contains("removeItem")) {
+                        e.target.closest("tr").remove();
+                        checkEmptyCart();
                         updateTotal();
                     }
-                }
-            });
 
+                    if (e.target.classList.contains("increment")) {
+                        const quantityInput = e.target.closest("tr").querySelector(".quantity");
+                        quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+                        updateTotal();
+                    }
 
-            submitButton.addEventListener("click", function() {
-                const cartItems = [];
-
-                document.querySelectorAll("#orders tr[data-id]").forEach(row => {
-                    const id = row.getAttribute("data-id");
-                    const quantity = parseInt(row.querySelector(".quantity").value, 10);
-
-                    console.log("Item ID:", id, "Quantity:", quantity); // Debug ID
-
-                    cartItems.push({
-                        id: id,
-                        quantity: quantity
-                    });
+                    if (e.target.classList.contains("decrement")) {
+                        const quantityInput = e.target.closest("tr").querySelector(".quantity");
+                        if (parseInt(quantityInput.value, 10) > 1) {
+                            quantityInput.value = parseInt(quantityInput.value, 10) - 1;
+                            updateTotal();
+                        }
+                    }
                 });
 
-                if (cartItems.length === 0) {
-                    alert("Keranjang masih kosong!");
-                    return;
-                }
 
-                console.log("Cart Items:", cartItems); // Debug sebelum fetch
+                submitButton.addEventListener("click", function() {
+                    const cartItems = [];
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+                    document.querySelectorAll("#orders tr[data-id]").forEach(row => {
+                        const id = row.getAttribute("data-id");
+                        const quantity = parseInt(row.querySelector(".quantity").value, 10);
 
-                fetch("/save", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": csrfToken
-                        },
-                        body: JSON.stringify({
-                            items: cartItems
-                        })
-                    })
-                    .then(async response => {
-                        const text = await response.text(); // Ambil respons mentah untuk debugging
-                        console.log("Raw response:", text);
 
-                        if (!response.ok) {
-                            throw new Error(`HTTP Error ${response.status}: ${text}`);
-                        }
-                        return JSON.parse(text);
-                    })
-                    .then(data => {
-                        console.log("Response JSON:", data);
-                        if (data.success) {
-                            alert(data.message);
-                            window.location.reload();
-                        } else {
-                            alert("Terjadi kesalahan, coba lagi.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Terjadi kesalahan saat mengirim data.");
+                        cartItems.push({
+                            id: id,
+                            quantity: quantity
+                        });
                     });
 
+                    if (cartItems.length === 0) {
+                        alert("Keranjang masih kosong!");
+                        return;
+                    }
+
+                    // console.log("Cart Items:", cartItems);  
+
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+                    fetch("/save", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": csrfToken
+                            },
+                            body: JSON.stringify({
+                                items: cartItems
+                            })
+                        })
+                        .then(async response => {
+                            const text = await response.text(); // Ambil respons mentah untuk debugging
+                            // console.log("Raw response:", text);
+
+                            if (!response.ok) {
+                                throw new Error(`HTTP Error ${response.status}: ${text}`);
+                            }
+                            return JSON.parse(text);
+                        })
+                        .then(data => {
+                            // console.log("Response JSON:", data);
+                            if (data.success) {
+                                alert(data.message);
+                                window.location.reload();
+                            } else {
+                                alert("Terjadi kesalahan, coba lagi.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Terjadi kesalahan saat mengirim data.");
+                        });
+
+                });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

@@ -17,9 +17,7 @@ class QrCodeController extends Controller
 
         // Data dummy untuk QR Code
         $data = [
-            'name' => 'Rahmat Syafri Kurniaman',
-            'nip' => '2202310115',
-            'password' => $token, // Pastikan password ada
+            'token' => 'h6XgdqJ2vJup4OB'
         ];
 
 
