@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from cryptozone.dexignzone.com/xhtml/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Feb 2025 02:57:18 GMT -->
+
 
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta name="keywords" content="" />
     <meta name="author" content="" />
@@ -16,11 +15,13 @@
     <meta property="og:description" content="CryptoZone  :Crypto Trading Admin  Admin Bootstrap 5 Template" />
     <meta property="og:image" content="social-image.png" />
     <meta name="format-detection" content="telephone=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- PAGE TITLE HERE -->
     <title>LogisHub</title>
-
     @include('components.style')
+
 </head>
 
 <body>

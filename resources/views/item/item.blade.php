@@ -20,7 +20,6 @@
                                                 <i class="fa fa-camera"></i>
                                             </div>
 
-                                            <h1>{{ auth()->user()->id }}</h1>
                                         </div>
                                         <div class="author-info">
                                             <h6 class="title">{{ auth()->user()->name }}</h6>
@@ -66,7 +65,7 @@
                                         {{-- jika tidak ada gambar tampilkan assets/images/no-image.png --}}
                                         @foreach ($items as $item)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->id_inventories }}</td>
                                                 <td>{{ $item->code_item }}</td>
                                                 <td><img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
                                                         alt="Item Image" width="50"></td>
@@ -74,11 +73,11 @@
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>{{ $item->updated_at }}</td>
                                                 <td>
-                                                    <div class="shopping-cart   addToCart" data-id="{{ $item->code_item }}"
+                                                    <div class="shopping-cart   addToCart"
+                                                        data-id="{{ $item->id_inventories }}"
                                                         data-code="{{ $item->code_item }}"
                                                         data-name="{{ $item->item_name }}"
-                                                        data-img="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
-                                                        data-price="{{ $item->price }}">
+                                                        data-img="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}">
                                                         <a class="btn btn-primary" href="javascript:void(0);;"><i
                                                                 class="fa fa-shopping-basket me-2"></i>Cart</a>
                                                     </div>
@@ -147,6 +146,7 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
 
          <!-- Modal -->
@@ -200,180 +200,154 @@
 
 
 
+=======
+>>>>>>> bdee02d780b9c5876b583bfa6b5d24b09e8cee60
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartButtons = document.querySelectorAll('.addToCart'); // Menangkap tombol "Tambah"
-            const ordersTableBody = document.getElementById('orders'); // Tabel keranjang
-            const noDataRow = document.querySelector('.no-data'); // Baris teks "Tidak ada data"
-            const totalItemsElement = document.getElementById('totalItems'); // Total item
+        document.addEventListener("DOMContentLoaded", function() {
+            const addToCartButtons = document.querySelectorAll(".addToCart");
+            const ordersTableBody = document.getElementById("orders");
+            const noDataRow = document.querySelector(".no-data");
+            const totalItemsElement = document.getElementById("totalItems");
+            const submitButton = document.getElementById("submitCart");
 
-            const submitButton = document.getElementById('submitCart'); // Tombol submit
+            function updateTotal() {
+                let totalItems = 0;
+                document.querySelectorAll("#orders tr[data-id]").forEach(row => {
+                    totalItems += parseInt(row.querySelector(".quantity").value, 10);
+                });
+                totalItemsElement.innerText = totalItems;
+            }
 
-            let totalItems = 0;
-
-
-            // Cek awal apakah ada data atau tidak
-            if (ordersTableBody.children.length === 1) { // Hanya ada satu baris (baris no-data)
-                noDataRow.style.display = 'table-row';
+            function checkEmptyCart() {
+                if (ordersTableBody.querySelectorAll("tr[data-id]").length === 0) {
+                    noDataRow.style.display = "table-row";
+                } else {
+                    noDataRow.style.display = "none";
+                }
             }
 
             addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const code = this.getAttribute('data-code');
-                    const name = this.getAttribute('data-name');
-                    const img = this.getAttribute('data-img');
-                    const price = parseInt(this.getAttribute('data-price'));
+                button.addEventListener("click", function() {
+                    const id = this.getAttribute("data-id");
+                    const code = this.getAttribute("data-code");
+                    const name = this.getAttribute("data-name");
+                    const img = this.getAttribute("data-img");
+                    const price = parseInt(this.getAttribute("data-price"), 10);
 
-                    // Cek apakah item sudah ada di dalam keranjang
                     const existingRow = ordersTableBody.querySelector(`tr[data-id="${id}"]`);
                     if (existingRow) {
-                        // Jika sudah ada, tingkatkan quantity-nya saja
-                        const quantityInput = existingRow.querySelector('.quantity');
-                        quantityInput.value = parseInt(quantityInput.value) + 1;
+                        const quantityInput = existingRow.querySelector(".quantity");
+                        quantityInput.value = parseInt(quantityInput.value, 10) + 1;
                         updateTotal();
-                        return; // Hentikan proses agar tidak menambahkan row baru
-                    }
-
-                    // Membuat elemen baru untuk baris tabel keranjang
-                    const newRow = document.createElement('tr');
-                    newRow.setAttribute('data-id',
-                        id); // Tambahkan atribut data-id untuk tracking item unik
-
-                    newRow.innerHTML = `
-            <td class="py-2">${totalItems + 1}</td>
-            <td class="py-2"><strong>#${code}</strong></td>
-            <td class="py-2">
-                <img src="${img}" alt="Product Photo" width="50">
-            </td>
-            <td class="py-2">${name}</td>
-            <td class="py-2 text-center">
-                <div class="input-group quantity-control">
-                    <button class="btn btn-outline-primary btn-sm decrement" type="button">-</button>
-                    <input type="number" class="form-control text-center quantity" value="1" min="1">
-                    <button class="btn btn-outline-primary btn-sm increment" type="button">+</button>
-                </div>
-            </td>
-          <td class="py-2">
-    <button class="btn btn-danger btn-sm removeItem">
-        <i class="fa fa-trash me-2"></i> Hapus
-    </button>
-</td>
-
-        `;
-
-                    // Menambahkan baris baru ke tabel keranjang
-                    ordersTableBody.appendChild(newRow);
-
-                    // Menyembunyikan pesan "Tidak ada data" jika ada item di keranjang
-                    noDataRow.style.display = 'none';
-
-                    // Update total item dan total harga
-                    totalItems += 1;
-
-                    updateTotal();
-
-
-                });
-            });
-
-            // Event listener untuk hapus item dari keranjang
-            ordersTableBody.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('removeItem')) {
-                    const row = e.target.closest('tr');
-                    const price = parseInt(row.querySelector('.quantity').value) * parseInt(row
-                        .querySelector('td:nth-child(2)').innerText.slice(1));
-
-                    // Menghapus baris yang berisi tombol hapus yang diklik
-                    row.remove();
-
-                    // Update total item dan total harga
-                    totalItems -= 1;
-
-                    updateTotal();
-
-                    // Jika tabel keranjang kosong, tampilkan pesan "Tidak ada data"
-                    if (ordersTableBody.children.length === 1) { // Cek jika hanya ada baris no-data
-                        noDataRow.style.display = 'table-row';
-                    }
-                }
-
-                // Fungsi untuk menangani increment
-                if (e.target && e.target.classList.contains('increment')) {
-                    const quantityInput = e.target.closest('tr').querySelector('.quantity');
-                    let currentValue = parseInt(quantityInput.value);
-                    quantityInput.value = currentValue + 1;
-
-                    // Update total harga
-                    updateTotal();
-                }
-
-                // Fungsi untuk menangani decrement
-                if (e.target && e.target.classList.contains('decrement')) {
-                    const quantityInput = e.target.closest('tr').querySelector('.quantity');
-                    let currentValue = parseInt(quantityInput.value);
-                    if (currentValue > 1) {
-                        quantityInput.value = currentValue - 1;
-                    }
-
-                    // Update total harga
-                    updateTotal();
-                }
-            });
-
-            // Fungsi untuk memperbarui total item dan total harga
-            function updateTotal() {
-                totalItemsElement.innerText = totalItems;
-
-            }
-
-            submitButton.addEventListener('click', function() {
-                const cartItems = [];
-
-                document.querySelectorAll('#orders tr[data-id]').forEach(row => {
-                    const id = row.getAttribute('data-id');
-                    const quantityInput = row.querySelector('.quantity');
-
-                    if (!quantityInput) {
-                        console.error("Elemen input quantity tidak ditemukan pada row:", row);
                         return;
                     }
 
+                    const newRow = document.createElement("tr");
+                    newRow.setAttribute("data-id", id);
+                    newRow.innerHTML = `
+                        <td class="py-2">${ordersTableBody.children.length}</td>
+                        <td class="py-2"><strong>#${code}</strong></td>
+                        <td class="py-2"><img src="${img}" alt="Product Photo" width="50"></td>
+                        <td class="py-2">${name}</td>
+                        <td class="py-2 text-center">
+                            <div class="input-group quantity-control">
+                                <button class="btn btn-outline-primary btn-sm decrement">-</button>
+                                <input type="number" class="form-control text-center quantity" value="1" min="1">
+                                <button class="btn btn-outline-primary btn-sm increment">+</button>
+                            </div>
+                        </td>
+                        <td class="py-2">
+                            <button class="btn btn-danger btn-sm removeItem"><i class="fa fa-trash me-2"></i> Hapus</button>
+                        </td>
+                    `;
+
+                    ordersTableBody.appendChild(newRow);
+                    checkEmptyCart();
+                    updateTotal();
+                });
+            });
+
+            ordersTableBody.addEventListener("click", function(e) {
+                if (e.target.classList.contains("removeItem")) {
+                    e.target.closest("tr").remove();
+                    checkEmptyCart();
+                    updateTotal();
+                }
+
+                if (e.target.classList.contains("increment")) {
+                    const quantityInput = e.target.closest("tr").querySelector(".quantity");
+                    quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+                    updateTotal();
+                }
+
+                if (e.target.classList.contains("decrement")) {
+                    const quantityInput = e.target.closest("tr").querySelector(".quantity");
+                    if (parseInt(quantityInput.value, 10) > 1) {
+                        quantityInput.value = parseInt(quantityInput.value, 10) - 1;
+                        updateTotal();
+                    }
+                }
+            });
+
+
+            submitButton.addEventListener("click", function() {
+                const cartItems = [];
+
+                document.querySelectorAll("#orders tr[data-id]").forEach(row => {
+                    const id = row.getAttribute("data-id");
+                    const quantity = parseInt(row.querySelector(".quantity").value, 10);
+
+                    console.log("Item ID:", id, "Quantity:", quantity); // Debug ID
+
                     cartItems.push({
-                        id,
-                        quantity: quantityInput.value,
+                        id: id,
+                        quantity: quantity
                     });
                 });
 
-                // Cek apakah elemen meta CSRF token ada
-                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfTokenElement) {
-                    console.error("CSRF token tidak ditemukan di halaman.");
+                if (cartItems.length === 0) {
+                    alert("Keranjang masih kosong!");
                     return;
                 }
-                const csrfToken = csrfTokenElement.getAttribute('content');
 
-                console.log("Data yang dikirim:", cartItems);
+                console.log("Cart Items:", cartItems); // Debug sebelum fetch
 
-                fetch('/save', {
-                        method: 'POST',
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+                fetch("/save", {
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": csrfToken
                         },
                         body: JSON.stringify({
                             items: cartItems
                         })
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        window.location.reload();
+                    .then(async response => {
+                        const text = await response.text(); // Ambil respons mentah untuk debugging
+                        console.log("Raw response:", text);
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP Error ${response.status}: ${text}`);
+                        }
+                        return JSON.parse(text);
                     })
-                    .catch(error => console.error('Error:', error));
+                    .then(data => {
+                        console.log("Response JSON:", data);
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.reload();
+                        } else {
+                            alert("Terjadi kesalahan, coba lagi.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Terjadi kesalahan saat mengirim data.");
+                    });
+
             });
-
-
         });
     </script>
 @endsection
