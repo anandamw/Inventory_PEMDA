@@ -247,54 +247,10 @@
 
                     let token;
                     try {
-<<<<<<< HEAD
-                        var data = JSON.parse(decodedText);
-                        var name = data.name;
-                        var nip = data.nip;
-                        var password = data.password;
-
-                        if (name && nip && password) {
-                            $("#qr-reader-results").append("<br><strong>Name:</strong> " + name +
-                                "<br><strong>NIP:</strong> " + nip);
-
-                            $.ajax({
-                                url: "/scan-qr-code",
-                                method: 'POST',
-                                data: {
-                                    name: name,
-                                    nip: nip,
-                                    password: password,
-                                    _token: $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success: function(response) {
-                                    console.log("Server Response:", response);
-                                    if (response.redirect_url) {
-                                        window.location.href = response.redirect_url;
-                                    } else {
-                                        $("#qr-reader-results").append(
-                                            "<br><span class='text-warning'>No redirection URL provided.</span>"
-                                        );
-                                    }
-                                },
-                                error: function(xhr) {
-                                    console.error("AJAX Error:", xhr);
-                                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
-                                        "Unknown error occurred.";
-                                    $("#qr-reader-results").append(
-                                        "<br><span class='text-danger'>Error: " + errorMessage +
-                                        "</span>");
-                                }
-                            });
-                        } else {
-                            $("#qr-reader-results").append(
-                                "<br><span class='text-danger'>Invalid data format.</span>");
-                        }
-=======
                         console.log("🛠️ Trying to parse JSON...");
                         let data = JSON.parse(decodedText);
                         token = data.token;
                         console.log("✅ JSON parsed successfully: ", token);
->>>>>>> 38a5397 (update)
                     } catch (e) {
                         console.log("⚠️ JSON Parsing Error:", e);
                         console.log("🛠️ Assuming raw token format...");
