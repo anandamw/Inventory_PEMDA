@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('profile')->nullable();
             $table->string('password');
+
             $table->string('nip', 15)->unique();
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->rememberToken();
@@ -44,6 +45,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

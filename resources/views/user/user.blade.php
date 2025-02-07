@@ -2,8 +2,8 @@
 
 @section('content')
     <!--**********************************
-                                                                                                            Content body start
-                                                                                                        ***********************************-->
+                                                                                                                                Content body start
+                                                                                                                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -31,6 +31,7 @@
                                             <th>NIP</th>
                                             <th>Role</th>
                                             <th>Qrcode Download</th>
+                                            <th>IsOnline</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -44,9 +45,17 @@
                                                 <td>{{ $item->nip }}</td>
                                                 <td>{{ $item->role }}</td>
                                                 <td>
-                                                    <a href="{{ asset('Pictures/qrcode/' . $item->name) }}.png" download> >>
+                                                    <a href="{{ asset('Pictures/qrcode/' . $item->name) }}.png"
+                                                        style="color: rgb(38, 38, 255)" download> >>
                                                         Qrcode
                                                         Download</a>
+                                                </td>
+                                                <td>
+                                                    @if ($item->isOnline())
+                                                        <span style="color: green;">Online</span>
+                                                    @else
+                                                        <span style="color: red;">Offline</span>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">

@@ -23,28 +23,28 @@ class UserSeeder extends Seeder
                 'name' => 'Ananda Maulana Wahyudi',
                 'nip' => '2202310054',
                 'role' => 'Admin',
+                'token' => '123123' // Token statis untuk Admin
             ],
             [
                 'name' => 'Rahmat Syafri Kurniaman',
                 'nip' => '2202310115',
                 'role' => 'User',
+                'token' => '456456' // Token statis untuk User
             ]
         ];
 
         foreach ($users as $userData) {
-            $jsonDATAtoken = [
-                'token' => '123123'
-            ];
+            // Membuat user
             $user = User::create([
                 'name' => $userData['name'],
                 'nip' => $userData['nip'],
                 'role' => $userData['role'],
-                'token' => $jsonDATAtoken['token'],
-                'password' => bcrypt(123123123), // Enkripsi password
+                'token' => $userData['token'],
+                'password' => bcrypt('123123123'), // Enkripsi password default
             ]);
 
             // Encode token untuk QR Code
-            $jsonData = json_encode($jsonDATAtoken);
+            $jsonData = json_encode(['token' => $userData['token']]);
 
             // Tentukan path penyimpanan QR Code
             $path = public_path('Pictures/qrcode');
@@ -55,7 +55,7 @@ class UserSeeder extends Seeder
             }
 
             // Nama file QR Code
-            $fileName = "$user->name.png";
+            $fileName = "{$user->name}.png";
 
             // Simpan QR Code dalam format PNG
             QrCode::format('png')

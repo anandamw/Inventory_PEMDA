@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\UpdateLastSeen;
+use Illuminate\Contracts\Http\Kernel;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,8 +20,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Kernel $kernel): void
     {
-        //
+        $kernel->appendMiddlewareToGroup('web', UpdateLastSeen::class);
     }
 }

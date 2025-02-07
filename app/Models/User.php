@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\OrderItem;
+use Illuminate\Support\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,14 +25,22 @@ class User extends Authenticatable
         'role',
         'token',
         'password',
-        'profile'
+        'profile',
+        'last_seen'
+    ];
+
+    protected $casts = [
+        'last_seen' => 'datetime',
     ];
 
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class, 'inventories_id');
     }
-
+    public function isOnline(): bool
+    {
+        return $this->last_seen && $this->last_seen->diffInMinutes(Carbon::now()) < 5;
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
 {
     public function index()
     {
         $users = User::all();
+
         $headerText = 'Data User';
         return view('user.user', compact('headerText', 'users'));
     }
+
 
 
     public function create()

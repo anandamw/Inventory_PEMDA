@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\order_items;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -13,7 +14,7 @@ class HistoryController extends Controller
     public function index()
     {
         $headerText = 'Data History';
-        $historys = order_items::all();
+        $historys = OrderItem::all();
         return view('history.history', compact('headerText', 'historys'));
     }
 

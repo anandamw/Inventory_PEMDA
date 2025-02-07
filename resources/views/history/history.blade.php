@@ -2,8 +2,8 @@
 
 @section('content')
     <!--**********************************
-                                Content body start
-                            ***********************************-->
+                                                Content body start
+                                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -33,8 +33,9 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td><img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
                                                         alt="Item Image" width="50"></td>
-                                                <td>ajon kdo</td>
-                                                <td>1256721</td>
+                                                <td>{{ $item->user->name }}</td>
+                                                <td>{{ $item->quantity }}</td>
+
                                                 <td>Admin</td>
                                                 <td class="text-end ps-0">
                                                     <div class="dropdown d-flex justify-content-center">
