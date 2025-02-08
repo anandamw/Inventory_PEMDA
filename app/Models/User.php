@@ -26,8 +26,7 @@ class User extends Authenticatable
         'token',
         'password',
         'profile',
-        'last_seen'
-    ];
+     ];
 
     protected $casts = [
         'last_seen' => 'datetime',
@@ -37,10 +36,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(OrderItem::class, 'inventories_id');
     }
-    public function isOnline(): bool
-    {
-        return $this->last_seen && $this->last_seen->diffInMinutes(Carbon::now()) < 5;
-    }
+     
     /**
      * The attributes that should be hidden for serialization.
      *

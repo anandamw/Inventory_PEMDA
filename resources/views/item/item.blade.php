@@ -19,7 +19,6 @@
                                                 <input type="file" class="update-flie">
                                                 <i class="fa fa-camera"></i>
                                             </div>
-
                                         </div>
                                         <div class="author-info">
                                             <h6 class="title">{{ auth()->user()->name }}</h6>
@@ -225,7 +224,7 @@
 
 
 
-    <script>
+    <script defer>
         document.addEventListener("DOMContentLoaded", function() {
             const addToCartButtons = document.querySelectorAll(".addToCart");
             const ordersTableBody = document.getElementById("orders");
@@ -330,6 +329,7 @@
                     alert("Keranjang masih kosong!");
                     return;
                 }
+
 
                 const events = document.getElementById("events").value;
                 const phone = document.getElementById("phone").value;

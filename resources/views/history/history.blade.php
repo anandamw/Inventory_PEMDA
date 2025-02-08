@@ -1,9 +1,6 @@
 @extends('components.template')
 
 @section('content')
-    <!--**********************************
-                                                Content body start
-                                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -19,24 +16,21 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Profile</th>
                                             <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>History date</th>
-                                            <th>Action</th>
+                                            <th>Events</th>
+                                            <th>Phone</th>
+                                            <th>Date Time</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        @foreach ($historys as $item)
+                                        @foreach ($orders as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
-                                                        alt="Item Image" width="50"></td>
-                                                <td>{{ $item->user->name }}</td>
-                                                <td>{{ $item->quantity }}</td>
-
-                                                <td>Admin</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->events }}</td>
+                                                <td>{{ $item->phone }}</td>
+                                                <td>{{ $item->created_at }}</td>
                                                 <td class="text-end ps-0">
                                                     <div class="dropdown d-flex justify-content-center">
                                                         <a href="javascript:void(0);"
@@ -50,10 +44,11 @@
                                                             </svg>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
                                                             <button type="button" class="dropdown-item"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#modalGrid">Detail</button>
+                                                                data-bs-target="#modalGrid{{ $item->id_orders }}">
+                                                                Detail
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -69,67 +64,74 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalGrid">
-        <div class="modal-dialog modal-lg" role="document"> <!-- Added modal-lg class here -->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Pengambilan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <!-- Image Section (left) -->
-                            <div class="col-md-4">
-                                <img src="path_to_your_image.jpg" alt="Image" class="img-fluid">
-                            </div>
+    @foreach ($orders as $item)
+        <!-- Modal -->
+        <div class="modal fade" id="modalGrid{{ $item->id_orders }}">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Image Section (left) -->
+                                <div class="col-md-4">
+                                    <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                        alt="Image" class="img-fluid">
+                                </div>
 
-                            <!-- Description Section (right) -->
-                            <div class="col-md-8">
-                                <h5>Nama: <span id="nama">John Doe</span></h5>
-                                <p>NIP: <span id="nip">123456789</span></p>
+                                <!-- Description Section (right) -->
+                                <div class="col-md-8">
+                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
+                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
 
-                                <!-- Detail Barang (table) -->
-                                <h6>Detail Barang:</h6>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Laptop</td>
-                                            <td>2</td>
-                                            <td>20,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Mouse</td>
-                                            <td>1</td>
-                                            <td>500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Keyboard</td>
-                                            <td>3</td>
-                                            <td>1,500</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <!-- Detail Barang (table) -->
+                                    <h6>Detail Barang:</h6>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                                <tr>
+                                                    <td>{{ $data->item_name }}</td>
+                                                    <td>{{ $data->quantity }}</td>
 
-                                <p>Total Barang: <span id="total">3</span></p>
-                                <p>DateTime: <span id="datetime">2025-02-06 14:30</span></p>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            @if ($data->status == 'success')
+                                                                <i class="fa fa-circle text-success me-1"></i> Successful
+                                                            @elseif($data->status == 'canceled')
+                                                                <i class="fa fa-circle text-danger me-1"></i> Canceled
+                                                            @elseif($data->status == 'pending')
+                                                                <i class="fa fa-circle text-warning me-1"></i> Pending
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <p>Total Barang: <span id="total">
+                                            {{ $orderItem->where('orders_id', $item->id_orders)->sum('quantity') }}
+                                        </span></p>
+                                    <p>DateTime: <span id="datetime">{{ $item->created_at }}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endforeach
 @endsection

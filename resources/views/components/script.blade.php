@@ -12,9 +12,11 @@
 <!-- Apex Chart -->
 <script src="{{ asset('') }}assets/vendor/apexchart/apexchart.js"></script>
 <script src="{{ asset('') }}assets/vendor/swiper/js/swiper-bundle.min.js"></script>
-<script src="../../s3.tradingview.com/tv.js"></script>
-<script src="../../cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
-<script src="../../cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.js"></script>
+{{-- <script src="../../s3.tradingview.com/tv.js"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script> --}}
+
+{{-- <script src="../../cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script> --}}
+
 <script src="{{ asset('') }}assets/vendor/raphael/raphael.min.js"></script>
 <script src="{{ asset('') }}assets/vendor/morris/morris.min.js"></script>
 
@@ -22,13 +24,13 @@
 <script src="{{ asset('') }}assets/js/deznav-init.js"></script>
 <script src="{{ asset('') }}assets/js/demo.js"></script>
 <script src="{{ asset('') }}assets/js/styleSwitcher.js"></script>
-<script src="{{ asset('') }}assets/js/dashboard/tradingview-1.js"></script>
+{{-- <script src="{{ asset('') }}assets/js/dashboard/tradingview-1.js"></script> --}}
 
 
 
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-<script>
+<script defer>
     $(document).ready(function() {
         var table = $('#mytable').DataTable({
             "paging": true,
@@ -50,7 +52,7 @@
         });
     });
 </script>
-<script>
+<script defer>
     document.getElementById('increment-1').addEventListener('click', function() {
         var quantityInput = document.getElementById('quantity-1');
         var quantity = parseInt(quantityInput.value);

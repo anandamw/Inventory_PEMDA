@@ -14,7 +14,8 @@
                                         <div>
                                             <h2>Grab Items Easy & Fast!</h2>
                                             <p>
-                                                Permudah ambil barang dengan sistem yang cepat dan transparan. Klik untuk memulai!
+                                                Permudah ambil barang dengan sistem yang cepat dan transparan. Klik untuk
+                                                memulai!
                                             </p>
                                             <a href="/item" class="btn btn-primary">Ambil Barang</a>
                                         </div>
@@ -31,11 +32,22 @@
                                 <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0 heading">About</h4>
                                     <div class="dropdown custom-dropdown mb-0 tbl-orders-style">
-                                        <div class="btn sharp tp-btn" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-                                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12.0335 13C12.5854 13 13.0328 12.5523 13.0328 12C13.0328 11.4477 12.5854 11 12.0335 11C11.4816 11 11.0342 11.4477 11.0342 12C11.0342 12.5523 11.4816 13 12.0335 13Z" stroke="#342E59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M12.0335 6C12.5854 6 13.0328 5.55228 13.0328 5C13.0328 4.44772 12.5854 4 12.0335 4C11.4816 4 11.0342 4.44772 11.0342 5C11.0342 5.55228 11.4816 6 12.0335 6Z" stroke="#342E59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M12.0335 20C12.5854 20 13.0328 19.5523 13.0328 19C13.0328 18.4477 12.5854 18 12.0335 18C11.4816 18 11.0342 18.4477 11.0342 19C11.0342 19.5523 11.4816 20 12.0335 20Z" stroke="#342E59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <div class="btn sharp tp-btn" data-bs-toggle="dropdown" aria-expanded="false"
+                                            role="button">
+                                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M12.0335 13C12.5854 13 13.0328 12.5523 13.0328 12C13.0328 11.4477 12.5854 11 12.0335 11C11.4816 11 11.0342 11.4477 11.0342 12C11.0342 12.5523 11.4816 13 12.0335 13Z"
+                                                    stroke="#342E59" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M12.0335 6C12.5854 6 13.0328 5.55228 13.0328 5C13.0328 4.44772 12.5854 4 12.0335 4C11.4816 4 11.0342 4.44772 11.0342 5C11.0342 5.55228 11.4816 6 12.0335 6Z"
+                                                    stroke="#342E59" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M12.0335 20C12.5854 20 13.0328 19.5523 13.0328 19C13.0328 18.4477 12.5854 18 12.0335 18C11.4816 18 11.0342 18.4477 11.0342 19C11.0342 19.5523 11.4816 20 12.0335 20Z"
+                                                    stroke="#342E59" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                             </svg>
                                         </div>
                                         <div class="dropdown-menu dropdown-menu-end">
@@ -48,23 +60,28 @@
                                         <!-- Gambar di kiri -->
                                         <div class="me-3">
                                             <a href="https://www.sumenepkab.go.id/" target="_blank">
-                                                <img src="{{ asset('') }}assets/images/about.png" class="d-block mx-auto img-fluid"
-                                                    alt="" style="max-width: 70%; height: auto;"/>
+                                                <img src="{{ asset('') }}assets/images/about.png"
+                                                    class="d-block mx-auto img-fluid" alt=""
+                                                    style="max-width: 70%; height: auto;" />
                                             </a>
                                         </div>
                                         <!-- Deskripsi di kanan -->
                                         <div>
                                             <h4 class="fs-20 font-w700 text-black mb-0">LogisHub</h4>
-                                            <span class="my-2 fs-16 font-w600 d-block">Take Items, Everything Becomes Easier!</span>
-                                            <p class="text-start">Website pengambilan barang: Solusi cepat, transparan, dan efisien untuk mengelola dan mempermudah proses pengambilan barang milik instansi, dengan fitur pelacakan dan pengajuan yang mudah diakses.</p>
+                                            <span class="my-2 fs-16 font-w600 d-block">Take Items, Everything Becomes
+                                                Easier!</span>
+                                            <p class="text-start">Website pengambilan barang: Solusi cepat, transparan, dan
+                                                efisien untuk mengelola dan mempermudah proses pengambilan barang milik
+                                                instansi, dengan fitur pelacakan dan pengajuan yang mudah diakses.</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-footer p-2 border-0">
-                                    <button type="button" class="btn btn-link text-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Read more</button>
+                                    <button type="button" class="btn btn-link text-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModalCenter">Read more</button>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
 
                     </div>
                 </div>
@@ -80,94 +97,34 @@
                             <div class="card-body pt-0">
                                 <div class="table-responsive" style="max-height: 505px; overflow-y: auto;">
                                     <table class="table table-sell verticle-middle mb-0">
-                                        <thead style="position: sticky; top: 0; background-color: rgba(255, 255, 255, 0.9);  z-index: 2;">
+                                        <thead
+                                            style="position: sticky; top: 0; background-color: rgba(255, 255, 255, 0.9);  z-index: 2;">
                                             <tr class="text-dark">
-                                                <th scope="col">Kode</th>
+                                                <th scope="col">Code</th>
                                                 <th class="text-center" scope="col">Item</th>
                                                 <th class="text-end" scope="col">Stok</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="text-white">
-                                                <td>71h271g</td>
-                                                <td class="text-center">Kabel</td>
-                                                <td class="text-end">120</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>74h271g</td>
-                                                <td class="text-center">Adaptor</td>
-                                                <td class="text-end">50</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>41h271g</td>
-                                                <td class="text-center">Mouse</td>
-                                                <td class="text-end">200</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>55h271g</td>
-                                                <td class="text-center">Keyboard</td>
-                                                <td class="text-end">150</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>42h271g</td>
-                                                <td class="text-center">Monitor</td>
-                                                <td class="text-end">75</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Printer</td>
-                                                <td class="text-end">30</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Printer</td>
-                                                <td class="text-end">30</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Printer</td>
-                                                <td class="text-end">30</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
-                                            <tr class="text-white">
-                                                <td>33h271g</td>
-                                                <td class="text-center">Scanner</td>
-                                                <td class="text-end">20</td>
-                                            </tr>
+
+                                            @foreach ($dataItem as $item)
+                                                <tr class="text-white">
+                                                    <td>{{ $item->code_item }}</td>
+                                                    <td class="text-center">{{ $item->item_name }}</td>
+                                                    <td class="text-end">{{ $item->quantity }}</td>
+                                                </tr>
+                                            @endforeach
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
 
-                
+
 
                 <div class="col-xl-12">
                     <div class="card">
@@ -175,7 +132,8 @@
                             <h2 class="heading mb-0">Latest Transaction</h2>
                             <div class="d-flex align-items-center">
                                 <div class="dropdown bootstrap-select">
-                                    <select class="image-select default-select dashboard-select width-130" aria-label="Default" tabindex="0">
+                                    <select class="image-select default-select dashboard-select width-130"
+                                        aria-label="Default" tabindex="0">
                                         <option selected="">This Month</option>
                                         <option value="1">Weeks</option>
                                         <option value="2">Today</option>
@@ -185,17 +143,30 @@
                         </div>
                         <div class="card-body pt-0 px-0">
                             <div class="table-responsive">
-                                <table class="table-responsive tb-transaction table shadow-hover mb-4 dataTable no-footer" id="example6">
+                                <table class="table tb-transaction table-hover mb-4 dataTable no-footer" id="example6">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Name</th>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
+                                            <td class="font-w700 fs-16">1</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="images/studio/5.jpg" alt="" class="avatar">
+                                                    <img src="{{ asset('assets/images/studio/5.jpg') }}" alt=""
+                                                        class="avatar">
                                                     <div class="ms-3">
-                                                        <h5 class="mb-0"><a class="text-secondary" href="page-error-404.html">Dhoni salaman</a></h5>
+                                                        <h5 class="mb-0"><a class="text-secondary"
+                                                                href="page-error-404.html">Dhoni Salaman</a></h5>
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="font-w700 fs-16">Item Name</td>
                                             <td class="font-w700 fs-16">9</td>
                                             <td class="fs-14 font-w400">June 1, 2022</td>
                                         </tr>
@@ -264,13 +235,15 @@
                     </p>
 
                     <h5>8. Tanggung Jawab Pengguna</h5>
-                    <p>Pengguna bertanggung jawab atas semua aktivitas di akun mereka dan setuju untuk mengganti rugi LogisHub atas kerugian yang timbul akibat pelanggaran.</p>
+                    <p>Pengguna bertanggung jawab atas semua aktivitas di akun mereka dan setuju untuk mengganti rugi
+                        LogisHub atas kerugian yang timbul akibat pelanggaran.</p>
 
                     <h5>9. Pembatasan Tanggung Jawab</h5>
                     <p>LogisHub tidak bertanggung jawab atas kerugian yang timbul akibat penggunaan layanan.</p>
 
                     <h5>10. Perubahan Syarat dan Ketentuan</h5>
-                    <p>LogisHub berhak untuk mengubah syarat dan ketentuan kapan saja, dan pengguna akan diberitahu tentang perubahan tersebut.</p>
+                    <p>LogisHub berhak untuk mengubah syarat dan ketentuan kapan saja, dan pengguna akan diberitahu tentang
+                        perubahan tersebut.</p>
 
                     <h5>11. Hukum yang Berlaku</h5>
                     <p>Syarat dan ketentuan ini diatur oleh hukum yang berlaku di Indonesia.</p>
@@ -281,5 +254,4 @@
             </div>
         </div>
     </div>
-
 @endsection

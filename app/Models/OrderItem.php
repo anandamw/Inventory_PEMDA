@@ -16,7 +16,7 @@ class OrderItem extends Model
 
 
     // The attributes that are mass assignable.
-    protected $fillable = ['users_id', 'inventories_id', 'quantity', 'status'];
+    protected $fillable = ['users_id', 'inventories_id', 'quantity', 'status', 'orders_id'];
 
     // Define the relationships
     public function user()

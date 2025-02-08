@@ -1,5 +1,5 @@
 <link href="{{ asset('') }}assets/vendor/swiper/css/swiper-bundle.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.css">
+{{-- <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.css"> --}}
 <!-- FAVICONS ICON -->
 <link rel="shortcut icon" type="image/png" href="{{ asset('') }}assets/images/favicon.png" />
 <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
@@ -8,7 +8,12 @@
 <!-- Custom Stylesheet -->
 <link href="{{ asset('') }}assets/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet" />
 <link href="{{ asset('') }}assets/css/style.css" rel="stylesheet" />
+<link href="{{ asset('') }}assets/vendor/nouislider/nouislider.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+
+
+
 
 
 <style>

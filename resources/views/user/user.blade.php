@@ -2,8 +2,8 @@
 
 @section('content')
     <!--**********************************
-                                                                                                                                Content body start
-                                                                                                                            ***********************************-->
+                                                                                                                                                            Content body start
+                                                                                                                                                        ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row">
@@ -50,13 +50,7 @@
                                                         Qrcode
                                                         Download</a>
                                                 </td>
-                                                <td>
-                                                    @if ($item->isOnline())
-                                                        <span style="color: green;">Online</span>
-                                                    @else
-                                                        <span style="color: red;">Offline</span>
-                                                    @endif
-                                                </td>
+                                                <td>haiiii</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
                                                         <button type="button"

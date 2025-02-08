@@ -18,7 +18,7 @@ class ItemSeeder extends Seeder
                 'code_item' => '123456',
                 'item_name' => 'Laptop',
                 'img_item' => null,
-                'quantity' => 10,
+                'quantity' => 6,
             ],
             [
                 'code_item' => '123457',
@@ -30,7 +30,7 @@ class ItemSeeder extends Seeder
                 'code_item' => '123458',
                 'item_name' => 'Server',
                 'img_item' => null,
-                'quantity' => 30,
+                'quantity' => 4,
             ],
             [
                 'code_item' => '123459',

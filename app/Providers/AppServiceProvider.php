@@ -20,8 +20,5 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(Kernel $kernel): void
-    {
-        $kernel->appendMiddlewareToGroup('web', UpdateLastSeen::class);
-    }
+    public function boot(Kernel $kernel): void {}
 }

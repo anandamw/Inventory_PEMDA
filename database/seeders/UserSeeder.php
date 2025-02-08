@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'name' => 'Rahmat Syafri Kurniaman',
                 'nip' => '2202310115',
                 'role' => 'User',
-                'token' => '456456' // Token statis untuk User
+                'token' => '456456'
             ]
         ];
 
