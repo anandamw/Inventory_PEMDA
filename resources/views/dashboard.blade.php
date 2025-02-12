@@ -119,56 +119,49 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
-
-
-                <div class="col-xl-12">
+                
+                <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header justify-content-between border-0">
-                            <h2 class="heading mb-0">Latest Transaction</h2>
-                            <div class="d-flex align-items-center">
-                                <div class="dropdown bootstrap-select">
-                                    <select class="image-select default-select dashboard-select width-130"
-                                        aria-label="Default" tabindex="0">
-                                        <option selected="">This Month</option>
-                                        <option value="1">Weeks</option>
-                                        <option value="2">Today</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0 px-0">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table tb-transaction table-hover mb-4 dataTable no-footer" id="example6">
-                                    <thead>
+                                <table class="table table-sm mb-0">
+                                    <thead class="text-white bg-primary">
                                         <tr>
-                                            <th>No</th>
-                                            <th>Name</th>
-                                            <th>Item</th>
-                                            <th>Quantity</th>
-                                            <th>Date</th>
+                                            <th class="align-middle">No</th>
+                                            <th class="align-middle">#Code</th>
+                                            <th class="align-middle pe-7">Photo</th>
+                                            <th class="align-middle" style="min-width: 12.5rem;">Item</th>
+                                            <th class="align-middle">Quantity</th>
+                                            <th class="align-middle">Status</th>
+                                            <th class="align-middle">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="font-w700 fs-16">1</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('assets/images/studio/5.jpg') }}" alt=""
-                                                        class="avatar">
-                                                    <div class="ms-3">
-                                                        <h5 class="mb-0"><a class="text-secondary"
-                                                                href="page-error-404.html">Dhoni Salaman</a></h5>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="font-w700 fs-16">Item Name</td>
-                                            <td class="font-w700 fs-16">9</td>
-                                            <td class="fs-14 font-w400">June 1, 2022</td>
+                                    <tbody id="orders">
+                                        @foreach ($dataLatest as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->code_item }}</td>
+                                                <td>
+                                                    <img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
+                                                        alt="Item Image" width="50">
+                                                </td>
+                                                <td>{{ $item->item_name }}</td>
+                                                <td>{{ $item->quantity }}</td>
+                                                <td>{{ $item->status }}</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-warning">
+                                                        <i class="fas fa-edit"></i> Kembalikan
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+                                        <tr class="no-data" style="display: none;">
+                                            <td colspan="7" class="text-center py-3">Tidak ada data di keranjang</td>
                                         </tr>
                                     </tbody>
                                 </table>

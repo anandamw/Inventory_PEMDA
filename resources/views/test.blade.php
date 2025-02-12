@@ -193,11 +193,6 @@
                         <i class="fas fa-stop"></i> Stop Scanner
                     </button>
                 </div>
-                <div class="mt-4">
-                    <h5>Scanned Result:</h5>
-                    <div id="qr-reader-results" class="alert alert-light border"
-                        style="min-height: 40px; border-radius: 10px;"></div>
-                </div>
             </div>
         </div>
     </div>
