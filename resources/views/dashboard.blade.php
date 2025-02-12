@@ -138,8 +138,9 @@
                                             <th class="align-middle">Picked Up</th>
 
                                             <th class="align-middle">Status</th>
-                                            <th class="align-middle"></th>
+
                                             <th class="align-middle">Action</th>
+
                                         </tr>
                                     </thead>
 
@@ -157,27 +158,34 @@
 
                                                 <td>{{ $get->status }}</td>
 
-                                                @if ($get->status !== 'success')
-                                                    <td class="py-2 text-center">
-                                                        <div class="input-group quantity-control">
-                                                            <button
-                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                            <input type="number" id="quantity" name="quantity"
-                                                                class="form-control text-center quantity" value="1"
-                                                                min="1">
-                                                            <button
-                                                                class="btn btn-outline-primary btn-sm increment">+</button>
+
+                                                <td class="text-end ps-0">
+                                                    <div class="dropdown d-flex justify-content-center">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn-link btn sharp tp-btn btn-primary pill"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                                                    fill="#A098AE" />
+                                                            </svg>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <button type="button" class="dropdown-item"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#exampleModal{{ $get->id_order_items }}">Edit
+                                                                Jumlah Item</button>
+                                                            <a class="dropdown-item " href="javascript:void(0);">Acara Selesai</a>
+
                                                         </div>
-                                                    </td>
-                                                    <td class="text-end ps-0">
-                                                        <button class="btn btn-warning submit-update"
-                                                            data-order-id="{{ $get->id_order_items }}">
-                                                            Submit
-                                                        </button>
-                                                    </td>
-                                                @else
-                                                    <td class="hidden"></td>
-                                                @endif
+                                                    </div>
+                                                </td>
+
+
+
+
+
                                             </tr>
                                         @endforeach
 
@@ -195,6 +203,76 @@
         </div>
     </div>
 
+    @foreach ($dataLatest as $item)
+        <div class="modal fade" id="exampleModal{{ $item->id_order_items }}">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_order_items }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Image Section (left) -->
+                                <div class="col-md-4">
+                                    <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
+                                        alt="Image" class="img-fluid">
+                                </div>
+
+                                <!-- Description Section (right) -->
+                                <div class="col-md-8">
+                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
+                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+
+                                    <!-- Detail Barang (table) -->
+                                    <h6>Detail Barang:</h6>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ $item->item_name }}</td>
+                                                <td>{{ $item->quantity }}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="input-group quantity-control">
+                                                            <button
+                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                            <input type="number" id="quantity" name="quantity"
+                                                                class="form-control text-center quantity" value="1"
+                                                                min="1">
+                                                            <button
+                                                                class="btn btn-outline-primary btn-sm increment">+</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+
+                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary light submit-update"
+                            data-order-id="{{ $item->id_order_items }}">Save Change</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 
     <!-- Modal -->
@@ -296,59 +374,60 @@
     </script>
 
     <script>
-        document.querySelectorAll(".submit-update").forEach(button => {
-            button.addEventListener("click", async event => {
-                event.preventDefault();
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".submit-update").forEach(button => {
+                button.addEventListener("click", async event => {
+                    event.preventDefault();
 
-                // Ambil orderItemId dari tombol yang diklik
-                let orderItemId = button.getAttribute("data-order-id");
-                if (!orderItemId) {
-                    console.error("Order Item ID tidak ditemukan!");
-                    alert("Terjadi kesalahan, coba lagi.");
-                    return;
-                }
-
-                let row = button.closest("tr");
-                let quantityInput = row.querySelector(".quantity");
-                let quantity = parseInt(quantityInput.value, 10); // Pastikan quantity adalah angka
-
-                // Cek apakah quantity valid (angka dan > 0 atau < 0)
-                if (isNaN(quantity)) {
-                    alert("Masukkan jumlah yang valid!");
-                    return;
-                }
-
-                try {
-                    let response = await fetch(`/revised/${orderItemId}`, {
-                        method: "PATCH",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute("content")
-                        },
-                        body: JSON.stringify({
-                            quantity: quantity
-                        }),
-                    });
-
-                    let data = await response.json();
-                    if (!response.ok) {
-                        // Cek apakah data error ada
-                        let errorMessage = data.error || "Terjadi kesalahan";
-                        throw new Error(errorMessage);
-                    }
-
-                    // Pastikan server mengirimkan pesan sukses
-                    if (data.success) {
-                        alert(data.success);
-                        window.location.reload(); // Reload halaman setelah update berhasil
-                    } else {
+                    // Ambil orderItemId dari tombol yang diklik
+                    let orderItemId = button.getAttribute("data-order-id");
+                    if (!orderItemId) {
+                        console.error("Order Item ID tidak ditemukan!");
                         alert("Terjadi kesalahan, coba lagi.");
+                        return;
                     }
-                } catch (error) {
-                    console.error("Error:", error);
-                    alert("Terjadi kesalahan saat mengirim data.");
-                }
+
+                    // Ambil modal terkait
+                    let modal = button.closest(".modal");
+                    let quantityInput = modal.querySelector(".quantity");
+                    let quantity = parseInt(quantityInput.value, 10);
+
+                    // Cek apakah quantity valid
+                    if (isNaN(quantity) || quantity <= 0) {
+                        alert("Masukkan jumlah yang valid!");
+                        return;
+                    }
+
+                    try {
+                        let response = await fetch(`/revised/${orderItemId}`, {
+                            method: "PATCH",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector(
+                                    'meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                quantity: quantity
+                            }),
+                        });
+
+                        let data = await response.json();
+                        if (!response.ok) {
+                            throw new Error(data.error || "Terjadi kesalahan");
+                        }
+
+                        // Jika berhasil, tampilkan alert dan reload halaman
+                        if (data.success) {
+                            alert(data.success);
+                            window.location.reload();
+                        } else {
+                            alert("Terjadi kesalahan, coba lagi.");
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        alert("Terjadi kesalahan saat mengirim data.");
+                    }
+                });
             });
         });
     </script>

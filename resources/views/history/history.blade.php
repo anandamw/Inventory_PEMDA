@@ -119,10 +119,8 @@
                                         </tbody>
                                     </table>
 
-                                    <p>Total Barang: <span id="total">
-                                            {{ $orderItem->where('orders_id', $item->id_orders)->sum('quantity') }}
-                                        </span></p>
-                                    <p>DateTime: <span id="datetime">{{ $item->created_at }}</span></p>
+
+                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
                             </div>
                         </div>
