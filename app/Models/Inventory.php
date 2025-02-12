@@ -8,9 +8,10 @@ class Inventory extends Model
 {
     protected $fillable = [
         'product_name',
-        'img_product',
+        'img_item',
         'quantity',
-        'code_item'
+        'code_item',
+        'item_name'
     ];
 
     protected $table = 'inventories';

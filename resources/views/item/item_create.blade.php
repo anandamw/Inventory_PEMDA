@@ -11,20 +11,20 @@
                             <h5 class="card-title">Add Item</h5>
                         </div>
                         <div class="card-body">
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="/inventory/store" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <!-- Kolom Kiri: Input Data -->
                                     <div class="col-md-8">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Item</label>
-                                            <input type="text" class="form-control" id="name" name="name"
-                                                placeholder="Masukkan Nama Item....." style="opacity: 0.6;" required>
+                                            <label for="item_name" class="form-label">Item</label>
+                                            <input type="text" class="form-control" id="item_name" name="item_name"
+                                                placeholder="Masukkan Nama Item..." style="opacity: 0.6;" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="stock" class="form-label">Quantity</label>
-                                            <input type="number" class="form-control" id="stock" name="stock"
-                                                placeholder="Masukkan Quantity....." style="opacity: 0.6;" required>
+                                            <label for="quantity" class="form-label">Quantity</label>
+                                            <input type="number" class="form-control" id="quantity" name="quantity"
+                                                placeholder="Masukkan Quantity..." style="opacity: 0.6;" required>
                                         </div>
                                     </div>
 
@@ -35,23 +35,26 @@
                                             <div id="dropZone"
                                                 class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
                                                 style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;">
-                                                <img id="previewImage" src="https://via.placeholder.com/100"
+                                                <img id="previewImage" src="{{asset('assets/images/no-image.png')}}"
                                                     alt="Drag & Drop" class="img-thumbnail"
                                                     style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
-                                                <input type="file" id="formFile" name="profile_picture" accept="image/*"
-                                                    hidden onchange="previewFile(event)">
+                                                <input type="file" id="formFile" name="img_item" accept="image/*" hidden
+                                                    onchange="previewFile(event)">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Button Submit harus di dalam form -->
+                                <div class="card-footer d-sm-flex justify-content-between align-items-center">
+                                    <div class="ms-auto">
+                                        <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
-                        <div class="card-footer d-sm-flex justify-content-between align-items-center">
-                            <div class="ms-auto">
-                                <a href="{{ url()->previous() }}" class="btn btn-danger">Kembali</a>
-                                <button type="submit" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

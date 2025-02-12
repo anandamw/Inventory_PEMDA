@@ -46,7 +46,7 @@
                                                     <div class="timeline-panel">
                                                         <div class="media me-2">
                                                             <img alt="image" width="50"
-                                                                src="{{ asset('') }}assets/images/avatar/1.jpg">
+                                                                src="images/avatar/1.jpg">
                                                         </div>
                                                         <div class="media-body">
                                                             <h6 class="mb-1">Dr sultads Send you Photo</h6>
@@ -80,7 +80,7 @@
                                                     <div class="timeline-panel">
                                                         <div class="media me-2">
                                                             <img alt="image" width="50"
-                                                                src="{{ asset('') }}assets/images/avatar/1.jpg">
+                                                                src="images/avatar/1.jpg">
                                                         </div>
                                                         <div class="media-body">
                                                             <h6 class="mb-1">Dr sultads Send you Photo</h6>
@@ -114,7 +114,7 @@
                                                     <div class="timeline-panel">
                                                         <div class="media me-2">
                                                             <img alt="image" width="50"
-                                                                src="{{ asset('') }}assets/images/avatar/1.jpg">
+                                                                src="images/avatar/1.jpg">
                                                         </div>
                                                         <div class="media-body">
                                                             <h6 class="mb-1">Dr sultads Send you Photo</h6>
@@ -144,8 +144,9 @@
                         <ul>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-                                    <img src="{{ asset('') }}assets/{{ asset('') }}assets/images/profile/pic1.jpg"
-                                        alt="">
+                                    <img width="50" height="50"
+                                        src="{{ Auth::user()->profile ? asset('assets/images/profile/' . Auth::user()->profile) : asset('assets/images/profile/no-profile.jpg') }}"
+                                        alt="User Profile">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" style="">
                                     <a href="/edit_profile" class="dropdown-item ai-icon ">

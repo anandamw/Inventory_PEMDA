@@ -65,9 +65,9 @@
                                         {{-- jika tidak ada gambar tampilkan assets/images/no-image.png --}}
                                         @foreach ($items as $item)
                                             <tr>
-                                                <td>{{ $item->id_inventories }}</td>
+                                                <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->code_item }}</td>
-                                                <td><img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
+                                                <td><img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
                                                         alt="Item Image" width="50"></td>
                                                 <td>{{ $item->item_name }}</td>
                                                 <td>{{ $item->quantity }}</td>
@@ -95,14 +95,28 @@
                                                             </svg>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <button type="button" class="dropdown-item"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modalGrid">Edit</button>
-                                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                                            <!-- Edit Button -->
+                                                            <a href="#" class="dropdown-item editBtn"
+                                                                data-id="{{ $item->id_inventories }}"
+                                                                data-name="{{ $item->item_name }}"
+                                                                data-quantity="{{ $item->quantity }}"
+                                                                data-image="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : 'assets/images/no-image.png' }}">
+                                                                Edit
+                                                            </a>
 
+
+
+                                                            <!-- Delete Button -->
+                                                            <a href="/inventory/{{ $item->id_inventories }}/destroy"
+                                                                class="dropdown-item text-danger">
+                                                                Delete
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </td>
+
+
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -168,60 +182,131 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="modalGrid">
-        <div class="modal-dialog modal-lg" role="document"> <!-- Added modal-lg class here -->
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modalGrid" tabindex="-1">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form id="editForm" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
+                        <input type="hidden" id="editId" name="id_inventories">
+
                         <div class="row">
-                            <!-- Kolom Kiri: Input Data -->
                             <div class="col-md-8">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Item</label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        placeholder="Masukkan Nama Item....." style="opacity: 0.6;" required>
+                                    <label class="form-label">Item</label>
+                                    <input type="text" class="form-control" id="editName" name="item_name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="stock" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" id="stock" name="stock"
-                                        placeholder="Masukkan Quantity....." style="opacity: 0.6;" required>
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="editQuantity" name="quantity"
+                                        required>
                                 </div>
                             </div>
-
-                            <!-- Kolom Kanan: Input Gambar dengan Drag & Drop -->
                             <div class="col-md-4 text-center">
                                 <label class="form-label d-block">Item Picture</label>
                                 <div class="card p-1 shadow-sm d-flex align-items-center">
-                                    <div id="dropZone"
+                                    <div id="dropZoneEdit"
                                         class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
-                                        style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;">
-                                        <img id="previewImage" src="https://via.placeholder.com/100" alt="Drag & Drop"
-                                            class="img-thumbnail"
+                                        style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;"
+                                        onclick="document.getElementById('editFile').click()">
+
+                                        <img id="previewEditImage" src="{{asset('assets/images/no-image.png')}}"
+                                            alt="Drag & Drop" class="img-thumbnail"
                                             style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
-                                        <input type="file" id="formFile" name="profile_picture" accept="image/*"
-                                            hidden onchange="previewFile(event)">
+
+                                        <input type="file" id="editFile" name="img_item" accept="image/*" hidden
+                                            onchange="previewEditFile(event)">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".editBtn").forEach(button => {
+                button.addEventListener("click", function() {
+                    let id = this.getAttribute("data-id"); // Harus sesuai dengan id_inventories
+                    let name = this.getAttribute("data-name");
+                    let quantity = this.getAttribute("data-quantity");
+                    let image = this.getAttribute("data-image") ||
+                    "https://via.placeholder.com/100";
+
+                    document.getElementById("editId").value = id;
+                    document.getElementById("editName").value = name;
+                    document.getElementById("editQuantity").value = quantity;
+                    document.getElementById("previewEditImage").src = image;
+
+                    var modal = new bootstrap.Modal(document.getElementById('modalGrid'));
+                    modal.show();
+                });
+            });
+
+            document.getElementById("editForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                let formData = new FormData(this);
+                let id = document.getElementById("editId").value;
+
+                // Laravel perlu _method=PUT agar update bekerja
+                formData.append("_method", "PUT");
+
+                fetch(`/inventory/${id}/update`, {
+                        method: "POST", // Laravel akan mengenali sebagai PUT karena _method
+                        body: formData,
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content")
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            location.reload();
+                        } else {
+                            alert("Terjadi kesalahan saat mengupdate data.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Gagal melakukan update, coba lagi.");
+                    });
+            });
+        });
+
+        function previewEditFile(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById("previewEditImage").src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+    <!-- Script Konfirmasi Delete -->
+    <script>
+        function confirmDelete(itemId) {
+            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
+                document.getElementById('delete-form-' + itemId).submit();
+            }
+        }
+    </script>
 
 
     <script defer>

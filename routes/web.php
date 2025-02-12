@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/inventory', [InventoryController::class, 'index']);
 
         Route::post('/inventory/store', [InventoryController::class, 'store']);
-        Route::post('/inventory/{id}/update', [InventoryController::class, 'update']);
+        Route::put('/inventory/{id_inventories}/update', [InventoryController::class, 'update']);
         Route::get('/inventory/{id}/destroy', [InventoryController::class, 'destroy']);
         Route::get('/user/create', [UserController::class, 'create']);
         Route::post('/user/store', [UserController::class, 'store']);
