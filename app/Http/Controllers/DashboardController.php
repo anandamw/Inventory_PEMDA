@@ -25,10 +25,14 @@ class DashboardController extends Controller
         $dataLatest = OrderItem::join('users', 'order_items.users_id', '=', 'users.id')
             ->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')
             ->where('users.role', Auth::user()->role)
-            ->select('order_items.quantity', 'inventories.item_name', 'inventories.code_item', 'users.name', 'inventories.img_item', 'order_items.status')
+            ->select('order_items.quantity', 'inventories.item_name', 'inventories.code_item', 'users.name', 'inventories.img_item', 'order_items.status', 'order_items.id_order_items')
             ->orderBy('order_items.created_at', 'desc') // Menambahkan pengurutan berdasarkan created_at
             ->get();
 
+
+
+
+            
         toast('Selamat datang di layanan Logishub', 'info');
 
         return view('dashboard', compact('headerText', 'dataItem', 'dataLatest'));

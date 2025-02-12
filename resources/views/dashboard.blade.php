@@ -123,40 +123,61 @@
                     </div>
                 </div>
 
-                
+
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-sm mb-0">
-                                    <thead class="text-white bg-primary">
+                                    <thead class="text-white bg-primary text-center">
                                         <tr>
                                             <th class="align-middle">No</th>
                                             <th class="align-middle">#Code</th>
                                             <th class="align-middle pe-7">Photo</th>
                                             <th class="align-middle" style="min-width: 12.5rem;">Item</th>
-                                            <th class="align-middle">Quantity</th>
+                                            <th class="align-middle">Picked Up</th>
+
                                             <th class="align-middle">Status</th>
+                                            <th class="align-middle"></th>
                                             <th class="align-middle">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="orders">
-                                        @foreach ($dataLatest as $item)
+
+                                    <tbody id="orders" class="text-center">
+                                        @foreach ($dataLatest as $get)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->code_item }}</td>
+                                                <td>{{ $get->code_item }}</td>
                                                 <td>
-                                                    <img src="{{ $item->img_item ? asset($item->img_item) : asset('assets/images/no-image.png') }}"
+                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
                                                         alt="Item Image" width="50">
                                                 </td>
-                                                <td>{{ $item->item_name }}</td>
-                                                <td>{{ $item->quantity }}</td>
-                                                <td>{{ $item->status }}</td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-warning">
-                                                        <i class="fas fa-edit"></i> Kembalikan
-                                                    </a>
-                                                </td>
+                                                <td>{{ $get->item_name }}</td>
+                                                <td>{{ $get->quantity }}</td>
+
+                                                <td>{{ $get->status }}</td>
+
+                                                @if ($get->status !== 'success')
+                                                    <td class="py-2 text-center">
+                                                        <div class="input-group quantity-control">
+                                                            <button
+                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                            <input type="number" id="quantity" name="quantity"
+                                                                class="form-control text-center quantity" value="1"
+                                                                min="1">
+                                                            <button
+                                                                class="btn btn-outline-primary btn-sm increment">+</button>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end ps-0">
+                                                        <button class="btn btn-warning submit-update"
+                                                            data-order-id="{{ $get->id_order_items }}">
+                                                            Submit
+                                                        </button>
+                                                    </td>
+                                                @else
+                                                    <td class="hidden"></td>
+                                                @endif
                                             </tr>
                                         @endforeach
 
@@ -247,4 +268,88 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".quantity-control").forEach(function(control) {
+                let decrementBtn = control.querySelector(".decrement");
+                let incrementBtn = control.querySelector(".increment");
+                let inputField = control.querySelector(".quantity");
+
+                decrementBtn.addEventListener("click", function() {
+                    let currentValue = parseInt(inputField.value) ||
+                        0; // Pastikan nilai selalu integer
+                    inputField.value = currentValue - 1; // Bisa negatif
+                });
+
+                incrementBtn.addEventListener("click", function() {
+                    let currentValue = parseInt(inputField.value) || 0;
+                    inputField.value = currentValue + 1;
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll(".submit-update").forEach(button => {
+            button.addEventListener("click", async event => {
+                event.preventDefault();
+
+                // Ambil orderItemId dari tombol yang diklik
+                let orderItemId = button.getAttribute("data-order-id");
+                if (!orderItemId) {
+                    console.error("Order Item ID tidak ditemukan!");
+                    alert("Terjadi kesalahan, coba lagi.");
+                    return;
+                }
+
+                let row = button.closest("tr");
+                let quantityInput = row.querySelector(".quantity");
+                let quantity = parseInt(quantityInput.value, 10); // Pastikan quantity adalah angka
+
+                // Cek apakah quantity valid (angka dan > 0 atau < 0)
+                if (isNaN(quantity)) {
+                    alert("Masukkan jumlah yang valid!");
+                    return;
+                }
+
+                try {
+                    let response = await fetch(`/revised/${orderItemId}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content")
+                        },
+                        body: JSON.stringify({
+                            quantity: quantity
+                        }),
+                    });
+
+                    let data = await response.json();
+                    if (!response.ok) {
+                        // Cek apakah data error ada
+                        let errorMessage = data.error || "Terjadi kesalahan";
+                        throw new Error(errorMessage);
+                    }
+
+                    // Pastikan server mengirimkan pesan sukses
+                    if (data.success) {
+                        alert(data.success);
+                        window.location.reload(); // Reload halaman setelah update berhasil
+                    } else {
+                        alert("Terjadi kesalahan, coba lagi.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Terjadi kesalahan saat mengirim data.");
+                }
+            });
+        });
+    </script>
 @endsection

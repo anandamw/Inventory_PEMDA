@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventory;
+use App\Models\OrderItem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -23,10 +24,10 @@ class InventoryController extends Controller
      * Form tambah inventory baru
      */
     public function create()
-    {
-        $headerText = 'Add Item';
-        return view('item.item_create', compact('headerText'));
-    }
+{
+    $headerText = 'Add Item';
+    return view('item.item_create', compact('headerText'));  // Pastikan untuk membuat view dengan nama 'item.create'
+}
 
     /**
      * Simpan data baru ke database
@@ -133,6 +134,4 @@ class InventoryController extends Controller
     
         return redirect()->back()->with('success', 'Item berhasil dihapus');
     }
-    
-
 }

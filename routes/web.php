@@ -33,7 +33,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/user', [UserController::class, 'index']);
     });
 
-                Route::post('/upload-profile', [SaveController::class, 'post_profile'])->name('upload.image');
+    Route::post('/upload-profile', [SaveController::class, 'post_profile'])->name('upload.image');
+    Route::patch('/revised/{id}', [InventoryController::class, 'revised']);
     Route::get('/item', [InventoryController::class, 'index']);
     Route::post('/save', [SaveController::class, 'store']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
