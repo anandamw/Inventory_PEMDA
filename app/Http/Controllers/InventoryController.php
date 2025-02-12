@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventory;
+use App\Models\OrderItem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -20,10 +21,10 @@ class InventoryController extends Controller
     }
 
     public function create()
-{
-    $headerText = 'Add Item';
-    return view('item.item_create', compact('headerText'));  // Pastikan untuk membuat view dengan nama 'item.create'
-}
+    {
+        $headerText = 'Add Item';
+        return view('item.item_create', compact('headerText'));  // Pastikan untuk membuat view dengan nama 'item.create'
+    }
 
     public function store(Request $request)
     {
@@ -110,5 +111,124 @@ class InventoryController extends Controller
         $inventory->delete();
 
         return redirect('/inventory')->with('success', 'Data berhasil dihapus');
+    }
+
+
+    // public function revised(Request $request, $id)
+    // {
+    //     \Log::info('=== DEBUG: Request diterima di revised() ===', [
+    //         'id' => $id,
+    //         'data' => $request->all()
+    //     ]);
+
+    //     // Validasi untuk quantity: apakah lebih besar dari atau sama dengan 1, atau negatif
+    //     $request->validate([
+    //         'quantity' => 'required|integer'
+    //     ]);
+
+    //     // Ambil data quantity yang dikirim
+    //     $set = $request->quantity;
+
+    //     // Ambil order item berdasarkan ID
+    //     $orderItem = OrderItem::where('id_order_items', $id)->first();
+
+    //     if (!$orderItem) {
+    //         \Log::error('=== ERROR: Order item tidak ditemukan ===');
+    //         return response()->json(['error' => 'Order item tidak ditemukan'], 404);
+    //     }
+
+    //     // Variabel untuk hasil update
+    //     $result = 0;
+
+    //     // Logika penyesuaian quantity
+    //     if ($set < 0) {
+    //         // Kurangi quantity
+    //         $result = $orderItem->quantity + $set;  // set negatif berarti mengurangi
+
+    //         Inventory::where('id_inventories', $id)->update([
+    //             'quantity' => 
+    //         ]);
+    //     } elseif ($set > 0) {
+    //         // Tambah quantity
+    //         $result = $orderItem->quantity + $set;  // set positif berarti menambah
+    //         Inventory::where('id_inventories', $id)->update([
+    //             'quantity' => 
+    //         ]);
+    //     }
+
+    //     // Cek apakah quantity tidak menjadi negatif setelah pengurangan
+    //     if ($result < 0) {
+    //         return response()->json(['error' => 'Jumlah quantity tidak bisa menjadi negatif'], 400);
+    //     }
+
+    //     // Update quantity
+    //     $orderItem->quantity = $result;
+    //     $orderItem->save();
+
+    //     \Log::info('=== DEBUG: Order item berhasil diperbarui ===', ['order_item' => $orderItem]);
+
+    //     return response()->json([
+    //         'success' => 'Quantity berhasil diperbarui',
+    //         'order_item' => $orderItem
+    //     ]);
+    // }
+
+    public function revised(Request $request, $id)
+    {
+        \Log::info('=== DEBUG: Request diterima di revised() ===', [
+            'id' => $id,
+            'data' => $request->all()
+        ]);
+
+        // Validasi request quantity (tidak boleh 0)
+        $request->validate([
+            'quantity' => 'required|integer|not_in:0'
+        ], [
+            'not_in' => 'Quantity tidak boleh 0'
+        ]);
+
+        $set = $request->quantity;
+
+        // Ambil order item berdasarkan ID
+        $orderItem = OrderItem::where('id_order_items', $id)->first();
+
+        if (!$orderItem) {
+            \Log::error('=== ERROR: Order item tidak ditemukan ===');
+            return response()->json(['error' => 'Order item tidak ditemukan'], 404);
+        }
+
+        // Ambil data inventory berdasarkan inventories_id dari order item
+        $inventory = Inventory::where('id_inventories', $orderItem->inventories_id)->first();
+
+        if (!$inventory) {
+            \Log::error('=== ERROR: Inventory tidak ditemukan ===');
+            return response()->json(['error' => 'Inventory tidak ditemukan'], 404);
+        }
+
+        $newOrderQuantity = $orderItem->quantity + $set;
+        $newInventoryQuantity = $inventory->quantity - $set;
+
+        // Pastikan inventory tidak menjadi negatif
+        if ($newInventoryQuantity < 0) {
+            return response()->json(['error' => 'Jumlah quantity di inventory tidak mencukupi'], 400);
+        }
+
+        // Update order item dan inventory
+        $orderItem->quantity = $newOrderQuantity;
+        $orderItem->save();
+
+        $inventory->quantity = $newInventoryQuantity;
+        $inventory->save();
+
+        \Log::info('=== DEBUG: Order item dan inventory berhasil diperbarui ===', [
+            'order_item' => $orderItem,
+            'inventory' => $inventory
+        ]);
+
+        return response()->json([
+            'success' => 'Quantity berhasil diperbarui',
+            'order_item' => $orderItem,
+            'inventory' => $inventory
+        ]);
     }
 }

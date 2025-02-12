@@ -18,31 +18,31 @@ class ItemSeeder extends Seeder
                 'code_item' => '123456',
                 'item_name' => 'Laptop',
                 'img_item' => null,
-                'quantity' => 6,
+                'quantity' => 200,
             ],
             [
                 'code_item' => '123457',
                 'item_name' => 'Kabel',
                 'img_item' => null,
-                'quantity' => 20,
+                'quantity' => 200,
             ],
             [
                 'code_item' => '123458',
                 'item_name' => 'Server',
                 'img_item' => null,
-                'quantity' => 4,
+                'quantity' => 400,
             ],
             [
                 'code_item' => '123459',
                 'item_name' => 'Monitor',
                 'img_item' => null,
-                'quantity' => 40,
+                'quantity' => 400,
             ],
             [
                 'code_item' => '123460',
                 'item_name' => 'Keyboard',
                 'img_item' => null,
-                'quantity' => 50,
+                'quantity' => 500,
             ],
 
         ];
