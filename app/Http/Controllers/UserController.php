@@ -116,8 +116,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+    
+        // Cek apakah data ditemukan sebelum menghapus
+        if (!$user) {
+            return redirect()->back()->with('error', 'Item tidak ditemukan');
+        }
+    
+        
+    
+        // Hapus gambar jika ada
+        if ($user->profile) {
+            $imagePath = public_path('uploads/profile/' . $user->profile);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+    
+        // Hapus item dari database
         $user->delete();
-
-        return redirect()->route('users.index')->with('success', 'User deleted successfully');
+    
+        return redirect()->back()->with('success', 'Item berhasil dihapus');
     }
 }

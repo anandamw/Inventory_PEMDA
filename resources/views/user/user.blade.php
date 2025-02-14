@@ -57,7 +57,7 @@
                                                             class="btn btn-primary shadow btn-xs sharp me-1"
                                                             data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i
                                                                 class="fas fa-pencil-alt"></i></button>
-                                                        <a href="#" class="btn btn-danger shadow btn-xs sharp">
+                                                        <a href="/user/{{ $item->id_inventories }}/destroy" class="btn btn-danger shadow btn-xs sharp">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </div>
@@ -100,6 +100,15 @@
                                         <label for="nip" class="form-label">NIP</label>
                                         <input type="text" class="form-control" id="nip" name="nip"
                                             placeholder="Masukkan NIP....." style="opacity: 0.6;" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="role" class="form-label">Role</label>
+                                        <select class="form-control" id="role" name="role" style="opacity: 0.6;"
+                                            required>
+                                            <option value="" disabled selected>Pilih Role...</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="user">User</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -26,6 +26,11 @@
                           <span class="nav-text">Users</span>
                       </a>
                   </li>
+                  <li><a href="/rekapitulasi" class="" aria-expanded="false">
+                          <i class="bi bi-book"></i>
+                          <span class="nav-text">Rekapitulasi</span>
+                      </a>
+                  </li>
                   <li><a href="/logout" class="" aria-expanded="false">
                           <i class="bi bi-box-arrow-right"></i>
                           <span class="nav-text">Logout</span>
