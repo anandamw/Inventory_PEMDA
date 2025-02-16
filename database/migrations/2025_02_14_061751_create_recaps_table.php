@@ -9,11 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('recaps', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('details'); // Menyimpan detail pesanan dalam bentuk JSON
-            $table->timestamps();
+            $table->unsignedBigInteger('id_recaps')->autoIncrement();
+         
+            $table->unsignedBigInteger('orders_id');
+            $table->foreign('orders_id')->references('id_orders')->on('orders');
+            
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->text('details');
+             $table->timestamps();
         });
     }
 

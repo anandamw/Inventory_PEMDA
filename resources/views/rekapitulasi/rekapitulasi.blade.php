@@ -1,8 +1,6 @@
 @extends('components.template')
 @section('content')
-    <!--**********************************
-                                            Content body start
-                                        ***********************************-->
+    
     <div class="content-body">
         <!-- row -->
         <div class="container-fluid">
@@ -87,9 +85,5 @@
             </div>
         </div>
     </div>
-    <!--**********************************
-                                            Content body end
-                                        ***********************************-->
-
-                                        
+                      
 @endsection
