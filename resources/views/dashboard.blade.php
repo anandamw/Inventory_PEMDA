@@ -132,31 +132,30 @@
                                     <thead class="text-white bg-primary text-center">
                                         <tr>
                                             <th class="align-middle">No</th>
-                                            <th class="align-middle">#Code</th>
-                                            <th class="align-middle pe-7">Photo</th>
-                                            <th class="align-middle" style="min-width: 12.5rem;">Item</th>
-                                            <th class="align-middle">Picked Up</th>
+                                            <th class="align-middle">Name</th>
+                                            <th class="align-middle pe-7">Events</th>
+                                            <th class="align-middle" style="min-width: 12.5rem;">Phone</th>
+                                            <th class="align-middle">Date Time</th>
 
-                                            <th class="align-middle">Status</th>
-
+ 
                                             <th class="align-middle">Action</th>
 
                                         </tr>
                                     </thead>
 
                                     <tbody id="orders" class="text-center">
-                                        @foreach ($dataLatest as $get)
+                                        @foreach ($orders as $get)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $get->code_item }}</td>
-                                                <td>
+                                                <td>{{ $get->name }}</td>
+                                                {{-- <td>
                                                     <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
                                                         alt="Item Image" width="50">
-                                                </td>
-                                                <td>{{ $get->item_name }}</td>
-                                                <td>{{ $get->quantity }}</td>
+                                                </td> --}}
+                                                <td>{{ $get->events }}</td>
+                                                <td>{{ $get->phone }}</td>
 
-                                                <td>{{ $get->status }}</td>
+                                                <td>{{ $get->created_at }}</td>
 
 
                                                 <td class="text-end ps-0">
@@ -174,7 +173,7 @@
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <button type="button" class="dropdown-item"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#exampleModal{{ $get->id_order_items }}">Edit
+                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">Edit
                                                                 Jumlah Item</button>
                                                             <a class="dropdown-item " href="javascript:void(0);">Acara Selesai</a>
 
@@ -198,79 +197,95 @@
         </div>
     </div>
 
-    @foreach ($dataLatest as $item)
-        <div class="modal fade" id="exampleModal{{ $item->id_order_items }}">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_order_items }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row">
-                                <!-- Image Section (left) -->
-                                <div class="col-md-4">
-                                    <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
-                                        alt="Image" class="img-fluid">
-                                </div>
+    @foreach ($orders as $item)
+    <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Image Section (left) -->
+                            <div class="col-md-4">
+                                <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                    alt="Image" class="img-fluid">
+                            </div>
 
-                                <!-- Description Section (right) -->
-                                <div class="col-md-8">
-                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
-                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+                            <!-- Description Section (right) -->
+                            <div class="col-md-8">
+                                <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
+                                <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
 
-                                    <!-- Detail Barang (table) -->
-                                    <h6>Detail Barang:</h6>
-                                    <table class="table table-bordered">
-                                        <thead>
+                                <!-- Detail Barang (table) -->
+                                <h6>Detail Barang:</h6>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Update Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
                                             <tr>
-                                                <th>Item</th>
-                                                <th>Quantity</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{{ $item->item_name }}</td>
-                                                <td>{{ $item->quantity }}</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="input-group quantity-control">
-                                                            <button
-                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                            <input type="number" id="quantity" name="quantity"
-                                                                class="form-control text-center quantity" value="1"
-                                                                min="1">
-                                                            <button
-                                                                class="btn btn-outline-primary btn-sm increment">+</button>
-                                                        </div>
+                                                <td>{{ $data->item_name }}</td>
+                                                <td class="py-2 text-center">
+                                                    <div class="input-group quantity-control">
+                                                        <button class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                        <input type="number" name="quantity[]" class="form-control text-center quantity"
+                                                            value="{{ $data->quantity }}" data-id="{{ $data->id_order_items }}" min="1">
+                                                        <button class="btn btn-outline-primary btn-sm increment">+</button>
                                                     </div>
                                                 </td>
+
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        @if ($data->status == 'success')
+                                                            <i class="fa fa-circle text-success me-1"></i> Successful
+                                                        @elseif($data->status == 'canceled')
+                                                            <i class="fa fa-circle text-danger me-1"></i> Canceled
+                                                        @elseif($data->status == 'pending')
+                                                            <i class="fa fa-circle text-warning me-1"></i> Pending
+                                                        @endif
+                                                    </div>
+                                                </td>
+
+                                                @if ($data->status !== 'success') 
+                                                <td>
+                                                    <div>
+                                                        <select name="status[]" data-id="{{ $data->id_order_items }}" class="form-select" required>
+                                                            <option value="pending" {{ $data->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                            <option value="success" {{ $data->status == 'success' ? 'selected' : '' }}>Success</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                            
                                             </tr>
-                                        </tbody>
-                                    </table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
 
-
-
-                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
-                                </div>
+                                <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary light submit-update"
-                            data-order-id="{{ $item->id_order_items }}">Save Change</button>
-
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success light" onclick="updateAllRecaps({{ $item->id_orders }})">Simpan</button>
                 </div>
             </div>
         </div>
+    </div>
     @endforeach
 
-
-    <!-- Modal -->
+    <!-- Modal About -->
     <div class="modal fade" id="exampleModalCenter">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -368,62 +383,40 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".submit-update").forEach(button => {
-                button.addEventListener("click", async event => {
-                    event.preventDefault();
+<script>
+   function updateAllRecaps(orderId) {
+    let recaps = [];
 
-                    // Ambil orderItemId dari tombol yang diklik
-                    let orderItemId = button.getAttribute("data-order-id");
-                    if (!orderItemId) {
-                        console.error("Order Item ID tidak ditemukan!");
-                        alert("Terjadi kesalahan, coba lagi.");
-                        return;
-                    }
+    document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
+        let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
+        let quantity = row.querySelector("input[name='quantity[]']").value;
+        let status = row.querySelector("select[name='status[]']").value;
 
-                    // Ambil modal terkait
-                    let modal = button.closest(".modal");
-                    let quantityInput = modal.querySelector(".quantity");
-                    let quantity = parseInt(quantityInput.value, 10);
-
-                    // Cek apakah quantity valid
-                    if (isNaN(quantity) || quantity <= 0) {
-                        alert("Masukkan jumlah yang valid!");
-                        return;
-                    }
-
-                    try {
-                        let response = await fetch(`/revised/${orderItemId}`, {
-                            method: "PATCH",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector(
-                                    'meta[name="csrf-token"]').content
-                            },
-                            body: JSON.stringify({
-                                quantity: quantity
-                            }),
-                        });
-
-                        let data = await response.json();
-                        if (!response.ok) {
-                            throw new Error(data.error || "Terjadi kesalahan");
-                        }
-
-                        // Jika berhasil, tampilkan alert dan reload halaman
-                        if (data.success) {
-                            alert(data.success);
-                            window.location.reload();
-                        } else {
-                            alert("Terjadi kesalahan, coba lagi.");
-                        }
-                    } catch (error) {
-                        console.error("Error:", error);
-                        alert("Terjadi kesalahan saat mengirim data.");
-                    }
-                });
-            });
+        recaps.push({
+            id: id,
+            quantity: quantity,
+            status: status
         });
-    </script>
+    });
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+    fetch("{{ route('history.bulk-update') }}", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken
+        },
+        body: JSON.stringify({ recaps: recaps })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        location.reload(); // Reload halaman setelah update sukses
+    })
+    .catch(error => {
+        console.error("Error updating data:", error);
+    });
+}
+
+</script>
 @endsection

@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/rekapitulasi', [RecapController::class, 'index'])->name('rekapitulasi.rekapitulasi');        
     });
+    Route::put('/history/bulk-update', [DashboardController::class, 'updateHistory'])->name('history.bulk-update');
 
     Route::post('/upload-profile', [SaveController::class, 'post_profile'])->name('upload.image');
     Route::patch('/revised/{id}', [InventoryController::class, 'revised']);
