@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
 
         Route::get('/history', [HistoryController::class, 'index']);
+        Route::put('/history/bulk-update', [HistoryController::class, 'updateHistory'])->name('history.update');
         Route::get('/item/create', [InventoryController::class, 'create'])->name('item.item_create');
 
         Route::get('/inventory', [InventoryController::class, 'index']);
@@ -38,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/rekapitulasi', [RecapController::class, 'index'])->name('rekapitulasi.rekapitulasi');        
     });
-    Route::put('/history/bulk-update', [DashboardController::class, 'updateHistory'])->name('history.bulk-update');
+    Route::put('/history/dashboard-update', [DashboardController::class, 'updateHistoryDashboard'])->name('history.dashboard.update');
 
     Route::post('/upload-profile', [SaveController::class, 'post_profile'])->name('upload.image');
     Route::patch('/revised/{id}', [InventoryController::class, 'revised']);

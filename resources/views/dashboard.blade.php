@@ -159,7 +159,7 @@
 
 
                                                 <td class="text-end ps-0">
-                                                    <div class="dropdown d-flex justify-content-center">
+                                                    <div class="dropdown dropup d-flex justify-content-center">
                                                         <a href="javascript:void(0);"
                                                             class="btn-link btn sharp tp-btn btn-primary pill"
                                                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,13 +173,14 @@
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <button type="button" class="dropdown-item"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">Edit
-                                                                Jumlah Item</button>
-                                                            <a class="dropdown-item " href="javascript:void(0);">Acara Selesai</a>
-
+                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">
+                                                                Edit Item
+                                                            </button> 
                                                         </div>
                                                     </div>
                                                 </td>
+                                                
+                                                
                                             </tr>
                                         @endforeach
 
@@ -234,6 +235,8 @@
                                         @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
                                             <tr>
                                                 <td>{{ $data->item_name }}</td>
+
+                                                @if ($data->status !== 'success') 
                                                 <td class="py-2 text-center">
                                                     <div class="input-group quantity-control">
                                                         <button class="btn btn-outline-primary btn-sm decrement">-</button>
@@ -243,7 +246,17 @@
                                                     </div>
                                                 </td>
 
-                                                <td>
+                                                @else
+                                                <td class="py-2 text-center hidden">
+                                                    <div class="input-group quantity-control">
+                                                        <button class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                        <input type="number" name="quantity[]" class="form-control text-center quantity"
+                                                            value="{{ $data->quantity }}" data-id="{{ $data->id_order_items }}" min="1">
+                                                        <button class="btn btn-outline-primary btn-sm increment">+</button>
+                                                    </div>
+                                                </td>
+                                                @endif
+                                                <td class="text-center">
                                                     <div class="d-flex align-items-center">
                                                         @if ($data->status == 'success')
                                                             <i class="fa fa-circle text-success me-1"></i> Successful
@@ -254,18 +267,19 @@
                                                         @endif
                                                     </div>
                                                 </td>
-
-                                                @if ($data->status !== 'success') 
-                                                <td>
-                                                    <div>
-                                                        <select name="status[]" data-id="{{ $data->id_order_items }}" class="form-select" required>
-                                                            <option value="pending" {{ $data->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                            <option value="success" {{ $data->status == 'success' ? 'selected' : '' }}>Success</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            @endif
+ 
                                             
+                                            <td>
+                                              
+                                                    <select name="status[]" data-id="{{ $data->id_order_items }}" class="form-select" required>
+                                                        <option value="pending" {{ $data->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="success" {{ $data->status == 'success' ? 'selected' : '' }}>Success</option>
+                                                    </select>
+                                               
+                                            </td>
+                                            
+
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -360,63 +374,61 @@
 
 
 
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".quantity-control").forEach(function(control) {
                 let decrementBtn = control.querySelector(".decrement");
                 let incrementBtn = control.querySelector(".increment");
                 let inputField = control.querySelector(".quantity");
-
+    
                 decrementBtn.addEventListener("click", function() {
-                    let currentValue = parseInt(inputField.value) ||
-                        0; // Pastikan nilai selalu integer
-                    inputField.value = currentValue - 1; // Bisa negatif
+                    let currentValue = parseInt(inputField.value) || 0;
+                    if (currentValue > 0) {  
+                        inputField.value = currentValue - 1;
+                    }
                 });
-
+    
                 incrementBtn.addEventListener("click", function() {
                     let currentValue = parseInt(inputField.value) || 0;
                     inputField.value = currentValue + 1;
                 });
             });
         });
+    
+        function updateAllRecaps(orderId) {
+            let recaps = [];
+    
+            document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
+                let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
+                let quantity = parseInt(row.querySelector("input[name='quantity[]']").value) || 0;
+                let status = row.querySelector("select[name='status[]']").value;
+    
+                recaps.push({
+                    id: id,
+                    quantity: quantity,
+                    status: status
+                });
+            });
+    
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    
+            fetch("{{ route('history.dashboard.update') }}", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({ recaps: recaps })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error("Error updating data:", error);
+            });
+        }
     </script>
-
-<script>
-   function updateAllRecaps(orderId) {
-    let recaps = [];
-
-    document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
-        let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
-        let quantity = row.querySelector("input[name='quantity[]']").value;
-        let status = row.querySelector("select[name='status[]']").value;
-
-        recaps.push({
-            id: id,
-            quantity: quantity,
-            status: status
-        });
-    });
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-    fetch("{{ route('history.bulk-update') }}", {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken
-        },
-        body: JSON.stringify({ recaps: recaps })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        location.reload(); // Reload halaman setelah update sukses
-    })
-    .catch(error => {
-        console.error("Error updating data:", error);
-    });
-}
-
-</script>
+    
 @endsection
