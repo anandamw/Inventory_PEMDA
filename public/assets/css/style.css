@@ -75,29 +75,33 @@
 @import url(../vendor/perfect-scrollbar/css/perfect-scrollbar.css);
 @import url(../vendor/metismenu/css/metisMenu.min.css);
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -2510,7 +2514,7 @@ textarea.form-control-lg {
   .btn-check:active + .btn-light, .btn-light:active, .btn-light.active,
   .show > .btn-light.dropdown-toggle {
     color: #000;
-    background-color: lightgray;
+    background-color: rgb(255, 253, 253);
     border-color: #cecece; }
     .btn-check:checked + .btn-light:focus,
     .btn-check:active + .btn-light:focus, .btn-light:active:focus, .btn-light.active:focus,
@@ -12174,29 +12178,33 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   width: 50vw; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -12407,29 +12415,33 @@ The smaller device rules always should write below the bigger device rules
 Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Component
 */
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -12656,29 +12668,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     transform: rotate(-225deg) translateY(-50%); } }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -13589,7 +13605,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   z-index: 9;
   top: 7.75rem;
   right: 100%;
-  background-color: #9568FF;
+  background-color: #20B2AA;
   color: #fff;
   display: inline-block;
   height: 3rem;
@@ -14401,7 +14417,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_4"][data-theme-version="dark"],
 [data-nav-headerbg="color_4"] {
-  --nav-headbg: #362465;
+  --nav-headbg: #008080;
   /* &[data-nav-headerbg="color_8"]{
 				.nav-header{
 					.brand-logo{
@@ -15189,7 +15205,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sidebarbg="color_4"][data-theme-version="dark"],
 [data-sidebarbg="color_4"] {
-  --sidebar-bg: #362465;
+  --sidebar-bg: #008080;
   /* .hamburger .line{
 				background:$white;
 			} */
@@ -18926,29 +18942,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   font-family: 'HelveticaNeue'; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -19073,29 +19093,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     border-color: transparent transparent rgba(0, 0, 0, 0.15) transparent; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -21915,29 +21939,33 @@ input#checkAll.form-check-input:checked {
   color: var(--primary); }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -22419,29 +22447,33 @@ input#checkAll.form-check-input:checked {
   color: #A098AE; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -22679,29 +22711,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   border-bottom-right-radius: 0; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -22713,29 +22749,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     color: #fff; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -22763,29 +22803,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     margin-bottom: .5rem; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -22830,29 +22874,33 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   font-size: 2rem; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }
@@ -32827,29 +32875,33 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   padding-right: 9.375rem; }
 
 :root {
-  --primary: #9568FF;
-  --secondary: #362465;
-  --secondary-dark: #22173f;
-  --primary-hover: #7135ff;
-  --primary-dark: #3d00ce;
-  --rgba-primary-1: rgba(149, 104, 255, 0.1);
-  --rgba-primary-2: rgba(149, 104, 255, 0.2);
-  --rgba-primary-3: rgba(149, 104, 255, 0.3);
-  --rgba-primary-4: rgba(149, 104, 255, 0.4);
-  --rgba-primary-5: rgba(149, 104, 255, 0.5);
-  --rgba-primary-6: rgba(149, 104, 255, 0.6);
-  --rgba-primary-7: rgba(149, 104, 255, 0.7);
-  --rgba-primary-8: rgba(149, 104, 255, 0.8);
-  --rgba-primary-9: rgba(149, 104, 255, 0.9);
-  --rgba-secondary-1: rgba(54, 36, 101, 0.1);
-  --rgba-secondary-2: rgba(54, 36, 101, 0.2);
-  --rgba-secondary-3: rgba(54, 36, 101, 0.3);
-  --rgba-secondary-4: rgba(54, 36, 101, 0.4);
-  --rgba-secondary-5: rgba(54, 36, 101, 0.5);
-  --rgba-secondary-6: rgba(54, 36, 101, 0.6);
-  --rgba-secondary-7: rgba(54, 36, 101, 0.7);
-  --rgba-secondary-8: rgba(54, 36, 101, 0.8);
-  --rgba-secondary-9: rgba(54, 36, 101, 0.9);
+  --primary: #20B2AA;
+  --secondary: #008080;
+  --secondary-dark: #004d4d;
+  --primary-hover: #1E9E97;
+  --primary-dark: #1A8C87;
+
+  /* RGBA Primary (Tosca Transparan) */
+  --rgba-primary-1: rgba(32, 178, 170, 0.1);
+  --rgba-primary-2: rgba(32, 178, 170, 0.2);
+  --rgba-primary-3: rgba(32, 178, 170, 0.3);
+  --rgba-primary-4: rgba(32, 178, 170, 0.4);
+  --rgba-primary-5: rgba(32, 178, 170, 0.5);
+  --rgba-primary-6: rgba(32, 178, 170, 0.6);
+  --rgba-primary-7: rgba(32, 178, 170, 0.7);
+  --rgba-primary-8: rgba(32, 178, 170, 0.8);
+  --rgba-primary-9: rgba(32, 178, 170, 0.9);
+
+  /* RGBA Secondary (Teal Transparan) */
+  --rgba-secondary-1: rgba(0, 128, 128, 0.1);
+  --rgba-secondary-2: rgba(0, 128, 128, 0.2);
+  --rgba-secondary-3: rgba(0, 128, 128, 0.3);
+  --rgba-secondary-4: rgba(0, 128, 128, 0.4);
+  --rgba-secondary-5: rgba(0, 128, 128, 0.5);
+  --rgba-secondary-6: rgba(0, 128, 128, 0.6);
+  --rgba-secondary-7: rgba(0, 128, 128, 0.7);
+  --rgba-secondary-8: rgba(0, 128, 128, 0.8);
+  --rgba-secondary-9: rgba(0, 128, 128, 0.9);
   --font-family-base: poppins, sans-serif, sans-serif;
   --font-family-title: poppins, sans-serif, sans-serif;
   --title: #374557; }

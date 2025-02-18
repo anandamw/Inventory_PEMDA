@@ -20,6 +20,24 @@
             background: #000;
         }
 
+        .logo-container {
+            width: 180px;
+            height: 180px;
+            background: #ECF0F3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 4px 4px 6px #babecc,
+                inset -4px -4px 6px #ffffff;
+            margin: 0 auto 20px auto;
+        }
+
+        .logo-container img {
+            width: 110px;
+            height: auto;
+        }
+
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -42,7 +60,7 @@
             width: 100%;
             height: 100vh;
             z-index: 1;
-            background: #16351fed;
+            background: #ffffffe3;
         }
 
         .home-content {
@@ -56,9 +74,9 @@
             align-items: center;
             flex-direction: column;
             text-align: center;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.61);
             z-index: 5;
-            color: white;
+            color: #008B8B;
             opacity: 1;
             transition: opacity 0.5s ease-out;
         }
@@ -88,7 +106,7 @@
             width: 100%;
             height: 350px;
             border-radius: 10px;
-            background: #5c5c5c;
+            background: #ffffff;
         }
 
         /* Media query untuk perangkat mobile */
@@ -120,14 +138,18 @@
         }
 
         .card-body {
-            background: #afafafed;
-            padding: 20px;
-            border-radius: 15px;
+            background: #008B8B;
+            width: 95%;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px #babecc, -10px -10px 20px #ffffff;
+            text-align: center;
+            margin-left: 10px
         }
 
         .scroll-instruction {
             font-size: 1.2rem;
-            color: #007bff;
+            color: #008B8B;
             cursor: pointer;
             text-decoration: underline;
         }
@@ -145,7 +167,36 @@
             width: 60px;
             filter: hue-rotate(0deg);
             transition: filter 0.5s ease-in-out;
+            filter: invert(43%) sepia(52%) saturate(306%) hue-rotate(137deg) brightness(91%) contrast(86%);
         }
+
+        .title-container {
+            display: flex;
+            justify-content: center;
+            /* Pusatkan secara horizontal */
+            align-items: center;
+            /* Jika ingin juga di tengah vertikal */
+            text-align: center;
+            /* Agar teks juga terpusat */
+            width: 100%;
+            /* Pastikan parent mencakup seluruh lebar */
+        }
+
+        .title-container p {
+            margin-left: 10%;
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #ECF0F3;
+            box-shadow: inset 4px 4px 6px #babecc,
+                inset -4px -4px 6px #ffffff;
+            font-size: 14px;
+            outline: none;
+            text-align: center;
+            /* Memastikan teks dalam elemen ikut rata tengah */
+        }
+
 
         @keyframes bounce {
             0% {
@@ -156,17 +207,54 @@
                 transform: translate(-50%, -20px);
             }
         }
+
+
+        .wave-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            z-index: 2;
+        }
+
+        .wave-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            z-index: 2;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Ombak Atas -->
+    <svg class="wave wave-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#008B8B" fill-opacity="1"
+            d="M0,192L30,186.7C60,181,120,171,180,170.7C240,171,300,181,360,202.7C420,224,480,256,540,250.7C600,245,660,203,720,170.7C780,139,840,117,900,122.7C960,128,1020,160,1080,170.7C1140,181,1200,171,1260,149.3C1320,128,1380,96,1410,80L1440,64V0H1410C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0H0Z">
+        </path>
+    </svg>
+
     <div id="particles-js"></div>
 
+    <!-- Ombak Bawah -->
+    <svg class="wave wave-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#008B8B" fill-opacity="1"
+            d="M0,160L30,176C60,192,120,224,180,224C240,224,300,192,360,170.7C420,149,480,139,540,138.7C600,139,660,149,720,181.3C780,213,840,267,900,266.7C960,267,1020,213,1080,176C1140,139,1200,117,1260,128C1320,139,1380,181,1410,202.7L1440,224V320H0Z">
+        </path>
+    </svg>
+
+
     <div class="home-content text-center" id="home-content">
-        <img src="{{ asset('') }}assets/images/pemda.png" alt="Logishub Logo" class="home-logo" width="150"
-            height="auto">
-        <h1>Welcome to Logishub</h1>
-        <div class="container">
+        <div class="logo-container">
+            <img src="{{ asset('') }}assets/images/pemda.png" alt="Logishub Logo" class="concave-logo">
+        </div>
+        <div class="title-container">
+            <h2>Welcome to Logishub</h2>
+        </div>
+        <div class="title-container">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <p>LogisHub - Platform web pemerintah untuk pengambilan barang yang cepat, mudah, dan terdata,
@@ -181,16 +269,13 @@
 
 
     <div class="scanner-card" id="scanner-card">
-        <div class="card shadow-lg p-4">
-            <div class="card-body text-center">
-                <h3 class="card-title mb-4"><i class="fas fa-qrcode"></i> QR Code Scanner</h3>
-                <div id="qr-reader"></div>
+        <div class="card shadow-lg p-3 " style="border-radius: 20px;">
+            <div class="card-body text-center" style="margin-left: 2.5%">
+                <h3 class="card-title mb-4" style="color: white"><i class="fas fa-qrcode"></i> QR Code Scanner</h3>
+                <div id="qr-reader" style="width: 100%"></div>
                 <div class="mt-4">
-                    <button class="btn btn-primary me-2" onclick="startScanner()" style="border-radius: 8px;">
+                    <button class="btn btn-light me-2" onclick="startScanner()" style="border-radius: 8px;">
                         <i class="fas fa-play"></i> Start Scanner
-                    </button>
-                    <button class="btn btn-danger" onclick="stopScanner()" style="border-radius: 8px;">
-                        <i class="fas fa-stop"></i> Stop Scanner
                     </button>
                 </div>
             </div>
@@ -199,7 +284,7 @@
 
 
     <script>
-        let hue = 0;
+        let hue = 008 B8B;
         setInterval(() => {
             hue = (hue + 30) % 360;
             document.getElementById('scroll-icon').style.filter = `hue-rotate(${hue}deg)`;
@@ -220,11 +305,11 @@
                         speed: 2
                     },
                     color: {
-                        value: "#ffffff"
+                        value: "#59dede"
                     },
                     line_linked: {
                         enable: true,
-                        color: "#ffffff"
+                        color: "#008B8B"
                     }
                 }
             });

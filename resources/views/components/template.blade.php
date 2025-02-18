@@ -19,7 +19,7 @@
 
 
     <!-- PAGE TITLE HERE -->
-    <title>LogisHub</title>
+    <title>LogisHub - {{ $headerText }}</title>
     @include('components.style')
 
 </head>
@@ -64,8 +64,8 @@
             <div class="copyright">
                 <p>
                     Copyright © Developed by
-                    <a href="https://dexignzone.com/" target="_blank">Anandamw</a> &
-                    <a href="https://mywebsite-fri.vercel.app/" target="_blank">FriemZ</a>
+                    <a href="https://mywebsite-fri.vercel.app/" target="_blank">FriemZ </a>&
+                    <a href="https://dexignzone.com/" target="_blank">Anandamw</a>
                     2025
                 </p>
             </div>

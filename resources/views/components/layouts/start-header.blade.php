@@ -26,130 +26,108 @@
                         </div>
                     </div>
                     <div class="dz-side-menu">
-                        <div class="sidebar-social-link ">
-                            <ul>
-                                <li class="nav-item dropdown notification_dropdown">
-                                    <a class="nav-link" href="javascript:void(0);" role="button"
-                                        data-bs-toggle="dropdown">
-                                        <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M18.7071 8.56414C18.7071 9.74035 19.039 10.4336 19.7695 11.2325C20.3231 11.8211 20.5 12.5766 20.5 13.3963C20.5 14.215 20.2128 14.9923 19.6373 15.6233C18.884 16.3798 17.8215 16.8627 16.7372 16.9466C15.1659 17.0721 13.5937 17.1777 12.0005 17.1777C10.4063 17.1777 8.83505 17.1145 7.26375 16.9466C6.17846 16.8627 5.11602 16.3798 4.36367 15.6233C3.78822 14.9923 3.5 14.215 3.5 13.3963C3.5 12.5766 3.6779 11.8211 4.23049 11.2325C4.98384 10.4336 5.29392 9.74035 5.29392 8.56414V8.16515C5.29392 6.58996 5.71333 5.55995 6.577 4.55164C7.86106 3.08114 9.91935 2.19922 11.9558 2.19922H12.0452C14.1254 2.19922 16.2502 3.12359 17.5125 4.65728C18.3314 5.64484 18.7071 6.63146 18.7071 8.16515V8.56414ZM9.07367 19.1136C9.07367 18.642 9.53582 18.426 9.96318 18.3336C10.4631 18.2345 13.5093 18.2345 14.0092 18.3336C14.4366 18.426 14.8987 18.642 14.8987 19.1136C14.8738 19.5626 14.5926 19.9606 14.204 20.2134C13.7001 20.5813 13.1088 20.8143 12.4906 20.8982C12.1487 20.9397 11.8128 20.9407 11.4828 20.8982C10.8636 20.8143 10.2723 20.5813 9.76938 20.2125C9.37978 19.9606 9.09852 19.5626 9.07367 19.1136Z"
-                                                fill="#130F26" />
-                                        </svg>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3"
-                                            style="height:380px;">
-                                            <ul class="timeline">
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2">
-                                                            <img alt="image" width="50"
-                                                                src="images/avatar/1.jpg">
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-info">
-                                                            KG
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Resport created successfully</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-success">
-                                                            <i class="fa fa-home"></i>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2">
-                                                            <img alt="image" width="50"
-                                                                src="images/avatar/1.jpg">
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-danger">
-                                                            KG
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Resport created successfully</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-primary">
-                                                            <i class="fa fa-home"></i>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2">
-                                                            <img alt="image" width="50"
-                                                                src="images/avatar/1.jpg">
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="timeline-panel">
-                                                        <div class="media me-2 media-primary">
-                                                            <i class="fa fa-home"></i>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                                                            <small class="d-block">29 July 2020 - 02:26 PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                        @if (auth()->user()->role == 'admin')
+                            <div class="sidebar-social-link ">
+                                <ul>
+
+                                    <style>
+                                        .blink {
+                                            animation: blink-animation 1s steps(5, start) infinite;
+                                        }
+
+                                        @keyframes blink-animation {
+                                            to {
+                                                visibility: hidden;
+                                            }
+                                        }
+
+                                        /* Penyesuaian ukuran badge */
+                                        .notification-badge {
+                                            position: absolute;
+                                            top: 2px;
+                                            right: 3px;
+                                            width: 18px;
+                                            height: 18px;
+                                            font-size: 10px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            padding: 0;
+                                            line-height: 1;
+                                        }
+                                    </style>
+
+                                    <li class="nav-item dropdown notification_dropdown">
+                                        <a class="nav-link position-relative" href="javascript:void(0);" role="button"
+                                            data-bs-toggle="dropdown">
+                                            <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M18.7071 8.56414C18.7071 9.74035 19.039 10.4336 19.7695 11.2325C20.3231 11.8211 20.5 12.5766 20.5 13.3963C20.5 14.215 20.2128 14.9923 19.6373 15.6233C18.884 16.3798 17.8215 16.8627 16.7372 16.9466C15.1659 17.0721 13.5937 17.1777 12.0005 17.1777C10.4063 17.1777 8.83505 17.1145 7.26375 16.9466C6.17846 16.8627 5.11602 16.3798 4.36367 15.6233C3.78822 14.9923 3.5 14.215 3.5 13.3963C3.5 12.5766 3.6779 11.8211 4.23049 11.2325C4.98384 10.4336 5.29392 9.74035 5.29392 8.56414V8.16515C5.29392 6.58996 5.71333 5.55995 6.577 4.55164C7.86106 3.08114 9.91935 2.19922 11.9558 2.19922H12.0452C14.1254 2.19922 16.2502 3.12359 17.5125 4.65728C18.3314 5.64484 18.7071 6.63146 18.7071 8.16515V8.56414ZM9.07367 19.1136C9.07367 18.642 9.53582 18.426 9.96318 18.3336C10.4631 18.2345 13.5093 18.2345 14.0092 18.3336C14.4366 18.426 14.8987 18.642 14.8987 19.1136C14.8738 19.5626 14.5926 19.9606 14.204 20.2134C13.7001 20.5813 13.1088 20.8143 12.4906 20.8982C12.1487 20.9397 11.8128 20.9407 11.4828 20.8982C10.8636 20.8143 10.2723 20.5813 9.76938 20.2125C9.37978 19.9606 9.09852 19.5626 9.07367 19.1136Z"
+                                                    fill="#130F26" />
+                                            </svg>
+
+                                            <!-- Notifikasi bulat merah -->
+                                            @if ($lowStockCount > 0)
+                                                <span class="badge bg-danger rounded-circle blink notification-badge">
+                                                    {{ $lowStockCount }}
+                                                </span>
+                                            @endif
+                                        </a>
+
+                                        <!-- Dropdown Notifikasi -->
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3"
+                                                style="height:380px;">
+                                                <ul class="timeline">
+                                                    @forelse ($lowStockItems as $item)
+                                                        <li>
+                                                            <div class="timeline-panel">
+                                                                <div class="media me-2">
+                                                                    <a href="{{ url('/inventory') }}">
+                                                                        <img src="{{ file_exists(public_path('uploads/items/' . $item->img_item)) ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h6 class="mb-1">{{ $item->item_name }}</h6>
+                                                                    <small class="d-block">{{ $item->code_item }} ||
+                                                                        Stok: {{ $item->quantity }} </small>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @empty
+                                                        <li>
+                                                            <div class="timeline-panel">
+                                                                <div class="media-body">
+                                                                    <h6 class="mb-1">Tidak ada item dengan stok rendah
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforelse
+                                                </ul>
+                                            </div>
+                                            <div class="text-center mt-2">
+                                                <a href="/inventory" class="btn btn-sm btn-primary">Lihat Semua</a>
+                                            </div>
                                         </div>
-                                        <a class="all-notification" href="javascript:void(0);">See all notifications
-                                            <i class="ti-arrow-end"></i></a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        @endif
+                        <ul></ul>
+
                         <ul>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                     <img width="50" height="50"
-                                        src="{{ Auth::user()->profile ? asset('assets/images/profile/' . Auth::user()->profile) : asset('assets/images/profile/no-profile.jpg') }}"
+                                        src="{{ Auth::user()->profile ? asset(Auth::user()->profile) : asset('uploads/profile/no-profile.jpg') }}"
                                         alt="User Profile">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" style="">
-                                    <a href="/edit_profile" class="dropdown-item ai-icon ">
+                                    <a href="/profile" class="dropdown-item ai-icon ">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                             viewBox="0 0 24 24" version="1.1" class="svg-main-icon">
@@ -167,8 +145,8 @@
                                     </a>
                                     <a href="/logout" class="dropdown-item ai-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                             <polyline points="16 17 21 12 16 7"></polyline>
                                             <line x1="21" y1="12" x2="9" y2="12">

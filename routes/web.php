@@ -32,14 +32,21 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/inventory/{id_inventories}/update', [InventoryController::class, 'update']);
         Route::get('/inventory/{id}/destroy', [InventoryController::class, 'destroy']);
         Route::get('/user/create', [UserController::class, 'create']);
+        Route::get('/user/{id}/edit', [UserController::class, 'edit']);
+        Route::post('/user/{id}/update', [UserController::class, 'update']);
         Route::get('/user/{id}/destroy', [UserController::class, 'destroy']);
         Route::post('/user/store', [UserController::class, 'store']);
         Route::get('/user', [UserController::class, 'index']);
 
-        Route::get('/rekapitulasi', [RecapController::class, 'index'])->name('rekapitulasi.rekapitulasi');        
-    });
+        Route::get('/rekapitulasi', [RecapController::class, 'index'])->name('rekapitulasi.rekapitulasi');      
+        Route::get('/rekapitulasi/{id}', [RecapController::class, 'show'])->name('rekapitulasi.show');
+        Route::get('/rekapitulasi/download/{id}', [RecapController::class, 'downloadPdf'])->name('rekapitulasi.download');  
 
-    Route::post('/upload-profile', [SaveController::class, 'post_profile'])->name('upload.image');
+        
+    });
+    Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');
+
     Route::patch('/revised/{id}', [InventoryController::class, 'revised']);
     Route::get('/item', [InventoryController::class, 'index']);
     Route::post('/save', [SaveController::class, 'store']);

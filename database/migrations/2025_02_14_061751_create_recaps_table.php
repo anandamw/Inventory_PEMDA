@@ -6,17 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('recaps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('details'); // Menyimpan detail pesanan dalam bentuk JSON
+            $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('orders_id')->constrained()->onDelete('cascade');
+            $table->string('event');
+            $table->string('profile')->nullable();
+            $table->string('name');
+            $table->string('nip', 15);
+            $table->string('phone');
+            $table->integer('total_item');
+            $table->json('detail_items'); // Menyimpan detail item dalam JSON
+            $table->dateTime('date');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('recaps');

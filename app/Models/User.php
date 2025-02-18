@@ -19,14 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'nip',
-        'role',
-        'token',
-        'password',
-        'profile',
-     ];
+    protected $fillable = ['name', 'nip', 'role', 'token', 'password', 'profile'];
 
     protected $casts = [
         'last_seen' => 'datetime',

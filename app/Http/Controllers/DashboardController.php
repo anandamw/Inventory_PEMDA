@@ -18,8 +18,10 @@ class DashboardController extends Controller
         $headerText = 'Dashboard';
 
 
-        $dataItem = Inventory::where('quantity', '<', 10)->select('code_item', 'item_name', 'quantity')->get();
+        $dataItem = Inventory::select('code_item', 'item_name', 'img_item', 'quantity')->get();
 
+            // Hitung jumlah item yang stoknya kurang dari 10
+    $lowStockCount = $dataItem->count();
 
         $dataLatest = OrderItem::join('users', 'order_items.users_id', '=', 'users.id')
             ->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')->join('orders', 'order_items.orders_id', '=', 'orders.id_orders')

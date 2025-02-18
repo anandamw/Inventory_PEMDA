@@ -8,17 +8,12 @@
                 <div class="col-xl-4 col-lg-4">
                     <div class="clearfix">
                         <div class="card card-bx profile-card author-profile m-b30">
-                            <div class="card-body">
+                            <div class="card-body"  style="height: 440px;">
                                 <div class="p-5">
                                     <div class="author-profile">
                                         <div class="author-media">
                                             <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
                                                 alt="">
-                                            <div class="upload-link" title="" data-toggle="tooltip"
-                                                data-placement="right" data-original-title="update">
-                                                <input type="file" class="update-flie">
-                                                <i class="fa fa-camera"></i>
-                                            </div>
                                         </div>
                                         <div class="author-info">
                                             <h6 class="title">{{ auth()->user()->name }}</h6>
@@ -217,7 +212,7 @@
                                         style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;"
                                         onclick="document.getElementById('editFile').click()">
 
-                                        <img id="previewEditImage" src="{{asset('assets/images/no-image.png')}}"
+                                        <img id="previewEditImage" src="{{ asset('assets/images/no-image.png') }}"
                                             alt="Drag & Drop" class="img-thumbnail"
                                             style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
 
@@ -246,7 +241,7 @@
                     let name = this.getAttribute("data-name");
                     let quantity = this.getAttribute("data-quantity");
                     let image = this.getAttribute("data-image") ||
-                    "https://via.placeholder.com/100";
+                        "https://via.placeholder.com/100";
 
                     document.getElementById("editId").value = id;
                     document.getElementById("editName").value = name;

@@ -2,7 +2,7 @@
             Nav header start
         ***********************************-->
   <div class="nav-header">
-      <a href="index.html" class="brand-logo">
+      <a href="/dashboard" class="brand-logo">
           <img src="{{ asset('')}}assets/images/logo/logo.png" class="logo-abbr" alt="">
           <img src="{{ asset('')}}assets/images/logo/logo-text.png" class="brand-title" alt="">
           <img src="{{ asset('')}}assets/images/logo/logo-color.png" class="logo-color" alt="">
