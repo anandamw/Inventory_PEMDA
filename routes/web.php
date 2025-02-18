@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
 
         Route::get('/history', [HistoryController::class, 'index']);
+        Route::put('/history/bulk-update', [HistoryController::class, 'updateHistory'])->name('history.update');
         Route::get('/item/create', [InventoryController::class, 'create'])->name('item.item_create');
 
         Route::get('/inventory', [InventoryController::class, 'index']);

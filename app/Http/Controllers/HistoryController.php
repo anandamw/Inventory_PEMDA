@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\order_items;
+use App\Models\Inventory;
 use App\Models\OrderItem;
+use App\Models\order_items;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class HistoryController extends Controller
 {
@@ -28,44 +30,52 @@ class HistoryController extends Controller
         return view('history.history', compact('headerText', 'orderItem', 'orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function updateHistory(Request $request){
+        // Validasi input
+    $validator = Validator::make($request->all(), [
+        'recaps' => 'required|array',
+        'recaps.*.id' => 'required|exists:order_items,id_order_items',
+        'recaps.*.quantity' => 'required|integer|min:0', // Bisa 0 jika dihapus
+        'recaps.*.status' => 'required|in:pending,success',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validasi gagal!',
+            'errors' => $validator->errors()
+        ], 422);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    // Loop untuk update semua data yang dikirim
+    foreach ($request->recaps as $recapData) {
+        $orderItem = OrderItem::where('id_order_items', $recapData['id'])->first();
+
+        if ($orderItem) {
+            $oldQuantity = $orderItem->quantity;
+            $newQuantity = $recapData['quantity'];
+            $quantityDifference = $newQuantity - $oldQuantity;
+
+            // Update quantity
+            $orderItem->update([
+                'quantity' => $newQuantity,
+                'status' => $recapData['status']
+            ]);
+
+       
+
+if ($quantityDifference > 0) {
+    Inventory::where('id_inventories', $orderItem->inventories_id)->decrement('quantity', $quantityDifference);
+ } elseif ($quantityDifference < 0) {
+    Inventory::where('id_inventories', $orderItem->inventories_id)->increment('quantity', abs($quantityDifference));
+ }
+
+            
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    return response()->json([
+        'message' => 'Data berhasil diperbarui!'
+    ]);
     }
 
     /**
