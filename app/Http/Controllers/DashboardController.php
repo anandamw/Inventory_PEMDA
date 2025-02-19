@@ -46,9 +46,7 @@ class DashboardController extends Controller
             )
             ->orderBy('order_items.created_at', 'desc')
             ->get();
-
-
-
+            
         toast('Selamat datang di layanan Logishub', 'info');
 
         return view('dashboard', compact('headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount'));

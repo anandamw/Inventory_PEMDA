@@ -94,13 +94,15 @@
                                             <th>Item</th>
                                             <th>Quantity</th>
                                             <th>Status</th>
-                                            <th>Update Status</th>
+                                       
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
                                             <tr>
                                                 <td>{{ $data->item_name }}</td>
+
+                                                @if ($data->status !== 'success') 
                                                 <td class="py-2 text-center">
                                                     <div class="input-group quantity-control">
                                                         <button class="btn btn-outline-primary btn-sm decrement">-</button>
@@ -110,7 +112,11 @@
                                                     </div>
                                                 </td>
 
-                                                <td>
+                                                @else
+                                                <td>{{ $data->quantity }}</td>
+
+                                                @endif
+                                                <td class="text-center">
                                                     <div class="d-flex align-items-center">
                                                         @if ($data->status == 'success')
                                                             <i class="fa fa-circle text-success me-1"></i> Successful
@@ -121,21 +127,9 @@
                                                         @endif
                                                     </div>
                                                 </td>
-
-                                                @if ($data->status !== 'success') 
-                                                <td>
-                                                    <div>
-                                                        <select name="status[]" data-id="{{ $data->id_order_items }}" class="form-select" required>
-                                                            <option value="pending" {{ $data->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                            <option value="success" {{ $data->status == 'success' ? 'selected' : '' }}>Success</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            @endif
-                                            
                                             </tr>
                                         @endforeach
-                                    </tbody>
+                                    </tbody>                                
                                 </table>
 
                                 <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
@@ -145,15 +139,28 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success light" onclick="updateAllRecaps({{ $item->id_orders }})">Simpan</button>
+
+                    @php
+                    // Mengecek apakah ada item yang belum success
+                    $hasPendingItems = $orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0;
+                @endphp
+            
+                @if ($hasPendingItems)
+                    <button type="button" class="btn btn-warning light" onclick="updateAllRecaps({{ $item->id_orders }})">
+                        Simpan Perubahan
+                    </button>
+                    
+                    <button type="button" class="btn btn-primary light" onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
+                        Acara Selesai
+                    </button>
+                    @endif
+                    
                 </div>
             </div>
         </div>
     </div>
     @endforeach
 
-
-   
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".quantity-control").forEach(function(control) {
@@ -181,12 +188,12 @@
             document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
                 let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
                 let quantity = parseInt(row.querySelector("input[name='quantity[]']").value) || 0;
-                let status = row.querySelector("select[name='status[]']").value;
+              
     
                 recaps.push({
                     id: id,
                     quantity: quantity,
-                    status: status
+                    
                 });
             });
     
@@ -210,5 +217,29 @@
             });
         }
     </script>
-    
+
+<script>
+    function updateItemsStatus(orderId, status) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+        fetch("{{ route('order-items.updateStatus') }}", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({ orders_id: orderId, status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => {
+            console.error("Error updating status:", error);
+        });
+    }
+</script>
+
+
 @endsection

@@ -1,11 +1,6 @@
 @extends('components.template')
 @section('content')
-    <!--**********************************
-                                                                                Content body start
-                                                                            ***********************************-->
-
-
-
+   
     <style>
         /* Background Modal */
         .modal-content {
@@ -68,7 +63,7 @@
                             <div class="d-flex align-items-center gap-2">
                                 <div class="shopping-cart">
                                     <a class="btn btn-primary btn-sm" href="javascript:void(0);">
-                                        <i class="fa fa-download me-2"></i>Download
+                                        <i class="fa fa-download me-2"></i>Download Excle
                                     </a>
                                 </div>
                                 <div class="dropdown bootstrap-select">
@@ -95,8 +90,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($orders as $item)
                                         <tr>
-                                            <td>Perbaikan Jalan</td>
+                                            <td>{{ $item->events }}</td>
                                             <td><img src="http://127.0.0.1:8000/assets/images/no-image.png" alt="Item Image"
                                                     width="50"></td>
                                             <td>Heru</td>
@@ -134,6 +130,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -233,7 +230,5 @@
             </div>
         </div>
     </div>
-    <!--**********************************
-                                                                                Content body end
-                                                                            ***********************************-->
+     
 @endsection
