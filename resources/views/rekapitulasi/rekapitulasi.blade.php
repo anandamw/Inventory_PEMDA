@@ -92,7 +92,7 @@
                                                 <td>
                                                         <img src="{{ $item->profile ? asset($item->profile) : asset('assets/images/no-profile.jpg') }}"  width="50" alt="Profil">
                                                     </td>
-                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->user->name }}</td>
                                                 <td>{{ $item->created_at }}</td>
                                                 <td class="text-center d-flex justify-content-center align-items-center">
                                                     <a href="javascript:void(0)" onclick="downloadData({{ $item->id_orders }})"
@@ -201,9 +201,10 @@
                                 </div>
                             </div>
                             <h5 class="fw-bold">Detail Pengambilan</h5>
-                            <p><strong>NAMA:</strong> {{ $item->name }}</p>
-                            <p><strong>NIP:</strong> {{ $item->nip }}</p>
-                            <p><strong>TANGGAL:</strong> 10 Agustus 2023</p>
+                            <p><strong>NAMA:</strong> {{ $item->user->name }}</p>
+                            <p><strong>NIP:</strong> {{ $item->user->nip }}</p>
+                            <p><strong>TANGGAL:</strong> {{ $item->created_at->translatedFormat('d F Y') }}</p>
+                            
                             <div class="text-end">
                                 <p>ADMINISTRATOR</p>
                                 <img src="{{ asset('') }}assets/images/ttd.png" alt="Tanda Tangan"
@@ -215,59 +216,91 @@
             </div>
         </div>
     @endforeach
+<!-- Tambahkan elemen loading di dalam halaman -->
+<div id="loading-overlay" style="
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.5); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 9999; 
+    display: none;">
+    <div style="
+        background: white; 
+        padding: 20px; 
+        border-radius: 10px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p style="margin-top: 10px;">Mengekspor ...</p>
+    </div>
+</div> 
 
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script>
-    async function downloadData(orderId) {
-    const { jsPDF } = window.jspdf;
-    let modal = document.querySelector(`#exampleModal${orderId}`);
-    let modalContent = modal.querySelector(".modal-body");
-
-    if (!modalContent) {
-        alert("Data tidak ditemukan!");
-        return;
-    }
-
-    // Pastikan modal sudah terbuka sebelum menangkap tampilannya
-    let modalInstance = new bootstrap.Modal(modal);
-    modalInstance.show();
-
-    // Beri waktu untuk modal tampil sepenuhnya
-    setTimeout(() => {
-        html2canvas(modalContent, {
-            scale: 2,
-            useCORS: true // Untuk menangani gambar yang dimuat dari eksternal
-        }).then(canvas => {
-            let imgData = canvas.toDataURL("image/png");
-            let pdf = new jsPDF("p", "mm", "a4");
-
-            let imgWidth = 210; // Lebar PDF dalam mm
-            let imgHeight = (canvas.height * imgWidth) / canvas.width; // Menjaga proporsi
-
-            pdf.addImage(imgData, "PNG", 0, 10, imgWidth, imgHeight);
-            pdf.save(`Invoice_${orderId}.pdf`);
-
-            // Tutup modal setelah selesai ekspor
-            modalInstance.hide();
-        });
-    }, 500); // Delay 500ms agar modal tampil sepenuhnya sebelum diproses
-}
-
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        async function downloadData(orderId) {
+            const { jsPDF } = window.jspdf;
+            let modal = document.querySelector(`#exampleModal${orderId}`);
+            let modalContent = modal.querySelector(".modal-body");
+    
+            if (!modalContent) {
+                alert("Data tidak ditemukan!");
+                return;
+            }
+    
+            let modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+    
+            // Tunggu modal selesai render
+            await new Promise(resolve => setTimeout(resolve, 500));
+    
+            // Pastikan modal terlihat di layar
+            window.scrollTo(0, 0);
+    
+            html2canvas(modalContent, {
+                scale: 3,  // Tingkatkan skala agar gambar lebih tajam
+                useCORS: true,
+                imageTimeout: 5000
+            }).then(canvas => {
+                let imgData = canvas.toDataURL("image/png");
+                let pdf = new jsPDF("p", "mm", "a4");
+    
+                let imgWidth = 210; 
+                let imgHeight = (canvas.height * imgWidth) / canvas.width; 
+    
+                pdf.addImage(imgData, "PNG", 0, 10, imgWidth, imgHeight);
+                pdf.save(`Invoice_${orderId}.pdf`);
+    
+                // Tutup modal setelah ekspor selesai
+                modalInstance.hide();
+            });
+        }
+    </script>
+    
 <script>
     function exportToExcel() {
         let filterValue = document.getElementById("filterSelect").value;
+        let loadingOverlay = document.getElementById("loading-overlay");
+
+        // Tampilkan animasi loading
+        loadingOverlay.style.display = "flex";
 
         fetch(`/fetch-orders/${filterValue}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length === 0) {
                     alert("Tidak ada data yang sesuai dengan filter yang dipilih.");
+                    loadingOverlay.style.display = "none"; // Sembunyikan loading
                     return;
                 }
 
@@ -296,8 +329,15 @@
 
                 // Simpan file
                 XLSX.writeFile(wb, "rekapitulasi_order.xlsx");
+
+                // Sembunyikan loading setelah proses selesai
+                loadingOverlay.style.display = "none";
             })
-            .catch(error => console.error("Error fetching data:", error));
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                alert("Gagal mengekspor data!");
+                loadingOverlay.style.display = "none";  
+            });
     }
 </script>
 

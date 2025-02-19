@@ -10,4 +10,9 @@ class Order extends Model
     protected $primaryKey = 'id_orders';  // Custom primary key name
 
     protected $fillable = ['users_id', 'events', 'phone'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id', 'id');
+    }
 }
