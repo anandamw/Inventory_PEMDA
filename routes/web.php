@@ -55,4 +55,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/save', [SaveController::class, 'store']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout']);
+
+   
+
+Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
+
 });

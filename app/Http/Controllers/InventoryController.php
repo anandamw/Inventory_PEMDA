@@ -16,7 +16,7 @@ class InventoryController extends Controller
     public function index()
     {
         $headerText = 'Data Inventory';
-        $items = Inventory::all();
+        $items = Inventory::orderBy('created_at', 'desc')->get();
         return view('item.item', compact('items', 'headerText'));
     }
 

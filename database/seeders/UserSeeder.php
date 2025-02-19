@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Support\Str;
-use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -62,5 +64,11 @@ class UserSeeder extends Seeder
                 ->size(250)->margin(2)
                 ->generate($jsonData, $path . '/' . $fileName);
         }
+
+
+
+
+
+
     }
 }

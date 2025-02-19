@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Exports\ExcelReExport;
@@ -27,8 +28,33 @@ class RekapitulasiController extends Controller
 
 
 
-    public function export_excel(){
-        return Excel::download(new ExcelReExport, 'Rekapitulasi.xlsx');
+    public function fetchOrders($filter)
+    {
+        $query = Order::join('users', 'orders.users_id', '=', 'users.id')
+            ->join('order_items', 'orders.id_orders', '=', 'order_items.orders_id')
+            ->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')
+            ->select(
+                'users.name as user_name',
+                'orders.events',
+                'orders.phone',
+                'inventories.item_name',
+                'order_items.quantity',
+                'order_items.status',
+                'orders.created_at'
+            );
+    
+        if ($filter === 'day') {
+            $query->whereDate('orders.created_at', now()->toDateString());
+        } elseif ($filter === 'week') {
+            $query->whereBetween('orders.created_at', [now()->subDays(7), now()]);
+        } elseif ($filter === 'month') {
+            $query->whereMonth('orders.created_at', now()->month);
+        }
+    
+        $orders = $query->orderBy('orders.created_at', 'desc')->get();
+    
+        return response()->json($orders);
     }
+    
 
 }

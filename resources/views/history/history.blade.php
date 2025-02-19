@@ -64,12 +64,12 @@
         </div>
     </div>
 
-    @foreach ($orders as $item)
-        <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
+    @foreach ($orders as $get)
+        <div class="modal fade" id="exampleModal{{ $get->id_orders }}">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
+                        <h5 class="modal-title">Detail Pengambilan #{{ $get->id_orders }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -77,14 +77,14 @@
                             <div class="row">
                                 <!-- Image Section (left) -->
                                 <div class="col-md-4">
-                                    <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                    <img src="{{ $get->profile ? asset($get->profile) : asset('assets/images/no-profile.jpg') }}"
                                         alt="Image" class="img-fluid">
                                 </div>
 
                                 <!-- Description Section (right) -->
                                 <div class="col-md-8">
-                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
-                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+                                    <h5>Nama: <span id="nama">{{ $get->name }}</span></h5>
+                                    <p>NIP: <span id="nip">{{ $get->nip }}</span></p>
 
                                     <!-- Detail Barang (table) -->
                                     <h6>Detail Barang:</h6>
@@ -98,7 +98,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                            @foreach ($orderItem->where('orders_id', $get->id_orders) as $data)
                                                 <tr>
                                                     <td>{{ $data->item_name }}</td>
 
@@ -134,7 +134,7 @@
                                         </tbody>
                                     </table>
 
-                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                    <p>Acara: <span id="datetime">{{ $get->events }}</span></p>
                                 </div>
                             </div>
                         </div>
@@ -146,19 +146,19 @@
                             // Mengecek apakah ada item yang belum success
                             $hasPendingItems =
                                 $orderItem
-                                    ->where('orders_id', $item->id_orders)
+                                    ->where('orders_id', $get->id_orders)
                                     ->where('status', '!=', 'success')
                                     ->count() > 0;
                         @endphp
 
                         @if ($hasPendingItems)
                             <button type="button" class="btn btn-warning light"
-                                onclick="updateAllRecaps({{ $item->id_orders }})">
+                                onclick="updateAllRecaps({{ $get->id_orders }})">
                                 Simpan Perubahan
                             </button>
 
                             <button type="button" class="btn btn-primary light"
-                                onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
+                                onclick="updateItemsStatus({{ $get->id_orders }}, 'success')">
                                 Acara Selesai
                             </button>
                         @endif

@@ -19,13 +19,18 @@ class HistoryController extends Controller
     public function index()
     {
         $headerText = 'Data History';
-        // $historys = OrderItem::join('users', 'order_items.users_id', '=', 'users.id')->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')->select('order_items.quantity', 'inventories.item_name', 'users.name', 'inventories.img_item', 'users.role', 'order_items.status', 'users.nip')->get();
 
-        $orders = DB::table('orders')->join('users', 'orders.users_id', '=', 'users.id')->select('users.name', 'users.nip', 'orders.events', 'orders.phone', 'orders.id_orders', 'orders.created_at', 'orders.users_id')->orderBy('orders.id_orders')->paginate(10);
+        $orders = DB::table('orders')
+            ->join('users', 'orders.users_id', '=', 'users.id')
+            ->select('users.name', 'users.nip', 'orders.events', 'users.profile', 'orders.phone', 'orders.id_orders', 'orders.created_at', 'orders.users_id')
+            ->orderBy('orders.id_orders', 'desc') // Order by id_orders in descending order
+            ->paginate(10);
 
-
-        $orderItem = OrderItem::join('orders', 'order_items.orders_id', '=', 'orders.id_orders')->join('inventories', 'order_items.inventories_id', 'inventories.id_inventories')->select('order_items.orders_id', 'order_items.quantity', 'order_items.id_order_items', 'order_items.status', 'inventories.item_name', 'orders.*')->get();
-
+        $orderItem = OrderItem::join('orders', 'order_items.orders_id', '=', 'orders.id_orders')
+            ->join('inventories', 'order_items.inventories_id', 'inventories.id_inventories')
+            ->select('order_items.orders_id', 'order_items.quantity', 'order_items.id_order_items', 'order_items.status', 'inventories.item_name', 'orders.*')
+            ->orderBy('order_items.id_order_items', 'desc') // Order by id_order_items in descending order
+            ->get();
 
         return view('history.history', compact('headerText', 'orderItem', 'orders'));
     }
