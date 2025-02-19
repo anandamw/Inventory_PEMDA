@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('recaps', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id_recaps')->autoIncrement();
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
-            $table->foreignId('orders_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('orders_id');
+            $table->foreign('orders_id')->references('id_orders')->on('orders')->onDelete('cascade');
             $table->string('event');
             $table->string('profile')->nullable();
             $table->string('name');

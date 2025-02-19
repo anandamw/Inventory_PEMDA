@@ -54,35 +54,20 @@ class DashboardController extends Controller
         return view('dashboard', compact('headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount'));
     }
 
-
-    // public function updateHistoryDashboard(Request $request){
-    //     // Validasi input
-    //     $validator = Validator::make($request->all(), [
-    //         'recaps' => 'required|array',
-    //         'recaps.*.id' => 'required|exists:order_items,id_order_items',
-    //         'recaps.*.quantity' => 'required|integer|min:1',
-    //         'recaps.*.status' => 'required|in:pending,success',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'message' => 'Validasi gagal!',
-    //             'errors' => $validator->errors()
-    //         ], 422);
-    //     }
-
-    //     // Loop untuk update semua data yang dikirim
-    //     foreach ($request->recaps as $recapData) {
-    //         OrderItem::where('id_order_items', $recapData['id'])->update([
-    //             'quantity' => $recapData['quantity'],
-    //             'status' => $recapData['status']
-    //         ]);
-    //     }
-
-    //     return response()->json([
-    //         'message' => 'Data berhasil diperbarui!'
-    //     ]);
-    // }
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'orders_id' => 'required|exists:orders,id_orders',
+            'status' => 'required|in:pending,success,canceled'
+        ]);
+    
+        // Update semua order_items yang terkait dengan orders_id
+        OrderItem::where('orders_id', $request->orders_id)->update(['status' => $request->status]);
+    
+        return response()->json(['message' => 'Status semua item berhasil diperbarui']);
+    }
+    
+    
 
 
     public function updateHistoryDashboard(Request $request)
@@ -92,7 +77,6 @@ class DashboardController extends Controller
         'recaps' => 'required|array',
         'recaps.*.id' => 'required|exists:order_items,id_order_items',
         'recaps.*.quantity' => 'required|integer|min:0', // Bisa 0 jika dihapus
-        'recaps.*.status' => 'required|in:pending,success',
     ]);
 
     if ($validator->fails()) {
@@ -114,7 +98,7 @@ class DashboardController extends Controller
             // Update quantity
             $orderItem->update([
                 'quantity' => $newQuantity,
-                'status' => $recapData['status']
+                
             ]);
 
        
@@ -135,42 +119,4 @@ if ($quantityDifference > 0) {
 }
 
 
-
-    // public function index()
-    // {
-
-
-    //     $headerText = 'Dashboard';
-
-
-    //     $dataItem = Inventory::where('quantity', '<', 10)->select('code_item', 'item_name', 'quantity')->get();
-
-
-    //     $dataLatest = OrderItem::join('users', 'order_items.users_id', '=', 'users.id')
-    //         ->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')->join('orders', 'order_items.orders_id', '=', 'orders.id_orders')
-    //         ->where('users.role', Auth::user()->role)
-    //         ->select(
-    //             'order_items.id_order_items',
-    //             'order_items.quantity',
-    //             'order_items.status',
-    //             'inventories.item_name',
-    //             'inventories.code_item',
-    //             'inventories.img_item',
-    //             'users.name',
-    //             'users.nip',  // Pastikan nip ada dalam tabel users
-    //             'orders.events',  // Pastikan nip ada dalam tabel users
-    //             'order_items.created_at'
-    //         )
-    //         ->orderBy('order_items.created_at', 'desc')
-    //         ->get();
-
-
-
-
-
-
-    //     toast('Selamat datang di layanan Logishub', 'info');
-
-    //     return view('dashboard', compact('headerText', 'dataItem', 'dataLatest'));
-    // }
 }
