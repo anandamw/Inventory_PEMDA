@@ -65,100 +65,108 @@
     </div>
 
     @foreach ($orders as $item)
-    <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <!-- Image Section (left) -->
-                            <div class="col-md-4">
-                                <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
-                                    alt="Image" class="img-fluid">
-                            </div>
+        <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Image Section (left) -->
+                                <div class="col-md-4">
+                                    <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                        alt="Image" class="img-fluid">
+                                </div>
 
-                            <!-- Description Section (right) -->
-                            <div class="col-md-8">
-                                <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
-                                <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+                                <!-- Description Section (right) -->
+                                <div class="col-md-8">
+                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
+                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
 
-                                <!-- Detail Barang (table) -->
-                                <h6>Detail Barang:</h6>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Quantity</th>
-                                            <th>Status</th>
-                                       
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                    <!-- Detail Barang (table) -->
+                                    <h6>Detail Barang:</h6>
+                                    <table class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $data->item_name }}</td>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
 
-                                                @if ($data->status !== 'success') 
-                                                <td class="py-2 text-center">
-                                                    <div class="input-group quantity-control">
-                                                        <button class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                        <input type="number" name="quantity[]" class="form-control text-center quantity"
-                                                            value="{{ $data->quantity }}" data-id="{{ $data->id_order_items }}" min="1">
-                                                        <button class="btn btn-outline-primary btn-sm increment">+</button>
-                                                    </div>
-                                                </td>
-
-                                                @else
-                                                <td>{{ $data->quantity }}</td>
-
-                                                @endif
-                                                <td class="text-center">
-                                                    <div class="d-flex align-items-center">
-                                                        @if ($data->status == 'success')
-                                                            <i class="fa fa-circle text-success me-1"></i> Successful
-                                                        @elseif($data->status == 'canceled')
-                                                            <i class="fa fa-circle text-danger me-1"></i> Canceled
-                                                        @elseif($data->status == 'pending')
-                                                            <i class="fa fa-circle text-warning me-1"></i> Pending
-                                                        @endif
-                                                    </div>
-                                                </td>
                                             </tr>
-                                        @endforeach
-                                    </tbody>                                
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                                <tr>
+                                                    <td>{{ $data->item_name }}</td>
 
-                                <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                                    @if ($data->status !== 'success')
+                                                        <td class="py-2 text-center">
+                                                            <div class="input-group quantity-control">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                                <input type="number" name="quantity[]"
+                                                                    class="form-control text-center quantity"
+                                                                    value="{{ $data->quantity }}"
+                                                                    data-id="{{ $data->id_order_items }}" min="1">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm increment">+</button>
+                                                            </div>
+                                                        </td>
+                                                    @else
+                                                        <td>{{ $data->quantity }}</td>
+                                                    @endif
+                                                    <td class="text-center">
+                                                        <div class="d-flex align-items-center">
+                                                            @if ($data->status == 'success')
+                                                                <i class="fa fa-circle text-success me-1"></i> Successful
+                                                            @elseif($data->status == 'canceled')
+                                                                <i class="fa fa-circle text-danger me-1"></i> Canceled
+                                                            @elseif($data->status == 'pending')
+                                                                <i class="fa fa-circle text-warning me-1"></i> Pending
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
 
-                    @php
-                    // Mengecek apakah ada item yang belum success
-                    $hasPendingItems = $orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0;
-                @endphp
-            
-                @if ($hasPendingItems)
-                    <button type="button" class="btn btn-warning light" onclick="updateAllRecaps({{ $item->id_orders }})">
-                        Simpan Perubahan
-                    </button>
-                    
-                    <button type="button" class="btn btn-primary light" onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
-                        Acara Selesai
-                    </button>
-                    @endif
-                    
+                        @php
+                            // Mengecek apakah ada item yang belum success
+                            $hasPendingItems =
+                                $orderItem
+                                    ->where('orders_id', $item->id_orders)
+                                    ->where('status', '!=', 'success')
+                                    ->count() > 0;
+                        @endphp
+
+                        @if ($hasPendingItems)
+                            <button type="button" class="btn btn-warning light"
+                                onclick="updateAllRecaps({{ $item->id_orders }})">
+                                Simpan Perubahan
+                            </button>
+
+                            <button type="button" class="btn btn-primary light"
+                                onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
+                                Acara Selesai
+                            </button>
+                        @endif
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endforeach
 
     <script>
@@ -167,79 +175,82 @@
                 let decrementBtn = control.querySelector(".decrement");
                 let incrementBtn = control.querySelector(".increment");
                 let inputField = control.querySelector(".quantity");
-    
+
                 decrementBtn.addEventListener("click", function() {
                     let currentValue = parseInt(inputField.value) || 0;
-                    if (currentValue > 0) {  
+                    if (currentValue > 0) {
                         inputField.value = currentValue - 1;
                     }
                 });
-    
+
                 incrementBtn.addEventListener("click", function() {
                     let currentValue = parseInt(inputField.value) || 0;
                     inputField.value = currentValue + 1;
                 });
             });
         });
-    
+
         function updateAllRecaps(orderId) {
             let recaps = [];
-    
+
             document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
                 let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
                 let quantity = parseInt(row.querySelector("input[name='quantity[]']").value) || 0;
-              
-    
+
+
                 recaps.push({
                     id: id,
                     quantity: quantity,
-                    
+
                 });
             });
-    
+
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    
+
             fetch("{{ route('history.dashboard.update') }}", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify({ recaps: recaps })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();
-            })
-            .catch(error => {
-                console.error("Error updating data:", error);
-            });
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        recaps: recaps
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error("Error updating data:", error);
+                });
         }
     </script>
 
-<script>
-    function updateItemsStatus(orderId, status) {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    <script>
+        function updateItemsStatus(orderId, status) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-        fetch("{{ route('order-items.updateStatus') }}", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken
-            },
-            body: JSON.stringify({ orders_id: orderId, status: status })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            location.reload();
-        })
-        .catch(error => {
-            console.error("Error updating status:", error);
-        });
-    }
-</script>
-
-
+            fetch("{{ route('order-items.updateStatus') }}", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        orders_id: orderId,
+                        status: status
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error("Error updating status:", error);
+                });
+        }
+    </script>
 @endsection

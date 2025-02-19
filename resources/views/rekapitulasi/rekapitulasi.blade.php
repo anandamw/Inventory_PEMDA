@@ -95,8 +95,8 @@
                                             <td>{{ $item->events }}</td>
                                             <td><img src="http://127.0.0.1:8000/assets/images/no-image.png" alt="Item Image"
                                                     width="50"></td>
-                                            <td>Heru</td>
-                                            <td>2025-02-12 01:03:12</td>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->created_at }}</td>
                                             <td class="text-center d-flex justify-content-center align-items-center">
                                                 <a href="javascript:void(0)" onclick="downloadData()"
                                                     class="d-flex justify-content-center align-items-center"
@@ -116,7 +116,7 @@
                                                     <a href="javascript:void(0)"
                                                         class="icon-box bg-primary d-flex justify-content-center align-items-center"
                                                         style="width: 28px; height: 28px; border-radius: 50%;"
-                                                        data-bs-toggle="modal" data-bs-target="#invoiceModal">
+                                                        data-bs-toggle="modal"  data-bs-target="#exampleModal{{ $item->id_orders }}">
                                                         <i class="fas fa-eye text-white"></i>
                                                     </a>
 
@@ -143,9 +143,9 @@
     </div>
 
 
-
+    @foreach ($orders as $item)
     <!-- Modal -->
-    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal{{ $item->id_orders }}" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header border-0">
@@ -172,54 +172,42 @@
                             <!-- Profil di Kiri -->
                             <div class="profile-container">
                                 <img src="{{ asset('') }}assets/images/no-profile.jpg" alt="Profil">
-                                <h5 class="mt-2">Daniel Gallego</h5>
+                                <h5 class="mt-2">{{ $item->name }}</h5>
                                 <p class="text-white-50">User</p>
                                 <hr class="border-white">
                             </div>
                             <div class="invoice-container">
                                 <table class="table table-bordered">
                                     <thead class="table-dark">
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>No.</th>
                                             <th>Barang</th>
                                             <th>Kuantitas</th>
-                                            <th>Harga</th>
-                                            <th>Total</th>
+                                            <th>Status</th>
+                                             
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Deskripsi barang</td>
-                                            <td>1</td>
-                                            <td>Rp 1,234.56</td>
-                                            <td>Rp 1,234.56</td>
+                                        @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                        <tr class="text-center">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $data->item_name }}</td>
+                                            <td >{{ $data->quantity }}</td>
+                                            <td>{{ $data->status }}</td>
+                                         
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Deskripsi barang</td>
-                                            <td>1</td>
-                                            <td>Rp 1,234.56</td>
-                                            <td>Rp 1,234.56</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Deskripsi barang</td>
-                                            <td>1</td>
-                                            <td>Rp 1,234.56</td>
-                                            <td>Rp 1,234.56</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" class="text-end fw-bold">Total</td>
-                                            <td>Rp 3,703.68</td>
-                                        </tr>
+                                        
+
+
+                                         
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <h5 class="fw-bold">Detail Pengambilan</h5>
-                        <p><strong>NAMA:</strong> DANIEL GALLEGO</p>
-                        <p><strong>NIP:</strong> #1234567890</p>
+                        <p><strong>NAMA:</strong> {{ $item->name }}</p>
+                        <p><strong>NIP:</strong> {{ $item->nip }}</p>
                         <p><strong>TANGGAL:</strong> 10 Agustus 2023</p>
                         <div class="text-end">
                             <p>ADMINISTRATOR</p>
@@ -230,5 +218,5 @@
             </div>
         </div>
     </div>
-     
+     @endforeach
 @endsection
