@@ -10,6 +10,7 @@ use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 // routes/web.php
 use App\Http\Controllers\RekapitulasiController;
+use App\Models\History;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -47,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/profile', [UserController::class, 'profile']);
     Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');
+
+    Route::put('/history/dashboard-update', [DashboardController::class, 'updateHistory'])->name('history.dashboard.update');
 
     Route::patch('/revised/{id}', [InventoryController::class, 'revised']);
     Route::get('/item', [InventoryController::class, 'index']);

@@ -116,7 +116,7 @@
                                             <th class="align-middle" style="min-width: 12.5rem;">Phone</th>
                                             <th class="align-middle">Date Time</th>
 
- 
+
                                             <th class="align-middle">Action</th>
 
                                         </tr>
@@ -154,12 +154,12 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#exampleModal{{ $get->id_orders }}">
                                                                 Edit Item
-                                                            </button> 
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                
-                                                
+
+
                                             </tr>
                                         @endforeach
 
@@ -178,104 +178,118 @@
     </div>
 
     @foreach ($orders as $item)
-    <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <!-- Image Section (left) -->
-                            <div class="col-md-4">
-                                <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
-                                    alt="Image" class="img-fluid">
-                            </div>
+        <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Pengambilan #{{ $item->id_orders }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Image Section (left) -->
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <img src="{{ $item->profile ? asset($item->profile) : asset('assets/images/no-profile.jpg') }}" 
+                                        alt="Profile Image" width="100%">
+                                </div>
 
-                            <!-- Description Section (right) -->
-                            <div class="col-md-8">
-                                <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
-                                <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
 
-                                <!-- Detail Barang (table) -->
-                                <h6>Detail Barang:</h6>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Quantity</th>
-                                            <th>Status</th>
-                                            <th>Update Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                <!-- Description Section (right) -->
+                                <div class="col-md-8">
+                                    <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
+                                    <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+
+                                    <!-- Detail Barang (table) -->
+                                    <h6>Detail Barang:</h6>
+                                    <table class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $data->item_name }}</td>
-
-                                                @if ($data->status !== 'success') 
-                                                <td class="py-2 text-center">
-                                                    <div class="input-group quantity-control">
-                                                        <button class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                        <input type="number" name="quantity[]" class="form-control text-center quantity"
-                                                            value="{{ $data->quantity }}" data-id="{{ $data->id_order_items }}" min="1">
-                                                        <button class="btn btn-outline-primary btn-sm increment">+</button>
-                                                    </div>
-                                                </td>
-
-                                                @else
-                                                <td class="py-2 text-center hidden">
-                                                    <div class="input-group quantity-control">
-                                                        <button class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                        <input type="number" name="quantity[]" class="form-control text-center quantity"
-                                                            value="{{ $data->quantity }}" data-id="{{ $data->id_order_items }}" min="1">
-                                                        <button class="btn btn-outline-primary btn-sm increment">+</button>
-                                                    </div>
-                                                </td>
-                                                @endif
-                                                <td class="text-center">
-                                                    <div class="d-flex align-items-center">
-                                                        @if ($data->status == 'success')
-                                                            <i class="fa fa-circle text-success me-1"></i> Successful
-                                                        @elseif($data->status == 'canceled')
-                                                            <i class="fa fa-circle text-danger me-1"></i> Canceled
-                                                        @elseif($data->status == 'pending')
-                                                            <i class="fa fa-circle text-warning me-1"></i> Pending
-                                                        @endif
-                                                    </div>
-                                                </td>
- 
-                                            
-                                            <td>
-                                              
-                                                    <select name="status[]" data-id="{{ $data->id_order_items }}" class="form-select" required>
-                                                        <option value="pending" {{ $data->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                                        <option value="success" {{ $data->status == 'success' ? 'selected' : '' }}>Success</option>
-                                                    </select>
-                                               
-                                            </td>
-                                            
-
-
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                                <th>Update Status</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
+                                                <tr>
+                                                    <td>{{ $data->item_name }}</td>
 
-                                <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                                    @if ($data->status !== 'success')
+                                                        <td class="py-2 text-center">
+                                                            <div class="input-group quantity-control">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                                <input type="number" name="quantity[]"
+                                                                    class="form-control text-center quantity"
+                                                                    value="{{ $data->quantity }}"
+                                                                    data-id="{{ $data->id_order_items }}" min="1">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm increment">+</button>
+                                                            </div>
+                                                        </td>
+                                                    @else
+                                                        <td class="py-2 text-center hidden">
+                                                            <div class="input-group quantity-control">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                                <input type="number" name="quantity[]"
+                                                                    class="form-control text-center quantity"
+                                                                    value="{{ $data->quantity }}"
+                                                                    data-id="{{ $data->id_order_items }}" min="1">
+                                                                <button
+                                                                    class="btn btn-outline-primary btn-sm increment">+</button>
+                                                            </div>
+                                                        </td>
+                                                    @endif
+                                                    <td class="text-center">
+                                                        <div class="d-flex align-items-center">
+                                                            @if ($data->status == 'success')
+                                                                <i class="fa fa-circle text-success me-1"></i> Successful
+                                                            @elseif($data->status == 'canceled')
+                                                                <i class="fa fa-circle text-danger me-1"></i> Canceled
+                                                            @elseif($data->status == 'pending')
+                                                                <i class="fa fa-circle text-warning me-1"></i> Pending
+                                                            @endif
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <select name="status[]" data-id="{{ $data->id_order_items }}"
+                                                            class="form-select" required>
+                                                            <option value="pending"
+                                                                {{ $data->status == 'pending' ? 'selected' : '' }}>Pending
+                                                            </option>
+                                                            <option value="success"
+                                                                {{ $data->status == 'success' ? 'selected' : '' }}>Success
+                                                            </option>
+                                                        </select>
+
+                                                    </td>
+
+
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success light" onclick="updateAllRecaps({{ $item->id_orders }})">Simpan</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success light"
+                            onclick="updateAllRecaps({{ $item->id_orders }})">Simpan</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endforeach
 
     <!-- Modal About -->
@@ -359,55 +373,56 @@
                 let decrementBtn = control.querySelector(".decrement");
                 let incrementBtn = control.querySelector(".increment");
                 let inputField = control.querySelector(".quantity");
-    
+
                 decrementBtn.addEventListener("click", function() {
                     let currentValue = parseInt(inputField.value) || 0;
-                    if (currentValue > 0) {  
+                    if (currentValue > 0) {
                         inputField.value = currentValue - 1;
                     }
                 });
-    
+
                 incrementBtn.addEventListener("click", function() {
                     let currentValue = parseInt(inputField.value) || 0;
                     inputField.value = currentValue + 1;
                 });
             });
         });
-    
+
         function updateAllRecaps(orderId) {
             let recaps = [];
-    
+
             document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
                 let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
                 let quantity = parseInt(row.querySelector("input[name='quantity[]']").value) || 0;
                 let status = row.querySelector("select[name='status[]']").value;
-    
+
                 recaps.push({
                     id: id,
                     quantity: quantity,
                     status: status
                 });
             });
-    
+
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    
+
             fetch("{{ route('history.dashboard.update') }}", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify({ recaps: recaps })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();
-            })
-            .catch(error => {
-                console.error("Error updating data:", error);
-            });
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        recaps: recaps
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error("Error updating data:", error);
+                });
         }
     </script>
-    
 @endsection

@@ -5,10 +5,10 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- Card kiri atas: Detail User -->
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-4 col-lg-4 h-100">
                     <div class="clearfix">
                         <div class="card card-bx profile-card author-profile m-b30">
-                            <div class="card-body"  style="height: 440px;">
+                            <div class="card-body d-flex justify-content-center">
                                 <div class="p-5">
                                     <div class="author-profile">
                                         <div class="author-media">
@@ -33,27 +33,32 @@
                             <div class="search-box">
                                 <input type="text" id="tableSearch" class="form-control" placeholder="Search...">
                             </div>
-                            <a href="/item/create"
-                                class="btn btn-primary btn-info d-flex align-items-center justify-content-center">
-                                <span class="btn-icon-start text-info">
-                                    <i class="fa fa-plus color-info"></i>
-                                </span>
-                                Add
-                            </a>
+                            @if (auth()->user()->role == 'admin')
+                                <a href="/item/create"
+                                    class="btn btn-primary btn-info d-flex align-items-center justify-content-center">
+                                    <span class="btn-icon-start text-info">
+                                        <i class="fa fa-plus color-info"></i>
+                                    </span>
+                                    Add
+                                </a>
+                            @endif
+
                         </div>
                         <div class="card-body" style="padding: 0 20px">
                             <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
                                 <table id="mytable" class="table table-responsive-md text-center">
                                     <thead class="text-center">
                                         <tr>
-                                            <th>No</th>
-                                            <th>#Code</th>
-                                            <th>Photo</th>
-                                            <th>Item</th>
-                                            <th>Stok</th>
-                                            <th>Date</th>
-                                            <th>Action</th>
-                                            <th></th>
+                                            <th class="text-center">No</th>
+                                            <th class="text-center">#Code</th>
+                                            <th class="text-center">Photo</th>
+                                            <th class="text-center">Item</th>
+                                            <th class="text-center">Stok</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Action</th>
+                                            @if (auth()->user()->role == 'admin')
+                                                <th></th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,38 +82,40 @@
                                                                 class="fa fa-shopping-basket me-2"></i>Cart</a>
                                                     </div>
                                                 </td>
-                                                <td class="text-end ps-0">
-                                                    <div class="dropdown d-flex justify-content-center">
-                                                        <a href="javascript:void(0);"
-                                                            class="btn-link btn sharp tp-btn btn-primary pill"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                                                                    fill="#A098AE" />
-                                                            </svg>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <!-- Edit Button -->
-                                                            <a href="#" class="dropdown-item editBtn"
-                                                                data-id="{{ $item->id_inventories }}"
-                                                                data-name="{{ $item->item_name }}"
-                                                                data-quantity="{{ $item->quantity }}"
-                                                                data-image="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : 'assets/images/no-image.png' }}">
-                                                                Edit
+                                                @if (auth()->user()->role == 'admin')
+                                                    <td class="text-end ps-0">
+                                                        <div class="dropdown d-flex justify-content-center">
+                                                            <a href="javascript:void(0);"
+                                                                class="btn-link btn sharp tp-btn btn-primary pill"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                                                        fill="#A098AE" />
+                                                                </svg>
                                                             </a>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <!-- Edit Button -->
+                                                                <a href="#" class="dropdown-item editBtn"
+                                                                    data-id="{{ $item->id_inventories }}"
+                                                                    data-name="{{ $item->item_name }}"
+                                                                    data-quantity="{{ $item->quantity }}"
+                                                                    data-image="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : 'assets/images/no-image.png' }}">
+                                                                    Edit
+                                                                </a>
 
 
 
-                                                            <!-- Delete Button -->
-                                                            <a href="/inventory/{{ $item->id_inventories }}/destroy"
-                                                                class="dropdown-item text-danger">
-                                                                Delete
-                                                            </a>
+                                                                <!-- Delete Button -->
+                                                                <a href="/inventory/{{ $item->id_inventories }}/destroy"
+                                                                    class="dropdown-item text-danger">
+                                                                    Delete
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                @endif
 
 
 
