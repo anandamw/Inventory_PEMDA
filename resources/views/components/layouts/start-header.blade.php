@@ -85,7 +85,7 @@
                                                             <div class="timeline-panel">
                                                                 <div class="media me-2">
                                                                     <a href="{{ url('/inventory') }}">
-                                                                        <img src="{{ file_exists(public_path('uploads/items/' . $item->img_item)) ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
+                                                                        <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
                                                                             alt="Item Image" width="50">
                                                                     </a>
                                                                 </div>
