@@ -42,7 +42,6 @@
                                     Add
                                 </a>
                             @endif
-
                         </div>
                         <div class="card-body" style="padding: 0 20px">
                             <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
@@ -341,7 +340,6 @@
                     const code = this.getAttribute("data-code");
                     const name = this.getAttribute("data-name");
                     const img = this.getAttribute("data-img");
-                    const price = parseInt(this.getAttribute("data-price"), 10);
 
                     const existingRow = ordersTableBody.querySelector(`tr[data-id="${id}"]`);
                     if (existingRow) {
