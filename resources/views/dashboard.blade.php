@@ -531,12 +531,10 @@
 
     <script>
         function updateItems(orderId, element) {
-            const row = element.closest("tr"); // Ambil baris tabel tempat tombol ditekan
-            const quantityInput = row.querySelector(
-                "[data-table='bottom']"); // Ambil input quantity dari tabel yang sesuai
-            const quantity = quantityInput ? quantityInput.value : 1; // Pastikan quantity ada
-            const inventoryId = quantityInput ? quantityInput.dataset.inventoryId || quantityInput.dataset.id :
-                null; // Ambil inventory_id atau id_order_items
+            const row = element.closest("tr");
+            const quantityInput = row.querySelector(".quantity-input");
+            const quantity = quantityInput ? quantityInput.value : 1;
+            const inventoryId = quantityInput ? quantityInput.dataset.inventoryId : null;
 
             if (!inventoryId) {
                 alert("Terjadi kesalahan: ID tidak ditemukan.");
