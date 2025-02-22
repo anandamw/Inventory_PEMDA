@@ -101,8 +101,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
@@ -112,8 +110,10 @@
                                         <tr>
                                             <th class="align-middle">No</th>
                                             <th class="align-middle">Name</th>
-                                            <th class="align-middle pe-7">Events</th>
-                                            <th class="align-middle" style="min-width: 12.5rem;">Phone</th>
+                                            <th class="align-middle pe-7">Acara</th>
+                                            <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
+
+                                            <th class="align-middle">Status</th>
                                             <th class="align-middle">Date Time</th>
 
 
@@ -133,6 +133,17 @@
                                                 </td> --}}
                                                 <td>{{ $get->events }}</td>
                                                 <td>{{ $get->phone }}</td>
+
+
+                                                @if ($get->status == 'success')
+                                                    <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
+                                                @elseif($get->status == 'canceled')
+                                                    <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
+                                                @elseif($get->status == 'pending')
+                                                    <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
+                                                @endif
+
+
 
                                                 <td>{{ $get->created_at }}</td>
 
@@ -503,10 +514,44 @@
 
     {{-- update status items --}}
     <script>
-        function updateItemsStatus(orderId, status) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+        async function updateItemsStatus(orderId, status) {
+            if (!orderId) {
+                alert("ID pesanan tidak valid!");
+                return;
+            }
 
-            fetch("{{ route('order-items.updateStatus') }}", {
+            const recaps = [];
+            const saveChangesBtn = document.getElementById("saveChangesBtn");
+            const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = csrfMetaTag ? csrfMetaTag.getAttribute("content") : null;
+
+            if (!csrfToken) {
+                alert("CSRF token tidak ditemukan!");
+                return;
+            }
+
+            document.querySelectorAll("tbody tr").forEach(row => {
+                const input = row.querySelector(".quantity-input");
+                const id = input?.getAttribute("data-q-id");
+                const quantity = parseInt(input?.value) || 0;
+
+                if (id) {
+                    recaps.push({
+                        id,
+                        quantity
+                    });
+                }
+            });
+
+            if (recaps.length === 0) {
+                alert("Tidak ada data yang diperbarui!");
+                return;
+            }
+
+            saveChangesBtn.disabled = true;
+
+            try {
+                const response = await fetch("{{ route('order-items.updateStatus') }}", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -514,19 +559,31 @@
                     },
                     body: JSON.stringify({
                         orders_id: orderId,
-                        status: status
+                        status,
+                        recaps
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error("Error updating status:", error);
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Terjadi kesalahan pada server.");
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                location.reload();
+            } catch (error) {
+                console.error("Error updating data:", error);
+                alert(error.message || "Terjadi kesalahan saat memperbarui data. Silakan coba lagi.");
+            } finally {
+                setTimeout(() => {
+                    saveChangesBtn.disabled = false;
+                }, 3000);
+            }
         }
     </script>
+
+
 
 
     <script>

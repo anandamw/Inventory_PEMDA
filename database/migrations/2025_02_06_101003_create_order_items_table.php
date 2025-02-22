@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreign("orders_id")->references("id_orders")->on("orders");
 
 
-            $table->enum('status', ['pending', 'success', 'canceled'  ])->default('pending');
+            $table->enum('status', ['pending', 'success', 'canceled'])->default('pending');
 
             $table->timestamps();
         });
