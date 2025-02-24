@@ -203,7 +203,7 @@
                             <div class="row">
                                 <!-- Image Section (left) -->
                                 <div class="col-md-4">
-                                    <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                    <img src="{{ $item->profile ? asset($item->profile) : asset('assets/images/no-profile.jpg') }}"
                                         alt="Image" class="img-fluid">
                                 </div>
 
@@ -265,7 +265,7 @@
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
 
-                                
+
                                 {{-- table item --}}
 
                                 @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
