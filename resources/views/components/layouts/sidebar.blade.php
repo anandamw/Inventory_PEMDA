@@ -3,18 +3,23 @@
         ***********************************-->
 
   <style>
-
-      .title-container li a{
+      .title-container li a {
           border: none;
           border-radius: 12px;
           box-shadow: inset 4px 4px 6px var(--secondary-dark),
               inset -4px -4px 6px var(--primary);
-      
+
           outline: none;
           margin-top: 13px;
           width: 100%;
       }
 
+      .separator hr {
+          border: none;
+          height: 2px;
+          background: white;
+
+      }
   </style>
 
 
@@ -48,6 +53,17 @@
                               <i class="bi bi-book"></i>
                               <span class="nav-text">Rekapitulasi</span>
                           </a>
+                      </li>
+                      <li class="separator">
+                          <hr>
+                      </li>
+                      <li><a href="/aset" class="" aria-expanded="false">
+                              <i class="bi bi-briefcase"></i>
+                              <span class="nav-text">Assets</span>
+                          </a>
+                      </li>
+                      <li class="separator">
+                          <hr>
                       </li>
                       <li><a href="/logout" class="" aria-expanded="false">
                               <i class="bi bi-box-arrow-right"></i>

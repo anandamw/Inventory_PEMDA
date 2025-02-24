@@ -10,6 +10,7 @@ use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RekapitulasiController;
+use App\Http\Controllers\AssetController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -42,7 +43,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/rekapitulasi/{id}', [RekapitulasiController::class, 'show'])->name('rekapitulasi.show');
         Route::get('/rekapitulasi/download/{id}', [RekapitulasiController::class, 'downloadPdf'])->name('rekapitulasi.download');  
 
-        
+        Route::get('/aset', [AssetController::class, 'index'])->name('aset.aset'); // Menampilkan semua asset
+        Route::post('/assets/{id}/update-status', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
+        Route::post('/assets/update-description/{id}', [AssetController::class, 'updateDescription']);
+        Route::get('/aset/create', [AssetController::class, 'create'])->name('aset.aset_create'); // Menampilkan form tambah asset
+        Route::post('/aset/store', [AssetController::class, 'store']); // Menyimpan asset baru
+        Route::put('/assets/{id}/update', [AssetController::class, 'update'])->name('assets.update');
+        Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy'); // Menghapus asset
     });
     Route::get('/profile', [UserController::class, 'profile']);
     Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');

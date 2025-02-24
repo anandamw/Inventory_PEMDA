@@ -27,9 +27,8 @@
                     </div>
                     <div class="dz-side-menu">
                         @if (auth()->user()->role == 'admin')
-                            <div class="sidebar-social-link ">
+                            <div class="sidebar-social-link">
                                 <ul>
-
                                     <style>
                                         .blink {
                                             animation: blink-animation 1s steps(5, start) infinite;
@@ -41,7 +40,6 @@
                                             }
                                         }
 
-                                        /* Penyesuaian ukuran badge */
                                         .notification-badge {
                                             position: absolute;
                                             top: 2px;
@@ -67,56 +65,122 @@
                                                     fill="#130F26" />
                                             </svg>
 
-                                            <!-- Notifikasi bulat merah -->
-                                            @if ($lowStockCount > 0)
+                                            @if ($lowStockCount > 0 || $pendingAssetCount > 0)
                                                 <span class="badge bg-danger rounded-circle blink notification-badge">
-                                                    {{ $lowStockCount }}
+                                                    {{ $lowStockCount + $pendingAssetCount }}
                                                 </span>
                                             @endif
+
                                         </a>
 
-                                        <!-- Dropdown Notifikasi -->
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3"
-                                                style="height:380px;">
-                                                <ul class="timeline">
-                                                    @forelse ($lowStockItems as $item)
-                                                        <li>
-                                                            <div class="timeline-panel">
-                                                                <div class="media me-2">
-                                                                    <a href="{{ url('/inventory') }}">
-                                                                        <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
-                                                                            alt="Item Image" width="50">
-                                                                    </a>
+                                        <div class="dropdown-menu dropdown-menu-end custom-tab-1"
+                                            data-bs-auto-close="outside" id="dropdownMenu">
+                                            <ul class="nav nav-tabs justify-content-center w-100">
+                                                <!-- Menengahkan dan buat full width -->
+                                                <li class="nav-item w-50 text-center">
+                                                    <!-- Membuat tab rata dan sejajar -->
+                                                    <a class="nav-link active" style="background: none;"
+                                                        data-bs-toggle="tab" href="#items">Items</a>
+                                                </li>
+                                                <li class="nav-item w-50 text-center">
+                                                    <a class="nav-link" style="background: none;" data-bs-toggle="tab"
+                                                        href="#assets">Aset</a>
+                                                </li>
+                                            </ul>
+
+
+                                            <div class="tab-content p-3" style="height:380px; overflow-y:auto;">
+                                                <div id="items" class="tab-pane show active"> <!-- Removed fade -->
+                                                    <ul class="timeline">
+                                                        @forelse ($lowStockItems as $item)
+                                                            <li>
+                                                                <div class="timeline-panel d-flex align-items-center">
+                                                                    <div class="media me-3">
+                                                                        <a href="{{ url('/inventory') }}">
+                                                                            <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
+                                                                                alt="Item Image" width="50" style="border-radius: 20%">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1">{{ $item->item_name }}</h6>
+                                                                        <small class="d-block">{{ $item->code_item }} ||
+                                                                            Stok: {{ $item->quantity }}</small>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="media-body">
-                                                                    <h6 class="mb-1">{{ $item->item_name }}</h6>
-                                                                    <small class="d-block">{{ $item->code_item }} ||
-                                                                        Stok: {{ $item->quantity }} </small>
+                                                            </li>
+                                                        @empty
+                                                            <li>
+                                                                <div class="timeline-panel">
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1">Tidak ada item dengan stok
+                                                                            rendah</h6>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </li>
-                                                    @empty
-                                                        <li>
-                                                            <div class="timeline-panel">
-                                                                <div class="media-body">
-                                                                    <h6 class="mb-1">Tidak ada item dengan stok rendah
-                                                                    </h6>
+                                                            </li>
+                                                        @endforelse
+                                                    </ul>
+                                                </div>
+
+                                                <div id="assets" class="tab-pane"> <!-- Removed fade -->
+                                                    <ul class="timeline">
+                                                        @forelse ($pendingAssets as $asset)
+                                                            <li>
+                                                                <div class="timeline-panel d-flex align-items-center">
+                                                                    <!-- Tambahkan d-flex untuk flexbox -->
+                                                                    <div class="media me-3">
+                                                                        <a href="{{ url('/aset') }}">
+                                                                            <img src="{{ $asset->image ? asset('uploads/aset/' . $asset->image) : asset('assets/images/no-image.png') }}"
+                                                                                alt="Item Image" width="50" style="border-radius: 20%">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="media-body flex-grow-1">
+                                                                        <!-- flex-grow-1 agar teks menyesuaikan lebar -->
+                                                                        <h6 class="mb-1">{{ $asset->name }} || <span class="text-danger">{{ $asset->status }}</span></h6>
+                                                                        <small class="d-block">{{ $asset->description }}</small>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </li>
-                                                    @endforelse
-                                                </ul>
-                                            </div>
-                                            <div class="text-center mt-2">
-                                                <a href="/inventory" class="btn btn-sm btn-primary">Lihat Semua</a>
+
+                                                            </li>
+                                                        @empty
+                                                            <li>
+                                                                <div class="timeline-panel">
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1">Tidak ada aset yang pending
+                                                                        </h6>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforelse
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </li>
 
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                var tabs = document.querySelectorAll(".nav-link");
+                                                tabs.forEach(tab => {
+                                                    tab.addEventListener("click", function(event) {
+                                                        event.stopPropagation(); // Mencegah dropdown tertutup saat tab diklik
+                                                        setTimeout(() => {
+                                                            let activeTab = document.querySelector(".tab-pane.active");
+                                                            activeTab.style.opacity = "1";
+                                                        }, 100);
+                                                    });
+                                                });
+
+                                                // Mencegah dropdown tertutup saat kontennya diklik
+                                                document.getElementById("dropdownMenu").addEventListener("click", function(event) {
+                                                    event.stopPropagation();
+                                                });
+                                            });
+                                        </script>
+
+                                    </li>
                                 </ul>
                             </div>
                         @endif
+
                         <ul></ul>
 
                         <ul>
@@ -145,8 +209,8 @@
                                     </a>
                                     <a href="/logout" class="dropdown-item ai-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
+                                            viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                             <polyline points="16 17 21 12 16 7"></polyline>
                                             <line x1="21" y1="12" x2="9" y2="12">

@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -273,10 +274,7 @@
             <div class="card-body text-center" style="margin-left: 2.5%">
                 <h3 class="card-title mb-4" style="color: white"><i class="fas fa-qrcode"></i> QR Code Scanner</h3>
                 <div id="qr-reader" style="width: 100%"></div>
-                <div class="mt-4">
-                    <button class="btn btn-light me-2" onclick="startScanner()" style="border-radius: 8px;">
-                        <i class="fas fa-play"></i> Start Scanner
-                    </button>
+                <div class="mt-5">
                 </div>
             </div>
         </div>
@@ -383,7 +381,7 @@
             }
 
             var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {
-                fps: 10,
+                fps: 15,
                 qrbox: 250
             });
             html5QrcodeScanner.render(onScanSuccess);
