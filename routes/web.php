@@ -60,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/logout', [AuthController::class, 'logout']);
 
+    Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
+    Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
 
 
     Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
