@@ -61,7 +61,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -102,8 +101,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
@@ -113,8 +110,10 @@
                                         <tr>
                                             <th class="align-middle">No</th>
                                             <th class="align-middle">Name</th>
-                                            <th class="align-middle pe-7">Events</th>
-                                            <th class="align-middle" style="min-width: 12.5rem;">Phone</th>
+                                            <th class="align-middle pe-7">Acara</th>
+                                            <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
+
+                                            <th class="align-middle">Status</th>
                                             <th class="align-middle">Date Time</th>
 
 
@@ -134,6 +133,17 @@
                                                 </td> --}}
                                                 <td>{{ $get->events }}</td>
                                                 <td>{{ $get->phone }}</td>
+
+
+                                                @if ($get->status == 'success')
+                                                    <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
+                                                @elseif($get->status == 'canceled')
+                                                    <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
+                                                @elseif($get->status == 'pending')
+                                                    <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
+                                                @endif
+
+
 
                                                 <td>{{ $get->created_at }}</td>
 
@@ -178,6 +188,8 @@
             </div>
         </div>
     </div>
+
+
     @foreach ($orders as $item)
         <div class="modal fade" id="exampleModal{{ $item->id_orders }}">
             <div class="modal-dialog modal-lg" role="document">
@@ -191,14 +203,17 @@
                             <div class="row">
                                 <!-- Image Section (left) -->
                                 <div class="col-md-4">
-                                    <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                    <img src="{{ $item->profile ? asset($item->profile) : asset('assets/images/no-profile.jpg') }}"
                                         alt="Image" class="img-fluid">
                                 </div>
+
+
 
                                 <!-- Description Section (right) -->
                                 <div class="col-md-8">
                                     <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
                                     <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
+
 
                                     <!-- Detail Barang (table) -->
                                     <h6>Detail Barang:</h6>
@@ -208,30 +223,29 @@
                                                 <th>Item</th>
                                                 <th>Quantity</th>
                                                 <th>Status</th>
-
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($orderItem->where('orders_id', $item->id_orders) as $data)
                                                 <tr>
                                                     <td>{{ $data->item_name }}</td>
-
-                                                    @if ($data->status !== 'success')
-                                                        <td class="py-2 text-center">
+                                                    <td class="py-2 text-center">
+                                                        @if ($data->status !== 'success')
                                                             <div class="input-group quantity-control">
                                                                 <button
                                                                     class="btn btn-outline-primary btn-sm decrement">-</button>
                                                                 <input type="number" name="quantity[]"
-                                                                    class="form-control text-center quantity"
+                                                                    class="form-control text-center quantity-input"
                                                                     value="{{ $data->quantity }}"
-                                                                    data-id="{{ $data->id_order_items }}" min="1">
+                                                                    data-q-id="{{ $data->id_order_items }}"
+                                                                    min="0">
                                                                 <button
                                                                     class="btn btn-outline-primary btn-sm increment">+</button>
                                                             </div>
-                                                        </td>
-                                                    @else
-                                                        <td>{{ $data->quantity }}</td>
-                                                    @endif
+                                                        @else
+                                                            {{ $data->quantity }}
+                                                        @endif
+                                                    </td>
                                                     <td class="text-center">
                                                         <div class="d-flex align-items-center">
                                                             @if ($data->status == 'success')
@@ -250,9 +264,88 @@
 
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
+
+
+                                {{-- table item --}}
+
+                                @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div class="search-box">
+                                                    <input type="text" id="tableSearch" class="form-control"
+                                                        placeholder="Search...">
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="padding: 0 20px">
+                                                <div class="table-responsive"
+                                                    style="max-height: 330px; overflow-y: auto;">
+                                                    <table id="mytable" class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Photo</th>
+                                                                <th>Item</th>
+                                                                <th>Stok</th>
+                                                                <th>Quantity</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($items as $getItem)
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </td>
+                                                                    <td>{{ $getItem->item_name }}</td>
+                                                                    <td>{{ $getItem->quantity }}</td>
+                                                                    <td class="py-2 text-center">
+                                                                        <div class="input-group quantity-control">
+                                                                            <button
+                                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                                            <input type="number" name="quantity[]"
+                                                                                class="form-control text-center quantity-input"
+                                                                                min="1" value="1"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                data-order-id="{{ $item->id_orders }}">
+                                                                            <button
+                                                                                class="btn btn-outline-primary btn-sm increment">+</button>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="shopping-cart">
+                                                                            <a class="btn btn-primary"
+                                                                                href="javascript:void(0);"
+                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                <i class="fa fa-shopping-basket me-2"></i>
+                                                                                Save
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- end table item --}}
+
+
                             </div>
                         </div>
+
+
                     </div>
+
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
 
@@ -266,7 +359,7 @@
                         @endphp
 
                         @if ($hasPendingItems)
-                            <button type="button" class="btn btn-warning light"
+                            <button type="button" class="btn btn-warning light" id="saveChangesBtn"
                                 onclick="updateAllRecaps({{ $item->id_orders }})">
                                 Simpan Perubahan
                             </button>
@@ -359,39 +452,51 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".quantity-control").forEach(function(control) {
-                let decrementBtn = control.querySelector(".decrement");
-                let incrementBtn = control.querySelector(".increment");
-                let inputField = control.querySelector(".quantity");
-
-                decrementBtn.addEventListener("click", function() {
-                    let currentValue = parseInt(inputField.value) || 0;
-                    if (currentValue > 0) {
-                        inputField.value = currentValue - 1;
-                    }
+            document.querySelectorAll(".increment").forEach((button) => {
+                button.addEventListener("click", function() {
+                    let input = this.closest(".quantity-control").querySelector(".quantity-input");
+                    input.value = parseInt(input.value) + 1;
                 });
+            });
 
-                incrementBtn.addEventListener("click", function() {
-                    let currentValue = parseInt(inputField.value) || 0;
-                    inputField.value = currentValue + 1;
+            document.querySelectorAll(".decrement").forEach((button) => {
+                button.addEventListener("click", function() {
+                    let input = this.closest(".quantity-control").querySelector(".quantity-input");
+                    if (parseInt(input.value) > 0) {
+                        input.value = parseInt(input.value) - 1;
+                    }
                 });
             });
         });
 
+
+
         function updateAllRecaps(orderId) {
             let recaps = [];
 
-            document.querySelectorAll(`#exampleModal${orderId} tbody tr`).forEach(row => {
-                let id = row.querySelector("input[name='quantity[]']").getAttribute("data-id");
-                let quantity = parseInt(row.querySelector("input[name='quantity[]']").value) || 0;
+            document.querySelectorAll("tbody tr").forEach(row => {
+                let input = row.querySelector(".quantity-input");
+                let id = input?.getAttribute("data-q-id");
+                let quantity = parseInt(input?.value) || 0;
 
-
-                recaps.push({
-                    id: id,
-                    quantity: quantity,
-
-                });
+                if (id) {
+                    recaps.push({
+                        id: id,
+                        quantity: quantity,
+                    });
+                }
             });
+
+            if (recaps.length === 0) {
+                alert("Tidak ada data yang diperbarui!");
+                return;
+            }
+
+            document.getElementById("saveChangesBtn").disabled = true; // Mencegah spam klik
+
+            setTimeout(() => {
+                document.getElementById("saveChangesBtn").disabled = false;
+            }, 3000); // Tombol diaktifkan kembali setelah 3 detik
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
@@ -402,7 +507,7 @@
                         "X-CSRF-TOKEN": csrfToken
                     },
                     body: JSON.stringify({
-                        recaps: recaps
+                        recaps
                     })
                 })
                 .then(response => response.json())
@@ -416,11 +521,46 @@
         }
     </script>
 
+    {{-- update status items --}}
     <script>
-        function updateItemsStatus(orderId, status) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+        async function updateItemsStatus(orderId, status) {
+            if (!orderId) {
+                alert("ID pesanan tidak valid!");
+                return;
+            }
 
-            fetch("{{ route('order-items.updateStatus') }}", {
+            const recaps = [];
+            const saveChangesBtn = document.getElementById("saveChangesBtn");
+            const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = csrfMetaTag ? csrfMetaTag.getAttribute("content") : null;
+
+            if (!csrfToken) {
+                alert("CSRF token tidak ditemukan!");
+                return;
+            }
+
+            document.querySelectorAll("tbody tr").forEach(row => {
+                const input = row.querySelector(".quantity-input");
+                const id = input?.getAttribute("data-q-id");
+                const quantity = parseInt(input?.value) || 0;
+
+                if (id) {
+                    recaps.push({
+                        id,
+                        quantity
+                    });
+                }
+            });
+
+            if (recaps.length === 0) {
+                alert("Tidak ada data yang diperbarui!");
+                return;
+            }
+
+            saveChangesBtn.disabled = true;
+
+            try {
+                const response = await fetch("{{ route('order-items.updateStatus') }}", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -428,16 +568,74 @@
                     },
                     body: JSON.stringify({
                         orders_id: orderId,
-                        status: status
+                        status,
+                        recaps
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Terjadi kesalahan pada server.");
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                location.reload();
+            } catch (error) {
+                console.error("Error updating data:", error);
+                alert(error.message || "Terjadi kesalahan saat memperbarui data. Silakan coba lagi.");
+            } finally {
+                setTimeout(() => {
+                    saveChangesBtn.disabled = false;
+                }, 3000);
+            }
+        }
+    </script>
+
+
+
+
+    <script>
+        function updateItems(orderId, element) {
+            const row = element.closest("tr");
+            const quantityInput = row.querySelector(".quantity-input");
+            const quantity = quantityInput ? quantityInput.value : 1;
+            const inventoryId = quantityInput ? quantityInput.dataset.inventoryId : null;
+
+            if (!inventoryId) {
+                alert("Terjadi kesalahan: ID tidak ditemukan.");
+                return;
+            }
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+            fetch("{{ route('order-items.dashboard') }}", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        orders_id: orderId,
+                        quantity: quantity,
+                        inventories_id: inventoryId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    location.reload();
+                .then(response => response.json().then(data => ({
+                    status: response.status,
+                    body: data
+                })))
+                .then(({
+                    status,
+                    body
+                }) => {
+                    alert(body.message);
+                    if (status !== 400) {
+                        location.reload();
+                    }
                 })
                 .catch(error => {
-                    console.error("Error updating status:", error);
+                    console.error("Error updating item:", error);
                 });
         }
     </script>
