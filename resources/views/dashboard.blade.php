@@ -265,71 +265,80 @@
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
 
+                                
                                 {{-- table item --}}
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                            <div class="search-box">
-                                                <input type="text" id="tableSearch" class="form-control"
-                                                    placeholder="Search...">
-                                            </div>
 
-                                        </div>
-                                        <div class="card-body" style="padding: 0 20px">
-                                            <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
-                                                <table id="mytable" class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Photo</th>
-                                                            <th>Item</th>
-                                                            <th>Stok</th>
-                                                            <th>Quantity</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($items as $getItem)
+                                @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div class="search-box">
+                                                    <input type="text" id="tableSearch" class="form-control"
+                                                        placeholder="Search...">
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="padding: 0 20px">
+                                                <div class="table-responsive"
+                                                    style="max-height: 330px; overflow-y: auto;">
+                                                    <table id="mytable" class="table table-responsive-md text-center">
+                                                        <thead>
                                                             <tr>
-                                                                <td>{{ $loop->iteration }}</td>
-                                                                <td>
-                                                                    <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                        alt="Item Image" width="50">
-                                                                </td>
-                                                                <td>{{ $getItem->item_name }}</td>
-                                                                <td>{{ $getItem->quantity }}</td>
-                                                                <td class="py-2 text-center">
-                                                                    <div class="input-group quantity-control">
-                                                                        <button
-                                                                            class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                                        <input type="number" name="quantity[]"
-                                                                            class="form-control text-center quantity-input"
-                                                                            min="1" value="1"
-                                                                            data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                            data-order-id="{{ $item->id_orders }}">
-                                                                        <button
-                                                                            class="btn btn-outline-primary btn-sm increment">+</button>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="shopping-cart">
-                                                                        <a class="btn btn-primary"
-                                                                            href="javascript:void(0);"
-                                                                            onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                            <i class="fa fa-shopping-basket me-2"></i> Save
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
+                                                                <th>No</th>
+                                                                <th>Photo</th>
+                                                                <th>Item</th>
+                                                                <th>Stok</th>
+                                                                <th>Quantity</th>
+                                                                <th>Action</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($items as $getItem)
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </td>
+                                                                    <td>{{ $getItem->item_name }}</td>
+                                                                    <td>{{ $getItem->quantity }}</td>
+                                                                    <td class="py-2 text-center">
+                                                                        <div class="input-group quantity-control">
+                                                                            <button
+                                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
+                                                                            <input type="number" name="quantity[]"
+                                                                                class="form-control text-center quantity-input"
+                                                                                min="1" value="1"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                data-order-id="{{ $item->id_orders }}">
+                                                                            <button
+                                                                                class="btn btn-outline-primary btn-sm increment">+</button>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="shopping-cart">
+                                                                            <a class="btn btn-primary"
+                                                                                href="javascript:void(0);"
+                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                <i class="fa fa-shopping-basket me-2"></i>
+                                                                                Save
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
 
+                                                </div>
+                                                <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
                                             </div>
-                                            <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
+
+                                {{-- end table item --}}
+
+
                             </div>
                         </div>
 

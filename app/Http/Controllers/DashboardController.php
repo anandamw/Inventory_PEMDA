@@ -17,6 +17,8 @@ class DashboardController extends Controller
 
     public function index()
     {
+
+
         $headerText = 'Dashboard';
         $items = Inventory::orderBy('created_at', 'desc')->get();
         $orders = DB::table('orders')
@@ -51,7 +53,6 @@ class DashboardController extends Controller
         END, orders.created_at DESC
     ")
             ->paginate(10);
-
 
         $orderItem = OrderItem::join('orders', 'order_items.orders_id', '=', 'orders.id_orders')->join('inventories', 'order_items.inventories_id', 'inventories.id_inventories')->select('order_items.orders_id', 'order_items.quantity', 'order_items.id_order_items', 'order_items.status', 'inventories.item_name', 'orders.*')->get();
 
