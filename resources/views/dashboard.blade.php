@@ -261,6 +261,22 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <h6>Barang Yang Ditambahkan:</h6>
+                                    <table class="table table-bordered" id="tableadd">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="emptyRow">
+                                                <td colspan="3" class="text-center">Tidak ada item ditambahkan</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
@@ -287,7 +303,8 @@
                                                                 <th>Photo</th>
                                                                 <th>Item</th>
                                                                 <th>Stok</th>
-                                                                <th>Quantity</th>
+                                                                <th>quantity</th>
+
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
@@ -360,7 +377,7 @@
 
                         @if ($hasPendingItems)
                             <button type="button" class="btn btn-warning light" id="saveChangesBtn"
-                                onclick="updateAllRecaps({{ $item->id_orders }})">
+                                onclick="saveChangesData({{ $item->id_orders }})">
                                 Simpan Perubahan
                             </button>
 
@@ -468,57 +485,6 @@
                 });
             });
         });
-
-
-
-        function updateAllRecaps(orderId) {
-            let recaps = [];
-
-            document.querySelectorAll("tbody tr").forEach(row => {
-                let input = row.querySelector(".quantity-input");
-                let id = input?.getAttribute("data-q-id");
-                let quantity = parseInt(input?.value) || 0;
-
-                if (id) {
-                    recaps.push({
-                        id: id,
-                        quantity: quantity,
-                    });
-                }
-            });
-
-            if (recaps.length === 0) {
-                alert("Tidak ada data yang diperbarui!");
-                return;
-            }
-
-            document.getElementById("saveChangesBtn").disabled = true; // Mencegah spam klik
-
-            setTimeout(() => {
-                document.getElementById("saveChangesBtn").disabled = false;
-            }, 3000); // Tombol diaktifkan kembali setelah 3 detik
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-            fetch("{{ route('history.dashboard.update') }}", {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({
-                        recaps
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error("Error updating data:", error);
-                });
-        }
     </script>
 
     {{-- update status items --}}
@@ -592,51 +558,191 @@
         }
     </script>
 
-
-
-
+    {{-- simpan perubahan --}}
     <script>
-        function updateItems(orderId, element) {
-            const row = element.closest("tr");
-            const quantityInput = row.querySelector(".quantity-input");
-            const quantity = quantityInput ? quantityInput.value : 1;
-            const inventoryId = quantityInput ? quantityInput.dataset.inventoryId : null;
+        function saveChangesData(orderId) {
+            let updatedItems = []; // Untuk menyimpan item yang diupdate
+            let newItems = []; // Untuk menyimpan item baru
 
-            if (!inventoryId) {
-                alert("Terjadi kesalahan: ID tidak ditemukan.");
-                return;
-            }
+            // Ambil semua input quantity di tabel Detail Barang
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let itemId = input.getAttribute("data-q-id");
+                let newQuantity = parseInt(input.value);
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+                updatedItems.push({
+                    id_order_items: itemId,
+                    quantity: newQuantity
+                });
+            });
 
-            fetch("{{ route('order-items.dashboard') }}", {
-                    method: "PUT",
+            // Ambil semua item yang baru ditambahkan di tabel Barang Yang Ditambahkan
+            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
+                if (row.id !== "emptyRow") { // Lewati baris default "Tidak ada item ditambahkan"
+                    let inventoryId = row.dataset.inventoryId;
+                    let itemName = row.cells[1].textContent.trim();
+                    let quantity = parseInt(row.cells[2].textContent);
+
+                    newItems.push({
+                        inventories_id: inventoryId,
+                        item_name: itemName,
+                        quantity: quantity,
+                        orders_id: orderId
+                    });
+                }
+            });
+
+            // Kirim data ke backend menggunakan fetch API
+            fetch("/update-order-items", {
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
                     },
                     body: JSON.stringify({
-                        orders_id: orderId,
-                        quantity: quantity,
-                        inventories_id: inventoryId
+                        orderId: orderId,
+                        updatedItems: updatedItems,
+                        newItems: newItems
                     })
                 })
-                .then(response => response.json().then(data => ({
-                    status: response.status,
-                    body: data
-                })))
-                .then(({
-                    status,
-                    body
-                }) => {
-                    alert(body.message);
-                    if (status !== 400) {
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Perubahan berhasil disimpan!");
                         location.reload();
+                    } else {
+                        console.error("Error dari server:", data.error); // Tambahkan ini untuk melihat error
+                        alert("Terjadi kesalahan: " + data.error);
                     }
                 })
                 .catch(error => {
-                    console.error("Error updating item:", error);
+                    console.error("Fetch error:", error);
+                    alert("Gagal menyimpan perubahan.");
                 });
+
+        }
+    </script>
+
+
+    {{-- acara selesai --}}
+    <script>
+        function updateItemsStatus(orderId, status) {
+            let updatedItems = []; // Untuk menyimpan item yang diupdate
+            let newItems = []; // Untuk menyimpan item baru
+
+            // Ambil semua input quantity di tabel Detail Barang
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let itemId = input.getAttribute("data-q-id");
+                let newQuantity = parseInt(input.value);
+
+                updatedItems.push({
+                    id_order_items: itemId,
+                    quantity: newQuantity,
+                    status: status // Tambahkan status ke data yang dikirim
+                });
+            });
+
+            // Ambil semua item yang baru ditambahkan di tabel Barang Yang Ditambahkan
+            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
+                if (row.id !== "emptyRow") { // Lewati baris default "Tidak ada item ditambahkan"
+                    let inventoryId = row.dataset.inventoryId;
+                    let itemName = row.cells[1].textContent.trim();
+                    let quantity = parseInt(row.cells[2].textContent);
+
+                    newItems.push({
+                        inventories_id: inventoryId,
+                        item_name: itemName,
+                        quantity: quantity,
+                        orders_id: orderId,
+                        status: status // Tambahkan status "success"
+                    });
+                }
+            });
+
+            // Kirim data ke backend menggunakan fetch API
+            fetch("/update-order-items-status", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        updatedItems: updatedItems,
+                        newItems: newItems
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Perubahan berhasil disimpan!");
+                        location.reload();
+                    } else {
+                        console.error("Error dari server:", data.error);
+                        alert("Terjadi kesalahan: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    alert("Gagal menyimpan perubahan.");
+                });
+        }
+    </script>
+
+
+
+
+
+
+    {{-- create delete table item modal --}}
+    <script>
+        function updateItems(orderId, button) {
+            let row = button.closest("tr"); // Ambil baris tabel
+            let itemName = row.cells[2].textContent.trim(); // Nama item
+            let quantityInput = row.querySelector(".quantity-input"); // Input quantity
+            let quantity = parseInt(quantityInput.value);
+            let inventoryId = quantityInput.getAttribute("data-inventory-id"); // Ambil id_inventories
+            let tableBody = document.querySelector("#tableadd tbody"); // Tabel "Barang Yang Ditambahkan"
+
+            // Cek apakah item sudah ada di tabel yang ditambahkan
+            let existingRow = [...tableBody.rows].find(r => r.dataset.inventoryId === inventoryId);
+
+            if (existingRow) {
+                // Jika item sudah ada di tabel, tambahkan quantity
+                let currentQty = parseInt(existingRow.cells[2].textContent);
+                existingRow.cells[2].textContent = currentQty + quantity;
+            } else {
+                // Jika item belum ada, tambahkan baris baru
+                let newRow = document.createElement("tr");
+                newRow.dataset.inventoryId = inventoryId; // Simpan id_inventories di dataset baris
+                newRow.innerHTML = `
+            <td>${inventoryId}</td>
+            <td>${itemName}</td>
+            <td>${quantity}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
+            </td>
+        `;
+                tableBody.appendChild(newRow);
+            }
+
+            // Hapus "Tidak ada item ditambahkan" jika ada
+            let emptyRow = document.getElementById("emptyRow");
+            if (emptyRow) emptyRow.remove();
+        }
+
+        // Fungsi untuk menghapus item dari tabel
+        function deleteItem(button) {
+            let row = button.closest("tr");
+            row.remove(); // Hapus baris tabel
+
+            // Jika tabel kosong setelah penghapusan, tampilkan pesan default
+            let tableBody = document.querySelector("#tableadd tbody");
+            if (tableBody.rows.length === 0) {
+                let emptyRow = document.createElement("tr");
+                emptyRow.id = "emptyRow";
+                emptyRow.innerHTML = `<td colspan="4" class="text-center">Tidak ada item ditambahkan</td>`;
+                tableBody.appendChild(emptyRow);
+            }
         }
     </script>
 @endsection

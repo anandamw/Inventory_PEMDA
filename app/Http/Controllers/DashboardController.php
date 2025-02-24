@@ -13,6 +13,76 @@ use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
+    public function updateOrderItems(Request $request)
+    {
+        try {
+            \Log::info("Request masuk:", $request->all()); // Log data request untuk debug
+
+            // Update item yang sudah ada di tabel order_items
+            foreach ($request->updatedItems as $item) {
+                $update = OrderItem::where('id_order_items', $item['id_order_items'])
+                    ->update(['quantity' => $item['quantity']]);
+
+                if (!$update) {
+                    \Log::error("Gagal update item ID: " . $item['id_order_items']);
+                }
+            }
+
+            // Tambahkan item baru ke tabel order_items
+            foreach ($request->newItems as $newItem) {
+                OrderItem::create([
+                    'orders_id' => $newItem['orders_id'],
+                    'inventories_id' => $newItem['inventories_id'],
+                    'quantity' => $newItem['quantity'],
+                    'status' => 'pending',
+                    'users_id' => auth()->user()->id
+                ]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            \Log::error("Error updateOrderItems: " . $e->getMessage()); // Log error untuk debug
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
+
+    public function updateOrderItemsStatus(Request $request)
+    {
+        try {
+            \Log::info("Request masuk:", $request->all()); // Debugging
+
+            // Update item yang sudah ada di tabel order_items
+            foreach ($request->updatedItems as $item) {
+                $update = OrderItem::where('id_order_items', $item['id_order_items'])
+                    ->update([
+                        'quantity' => $item['quantity'],
+                        'status' => $item['status'] // Update status menjadi success
+                    ]);
+
+                if (!$update) {
+                    \Log::error("Gagal update item ID: " . $item['id_order_items']);
+                }
+            }
+
+            // Tambahkan item baru ke tabel order_items
+            foreach ($request->newItems as $newItem) {
+                OrderItem::create([
+                    'orders_id' => $newItem['orders_id'],
+                    'inventories_id' => $newItem['inventories_id'],
+                    'quantity' => $newItem['quantity'],
+                    'status' => $newItem['status'],
+                    'users_id' => auth()->user()->id
+
+                ]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            \Log::error("Error updateOrderItems: " . $e->getMessage());
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
+
 
 
     public function index()
