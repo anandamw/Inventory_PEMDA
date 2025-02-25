@@ -53,6 +53,98 @@
     });
 </script>
 <script defer>
+    $(document).ready(function() {
+        var table = $('#rekaptable').DataTable({
+            "paging": false,
+            "searching": true,
+            "info": true,
+            "lengthChange": false,
+            "dom": 'rtip',
+            "language": {
+                "paginate": {
+                    "previous": "<",
+                    "next": ">"
+                }
+            }
+        });
+
+        // Fitur pencarian manual
+        $('#tableSearch').on('keyup', function() {
+            table.search(this.value).draw();
+        });
+
+        // Tampilkan input bulan jika "This Month" dipilih
+        $('#filterSelect').on('change', function() {
+            if ($(this).val() === "month") {
+                $('#monthPicker').show();
+            } else {
+                $('#monthPicker').hide();
+                applyFilter();
+            }
+        });
+
+        // Filter saat memilih bulan
+        $('#monthPicker').on('change', function() {
+            applyFilter();
+        });
+
+        // Filter berdasarkan waktu
+        function applyFilter() {
+            var filterValue = $('#filterSelect').val();
+            var selectedMonth = $('#monthPicker').val(); // Format: YYYY-MM
+            var today = new Date();
+
+            table.rows().every(function() {
+                var row = this.node();
+                var dateText = $(row).find("td:nth-child(4)").text().trim();
+                var rowDate = parseDate(dateText);
+
+                if (!rowDate) {
+                    $(row).show(); // Jika tanggal tidak valid, tetap tampilkan
+                    return;
+                }
+
+                var showRow = false;
+
+                if (filterValue === "day") {
+                    showRow = (rowDate.toDateString() === today.toDateString());
+                } else if (filterValue === "week") {
+                    var oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(today.getDate() - 7);
+                    showRow = (rowDate >= oneWeekAgo && rowDate <= today);
+                } else if (filterValue === "month") {
+                    if (selectedMonth) {
+                        var selectedYear = parseInt(selectedMonth.split('-')[0]);
+                        var selectedMonthNum = parseInt(selectedMonth.split('-')[1]) - 1;
+                        showRow = (rowDate.getFullYear() === selectedYear && rowDate.getMonth() === selectedMonthNum);
+                    } else {
+                        var thisMonth = today.getMonth();
+                        var thisYear = today.getFullYear();
+                        showRow = (rowDate.getFullYear() === thisYear && rowDate.getMonth() === thisMonth);
+                    }
+                } else {
+                    showRow = true;
+                }
+
+                $(row).toggle(showRow);
+            });
+        }
+
+        // Fungsi untuk mengubah teks tanggal menjadi objek Date
+        function parseDate(dateText) {
+            var parts = dateText.split('/');
+            if (parts.length === 3) {
+                return new Date(parts[2], parts[1] - 1, parts[0]); // Format DD/MM/YYYY
+            } else if (!isNaN(Date.parse(dateText))) {
+                return new Date(dateText);
+            }
+            return null; // Format tidak valid
+        }
+    });
+</script>
+
+
+<script defer>
     document.getElementById('increment-1').addEventListener('click', function() {
         var quantityInput = document.getElementById('quantity-1');
         var quantity = parseInt(quantityInput.value);

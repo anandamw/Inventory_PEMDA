@@ -60,19 +60,20 @@
                                 <button class="btn btn-success px-4 py-2 rounded-pill shadow-sm" onclick="exportToExcel()">
                                     <i class="bi bi-file-earmark-excel"></i> Export to Excel
                                 </button>
-                                <select id="filterSelect" class="form-select rounded-pill px-3 shadow-sm"
-                                    style="width: 150px;">
+                                <select id="filterSelect" class="form-select rounded-pill px-3 shadow-sm" style="width: 150px;">
                                     <option value="month" selected>This Month</option>
                                     <option value="week">Weeks</option>
                                     <option value="day">Today</option>
                                 </select>
+                                   <!-- Input untuk memilih bulan (disembunyikan awalnya) -->
+                                <input type="month" id="monthPicker" style="display: none; margin-top: 10px;">
                             </div>
                         </div>
 
 
                         <div class="card-body" style="padding: 0 20px">
-                            <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
-                                <table id="mytable" class="table table-responsive-md text-center">
+                            <div class="table-responsive" style="overflow-y: auto;">
+                                <table id="rekaptable" class="table table-responsive-md text-center">
                                     <thead class="text-center">
                                         <tr>
                                             <th class="text-center">Event</th>

@@ -15,7 +15,7 @@ class RekapitulasiController extends Controller
     public function index()
     {
  
-        $orders = Order::with('user')->orderBy('id_orders')->paginate(10);
+        $orders = Order::with('user')->orderBy('id_orders')->get();
 
 
 
