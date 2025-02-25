@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RekapitulasiController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\InstansiController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -38,6 +39,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/user/{id}/destroy', [UserController::class, 'destroy']);
         Route::post('/user/store', [UserController::class, 'store']);
         Route::get('/user', [UserController::class, 'index']);
+
+        Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.instansi');
+        Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
+        Route::put('/instansi/{id_instansi}/update', [InstansiController::class, 'update'])->name('instansi.update');
+        Route::get('/instansi/{id}/delete', [InstansiController::class, 'destroy'])->name('instansi.destroy');
 
         Route::get('/rekapitulasi', [RekapitulasiController::class, 'index'])->name('rekapitulasi.rekapitulasi');
         Route::get('/rekapitulasi/{id}', [RekapitulasiController::class, 'show'])->name('rekapitulasi.show');

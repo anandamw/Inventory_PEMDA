@@ -60,13 +60,13 @@
                                 <button class="btn btn-success px-4 py-2 rounded-pill shadow-sm" onclick="exportToExcel()">
                                     <i class="bi bi-file-earmark-excel"></i> Export to Excel
                                 </button>
-                                <select id="filterSelect" class="form-select rounded-pill px-3 shadow-sm" style="width: 150px;">
+                                <select id="filterSelect" class="form-select rounded-pill ps-4 shadow-sm" style="width: 170px;">
                                     <option value="month" selected>This Month</option>
-                                    <option value="week">Weeks</option>
+                                    <option value="week">Last 7 Days</option>
                                     <option value="day">Today</option>
                                 </select>
                                    <!-- Input untuk memilih bulan (disembunyikan awalnya) -->
-                                <input type="month" id="monthPicker" style="display: none; margin-top: 10px;">
+                                   <input type="month" id="monthPicker" class="form-control rounded-pill shadow-sm" style="display: none; width: 180px;">
                             </div>
                         </div>
 

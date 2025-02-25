@@ -49,6 +49,11 @@
                               <span class="nav-text">Users</span>
                           </a>
                       </li>
+                      <li><a href="/instansi" class="" aria-expanded="false">
+                              <i class="bi bi-building"></i>
+                              <span class="nav-text">Instansi</span>
+                          </a>
+                      </li>
                       <li><a href="/rekapitulasi" class="" aria-expanded="false">
                               <i class="bi bi-book"></i>
                               <span class="nav-text">Rekapitulasi</span>
