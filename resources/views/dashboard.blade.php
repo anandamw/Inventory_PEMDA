@@ -265,7 +265,7 @@
                                     <table class="table table-bordered" id="tableadd">
                                         <thead>
                                             <tr>
-                                                <th>Item</th>
+                                                <th>inventories_id</th>
                                                 <th>Item</th>
                                                 <th>Quantity</th>
                                                 <th>Status</th>
@@ -303,7 +303,6 @@
                                                                 <th>Photo</th>
                                                                 <th>Item</th>
                                                                 <th>Stok</th>
-                                                                <th>quantity</th>
 
                                                                 <th>Action</th>
                                                             </tr>
@@ -318,23 +317,13 @@
                                                                     </td>
                                                                     <td>{{ $getItem->item_name }}</td>
                                                                     <td>{{ $getItem->quantity }}</td>
-                                                                    <td class="py-2 text-center">
-                                                                        <div class="input-group quantity-control">
-                                                                            <button
-                                                                                class="btn btn-outline-primary btn-sm decrement">-</button>
-                                                                            <input type="number" name="quantity[]"
-                                                                                class="form-control text-center quantity-input"
-                                                                                min="1" value="1"
-                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                                data-order-id="{{ $item->id_orders }}">
-                                                                            <button
-                                                                                class="btn btn-outline-primary btn-sm increment">+</button>
-                                                                        </div>
-                                                                    </td>
+
                                                                     <td>
                                                                         <div class="shopping-cart">
                                                                             <a class="btn btn-primary"
                                                                                 href="javascript:void(0);"
+                                                                                data-order-id="{{ $item->id_orders }}"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
                                                                                 onclick="updateItems({{ $item->id_orders }}, this)">
                                                                                 <i class="fa fa-shopping-basket me-2"></i>
                                                                                 Save
@@ -469,105 +458,32 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".increment").forEach((button) => {
-                button.addEventListener("click", function() {
-                    let input = this.closest(".quantity-control").querySelector(".quantity-input");
+            document.body.addEventListener("click", function(event) {
+                if (event.target.classList.contains("increment")) {
+                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
                     input.value = parseInt(input.value) + 1;
-                });
-            });
+                }
 
-            document.querySelectorAll(".decrement").forEach((button) => {
-                button.addEventListener("click", function() {
-                    let input = this.closest(".quantity-control").querySelector(".quantity-input");
-                    if (parseInt(input.value) > 0) {
+                if (event.target.classList.contains("decrement")) {
+                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
+                    if (parseInt(input.value) > 1) { // Prevent nilai kurang dari 1
                         input.value = parseInt(input.value) - 1;
                     }
-                });
+                }
             });
         });
     </script>
 
-    {{-- update status items --}}
+    {{-- acara selesai --}}
     <script>
-        async function updateItemsStatus(orderId, status) {
-            if (!orderId) {
-                alert("ID pesanan tidak valid!");
-                return;
-            }
-
-            const recaps = [];
-            const saveChangesBtn = document.getElementById("saveChangesBtn");
-            const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
-            const csrfToken = csrfMetaTag ? csrfMetaTag.getAttribute("content") : null;
-
-            if (!csrfToken) {
-                alert("CSRF token tidak ditemukan!");
-                return;
-            }
-
-            document.querySelectorAll("tbody tr").forEach(row => {
-                const input = row.querySelector(".quantity-input");
-                const id = input?.getAttribute("data-q-id");
-                const quantity = parseInt(input?.value) || 0;
-
-                if (id) {
-                    recaps.push({
-                        id,
-                        quantity
-                    });
-                }
-            });
-
-            if (recaps.length === 0) {
-                alert("Tidak ada data yang diperbarui!");
-                return;
-            }
-
-            saveChangesBtn.disabled = true;
-
-            try {
-                const response = await fetch("{{ route('order-items.updateStatus') }}", {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({
-                        orders_id: orderId,
-                        status,
-                        recaps
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || "Terjadi kesalahan pada server.");
-                }
-
-                const data = await response.json();
-                alert(data.message);
-                location.reload();
-            } catch (error) {
-                console.error("Error updating data:", error);
-                alert(error.message || "Terjadi kesalahan saat memperbarui data. Silakan coba lagi.");
-            } finally {
-                setTimeout(() => {
-                    saveChangesBtn.disabled = false;
-                }, 3000);
-            }
-        }
-    </script>
-
-    {{-- simpan perubahan --}}
-    <script>
-        function saveChangesData(orderId) {
-            let updatedItems = []; // Untuk menyimpan item yang diupdate
-            let newItems = []; // Untuk menyimpan item baru
+        async function updateItemsStatus(orderId, status = null) {
+            let updatedItems = [];
+            let newItems = [];
 
             // Ambil semua input quantity di tabel Detail Barang
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
-                let newQuantity = parseInt(input.value);
+                let newQuantity = parseInt(input.value) || 0;
 
                 updatedItems.push({
                     id_order_items: itemId,
@@ -575,12 +491,94 @@
                 });
             });
 
-            // Ambil semua item yang baru ditambahkan di tabel Barang Yang Ditambahkan
             document.querySelectorAll("#tableadd tbody tr").forEach(row => {
-                if (row.id !== "emptyRow") { // Lewati baris default "Tidak ada item ditambahkan"
+                if (row.id !== "emptyRow") {
                     let inventoryId = row.dataset.inventoryId;
                     let itemName = row.cells[1].textContent.trim();
-                    let quantity = parseInt(row.cells[2].textContent);
+                    let quantityInput = row.querySelector(".quantity-input");
+                    let quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+
+                    newItems.push({
+                        inventories_id: inventoryId,
+                        item_name: itemName,
+                        quantity: quantity,
+                        orders_id: orderId,
+                        status: status // Menambahkan status jika ada
+                    });
+                }
+            });
+
+            if (updatedItems.length === 0 && newItems.length === 0) {
+                alert("Tidak ada perubahan yang disimpan.");
+                return;
+            }
+            console.log("Data yang dikirim:", JSON.stringify({
+                orderId: orderId,
+                updatedItems: updatedItems,
+                newItems: newItems,
+                status: status
+            }, null, 2));
+
+            try {
+                let response = await fetch("/update-order-items-status", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content")
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        updatedItems: updatedItems,
+                        newItems: newItems,
+                        status: status // Kirim status jika ada
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                let data = await response.json();
+
+                if (data.success) {
+                    alert("Perubahan berhasil disimpan!");
+                    location.reload();
+                } else {
+                    console.error("Error dari server:", data.error);
+                    alert("Terjadi kesalahan: " + data.error);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Gagal menyimpan perubahan.");
+            }
+        }
+    </script>
+
+
+    {{-- simpan perubahan --}}
+    <script>
+        async function saveChangesData(orderId) {
+            let updatedItems = [];
+            let newItems = [];
+
+            // Ambil semua input quantity di tabel Detail Barang
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                let itemId = input.getAttribute("data-q-id");
+                let newQuantity = parseInt(input.value) || 0;
+
+                updatedItems.push({
+                    id_order_items: itemId,
+                    quantity: newQuantity
+                });
+            });
+
+            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
+                if (row.id !== "emptyRow") {
+                    let inventoryId = row.dataset.inventoryId;
+                    let itemName = row.cells[1].textContent.trim();
+                    let quantityInput = row.querySelector(".quantity-input");
+                    let quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
                     newItems.push({
                         inventories_id: inventoryId,
@@ -591,144 +589,83 @@
                 }
             });
 
-            // Kirim data ke backend menggunakan fetch API
-            fetch("/update-order-items", {
+            if (updatedItems.length === 0 && newItems.length === 0) {
+                alert("Tidak ada perubahan yang disimpan.");
+                return;
+            }
+
+            try {
+                let response = await fetch("/update-order-items", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content")
                     },
                     body: JSON.stringify({
                         orderId: orderId,
                         updatedItems: updatedItems,
                         newItems: newItems
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Perubahan berhasil disimpan!");
-                        location.reload();
-                    } else {
-                        console.error("Error dari server:", data.error); // Tambahkan ini untuk melihat error
-                        alert("Terjadi kesalahan: " + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error("Fetch error:", error);
-                    alert("Gagal menyimpan perubahan.");
                 });
 
-        }
-    </script>
-
-
-    {{-- acara selesai --}}
-    <script>
-        function updateItemsStatus(orderId, status) {
-            let updatedItems = []; // Untuk menyimpan item yang diupdate
-            let newItems = []; // Untuk menyimpan item baru
-
-            // Ambil semua input quantity di tabel Detail Barang
-            document.querySelectorAll(".quantity-input").forEach(input => {
-                let itemId = input.getAttribute("data-q-id");
-                let newQuantity = parseInt(input.value);
-
-                updatedItems.push({
-                    id_order_items: itemId,
-                    quantity: newQuantity,
-                    status: status // Tambahkan status ke data yang dikirim
-                });
-            });
-
-            // Ambil semua item yang baru ditambahkan di tabel Barang Yang Ditambahkan
-            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
-                if (row.id !== "emptyRow") { // Lewati baris default "Tidak ada item ditambahkan"
-                    let inventoryId = row.dataset.inventoryId;
-                    let itemName = row.cells[1].textContent.trim();
-                    let quantity = parseInt(row.cells[2].textContent);
-
-                    newItems.push({
-                        inventories_id: inventoryId,
-                        item_name: itemName,
-                        quantity: quantity,
-                        orders_id: orderId,
-                        status: status // Tambahkan status "success"
-                    });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            });
 
-            // Kirim data ke backend menggunakan fetch API
-            fetch("/update-order-items-status", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                    },
-                    body: JSON.stringify({
-                        orderId: orderId,
-                        updatedItems: updatedItems,
-                        newItems: newItems
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Perubahan berhasil disimpan!");
-                        location.reload();
-                    } else {
-                        console.error("Error dari server:", data.error);
-                        alert("Terjadi kesalahan: " + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error("Fetch error:", error);
-                    alert("Gagal menyimpan perubahan.");
-                });
+                let data = await response.json();
+
+                if (data.success) {
+                    alert("Perubahan berhasil disimpan!");
+                    location.reload();
+                } else {
+                    console.error("Error dari server:", data.error);
+                    alert("Terjadi kesalahan: " + data.error);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Gagal menyimpan perubahan.");
+            }
         }
     </script>
-
-
-
-
-
 
     {{-- create delete table item modal --}}
     <script>
         function updateItems(orderId, button) {
             let row = button.closest("tr"); // Ambil baris tabel
+            let inventoryId = button.getAttribute("data-inventory-id"); // Ambil id_inventories dari tombol
             let itemName = row.cells[2].textContent.trim(); // Nama item
-            let quantityInput = row.querySelector(".quantity-input"); // Input quantity
-            let quantity = parseInt(quantityInput.value);
-            let inventoryId = quantityInput.getAttribute("data-inventory-id"); // Ambil id_inventories
             let tableBody = document.querySelector("#tableadd tbody"); // Tabel "Barang Yang Ditambahkan"
 
-            // Cek apakah item sudah ada di tabel yang ditambahkan
-            let existingRow = [...tableBody.rows].find(r => r.dataset.inventoryId === inventoryId);
+            let newRow = document.createElement("tr");
+            newRow.dataset.inventoryId = inventoryId; // Simpan id_inventories di dataset baris
+            newRow.innerHTML = `
+         
+        <td>${inventoryId}</td>
+        <td>${itemName}</td>
+      <td class="py-2 text-center">
+    <div class="input-group quantity-control">
+        <button class="btn btn-outline-primary btn-sm decrement">-</button>
+        <input type="number" name="quantity[]" class="form-control text-center quantity-input" min="1" value="1">
+        <button class="btn btn-outline-primary btn-sm increment">+</button>
+    </div>
+   </td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
+        </td>
+    `;
+            tableBody.appendChild(newRow);
 
-            if (existingRow) {
-                // Jika item sudah ada di tabel, tambahkan quantity
-                let currentQty = parseInt(existingRow.cells[2].textContent);
-                existingRow.cells[2].textContent = currentQty + quantity;
-            } else {
-                // Jika item belum ada, tambahkan baris baru
-                let newRow = document.createElement("tr");
-                newRow.dataset.inventoryId = inventoryId; // Simpan id_inventories di dataset baris
-                newRow.innerHTML = `
-            <td>${inventoryId}</td>
-            <td>${itemName}</td>
-            <td>${quantity}</td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
-            </td>
-        `;
-                tableBody.appendChild(newRow);
-            }
 
             // Hapus "Tidak ada item ditambahkan" jika ada
             let emptyRow = document.getElementById("emptyRow");
             if (emptyRow) emptyRow.remove();
         }
+        let quantityInput = document.querySelector('.quantity-input');
+
+        quantityInput.addEventListener('click', function() {
+            alert('Input value changed!' + quantityInput.value);
+        })
 
         // Fungsi untuk menghapus item dari tabel
         function deleteItem(button) {
@@ -740,7 +677,7 @@
             if (tableBody.rows.length === 0) {
                 let emptyRow = document.createElement("tr");
                 emptyRow.id = "emptyRow";
-                emptyRow.innerHTML = `<td colspan="4" class="text-center">Tidak ada item ditambahkan</td>`;
+                emptyRow.innerHTML = `<td colspan="5" class="text-center">Tidak ada item ditambahkan</td>`;
                 tableBody.appendChild(emptyRow);
             }
         }
