@@ -22,7 +22,6 @@ return new class extends Migration
 
             $table->integer('quantity');
 
-
             $table->unsignedBigInteger("orders_id");
             $table->foreign("orders_id")->references("id_orders")->on("orders");
 
