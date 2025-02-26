@@ -261,125 +261,126 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <h6>Barang Yang Ditambahkan:</h6>
-                                    <table class="table table-bordered" id="tableadd">
-                                        <thead>
-                                            <tr>
-                                                <th>inventories_id</th>
-                                                <th>Item</th>
-                                                <th>Quantity</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="emptyRow">
-                                                <td colspan="3" class="text-center">Tidak ada item ditambahkan</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
+                                        <h6>Barang Yang Ditambahkan:</h6>
+                                        <table class="table table-bordered" id="tableadd">
+                                            <thead>
+                                                <tr>
+                                                    <th>inventories_id</th>
+                                                    <th>Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="emptyRow">
+                                                    <td colspan="3" class="text-center">Tidak ada item ditambahkan</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                                    <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
+                                        <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
 
 
                                 {{-- table item --}}
 
-                                @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
-                                    <div class="col-lg-12">
-                                        <div class="card">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div class="search-box">
-                                                    <input type="text" id="tableSearch" class="form-control"
-                                                        placeholder="Search...">
-                                                </div>
-                                            </div>
-                                            <div class="card-body" style="padding: 0 20px">
-                                                <div class="table-responsive"
-                                                    style="max-height: 330px; overflow-y: auto;">
-                                                    <table id="mytable" class="table table-responsive-md text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Photo</th>
-                                                                <th>Item</th>
-                                                                <th>Stok</th>
-
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($items as $getItem)
-                                                                <tr>
-                                                                    <td>{{ $loop->iteration }}</td>
-                                                                    <td>
-                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                            alt="Item Image" width="50">
-                                                                    </td>
-                                                                    <td>{{ $getItem->item_name }}</td>
-                                                                    <td>{{ $getItem->quantity }}</td>
-
-                                                                    <td>
-                                                                        <div class="shopping-cart">
-                                                                            <a class="btn btn-primary"
-                                                                                href="javascript:void(0);"
-                                                                                data-order-id="{{ $item->id_orders }}"
-                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                                <i class="fa fa-shopping-basket me-2"></i>
-                                                                                Save
-                                                                            </a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-                                                <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <div class="search-box">
+                                                <input type="text" id="tableSearch" class="form-control"
+                                                    placeholder="Search...">
                                             </div>
                                         </div>
+                                        <div class="card-body" style="padding: 0 20px">
+                                            <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
+
+                                                {{-- tabel item --}}
+                                                <table id="mytable" class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Photo</th>
+                                                            <th>Item</th>
+                                                            <th>Stok</th>
+
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($items as $getItem)
+                                                            <tr>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>
+                                                                    <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                        alt="Item Image" width="50">
+                                                                </td>
+                                                                <td>{{ $getItem->item_name }}</td>
+                                                                <td>{{ $getItem->quantity }}</td>
+
+                                                                <td>
+                                                                    <div class="shopping-cart">
+                                                                        <a class="btn btn-primary"
+                                                                            href="javascript:void(0);"
+                                                                            data-order-id="{{ $item->id_orders }}"
+                                                                            data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                            onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                            <i class="fa fa-shopping-basket me-2"></i>
+                                                                            Save
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
+                                        </div>
                                     </div>
-                                @endif
-
-                                {{-- end table item --}}
-
-
-                            </div>
-                        </div>
+                                </div>
+    @endif
 
 
-                    </div>
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
 
-                        @php
-                            // Mengecek apakah ada item yang belum success
-                            $hasPendingItems =
-                                $orderItem
-                                    ->where('orders_id', $item->id_orders)
-                                    ->where('status', '!=', 'success')
-                                    ->count() > 0;
-                        @endphp
 
-                        @if ($hasPendingItems)
-                            <button type="button" class="btn btn-warning light" id="saveChangesBtn"
-                                onclick="saveChangesData({{ $item->id_orders }})">
-                                Simpan Perubahan
-                            </button>
 
-                            <button type="button" class="btn btn-primary light"
-                                onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
-                                Acara Selesai
-                            </button>
-                        @endif
+    </div>
+    </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+
+        @php
+            // Mengecek apakah ada item yang belum success
+            $hasPendingItems =
+                $orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0;
+        @endphp
+
+        @if ($hasPendingItems)
+            <button type="button" class="btn btn-warning light" id="saveChangesBtn"
+                onclick="saveChangesData({{ $item->id_orders }})">
+                Simpan Perubahan
+            </button>
+
+            <button type="button" class="btn btn-primary light"
+                onclick="updateItemsStatus({{ $item->id_orders }}, 'success')">
+                Acara Selesai
+            </button>
+        @endif
+
+    </div>
+    </div>
+    </div>
+    </div>
     @endforeach
 
 
@@ -456,23 +457,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.body.addEventListener("click", function(event) {
-                if (event.target.classList.contains("increment")) {
-                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
-                    input.value = parseInt(input.value) + 1;
-                }
-
-                if (event.target.classList.contains("decrement")) {
-                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
-                    if (parseInt(input.value) > 1) { // Prevent nilai kurang dari 1
-                        input.value = parseInt(input.value) - 1;
-                    }
-                }
-            });
-        });
-    </script>
 
     {{-- acara selesai --}}
     <script>
@@ -629,48 +613,73 @@
         }
     </script>
 
-    {{-- create delete table item modal --}}
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.addEventListener("click", function(event) {
+                if (event.target.classList.contains("increment")) {
+                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
+                    input.value = parseInt(input.value) + 1;
+                }
+
+                if (event.target.classList.contains("decrement")) {
+                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
+                    if (parseInt(input.value) > 1) {
+                        input.value = parseInt(input.value) - 1;
+                    }
+                }
+            });
+        });
+
         function updateItems(orderId, button) {
-            let row = button.closest("tr"); // Ambil baris tabel
-            let inventoryId = button.getAttribute("data-inventory-id"); // Ambil id_inventories dari tombol
-            let itemName = row.cells[2].textContent.trim(); // Nama item
-            let tableBody = document.querySelector("#tableadd tbody"); // Tabel "Barang Yang Ditambahkan"
+            let row = button.closest("tr");
+            let inventoryId = button.getAttribute("data-inventory-id");
+            let itemName = row.cells[2].textContent.trim();
+            let tableBody = document.querySelector("#tableadd tbody");
 
-            let newRow = document.createElement("tr");
-            newRow.dataset.inventoryId = inventoryId; // Simpan id_inventories di dataset baris
-            newRow.innerHTML = `
-         
-        <td>${inventoryId}</td>
-        <td>${itemName}</td>
-      <td class="py-2 text-center">
-    <div class="input-group quantity-control">
-        <button class="btn btn-outline-primary btn-sm decrement">-</button>
-        <input type="number" name="quantity[]" class="form-control text-center quantity-input" min="1" value="1">
-        <button class="btn btn-outline-primary btn-sm increment">+</button>
-    </div>
-   </td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
-        </td>
-    `;
-            tableBody.appendChild(newRow);
+            // Cek apakah item sudah ada di tabel
+            let existingRow = [...tableBody.rows].find(r => r.dataset.inventoryId === inventoryId);
 
+            if (existingRow) {
+                // Jika item sudah ada, tambahkan quantity
+                let quantityInput = existingRow.querySelector(".quantity-input");
+                quantityInput.value = parseInt(quantityInput.value) + 1;
+            } else {
+                // Jika item belum ada, tambahkan baris baru
+                let newRow = document.createElement("tr");
+                newRow.dataset.inventoryId = inventoryId;
+                newRow.innerHTML = `
+                <td>${inventoryId}</td>
+                <td>${itemName}</td>
+                <td class="py-2 text-center">
+                    <div class="input-group quantity-control">
+                        <button class="btn btn-outline-primary btn-sm decrement" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" name="quantity[]" class="form-control text-center quantity-input" min="1" value="1">
+                        <button class="btn btn-outline-primary btn-sm increment" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
+                </td>
+            `;
+                tableBody.appendChild(newRow);
+            }
 
             // Hapus "Tidak ada item ditambahkan" jika ada
             let emptyRow = document.getElementById("emptyRow");
             if (emptyRow) emptyRow.remove();
         }
-        let quantityInput = document.querySelector('.quantity-input');
 
-        quantityInput.addEventListener('click', function() {
-            alert('Input value changed!' + quantityInput.value);
-        })
+        function changeQuantity(button, amount) {
+            let input = button.closest(".quantity-control").querySelector(".quantity-input");
+            let newValue = parseInt(input.value) + amount;
+            if (newValue > 0) {
+                input.value = newValue;
+            }
+        }
 
-        // Fungsi untuk menghapus item dari tabel
         function deleteItem(button) {
             let row = button.closest("tr");
-            row.remove(); // Hapus baris tabel
+            row.remove();
 
             // Jika tabel kosong setelah penghapusan, tampilkan pesan default
             let tableBody = document.querySelector("#tableadd tbody");

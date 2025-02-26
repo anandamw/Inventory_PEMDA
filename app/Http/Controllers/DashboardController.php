@@ -94,16 +94,17 @@ class DashboardController extends Controller
         }
     }
 
-
-
-
-
     public function index()
     {
-
-
         $headerText = 'Dashboard';
-        $items = Inventory::orderBy('created_at', 'desc')->get();
+        $items = Inventory::whereNotIn('id_inventories', function ($query) {
+            $query->select('inventories_id')
+                ->from('order_items')
+                ->where('status', 'pending');
+        })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $orders = DB::table('orders')
             ->join('users', 'orders.users_id', '=', 'users.id')
             ->join('order_items', 'order_items.orders_id', '=', 'orders.id_orders')
@@ -137,7 +138,19 @@ class DashboardController extends Controller
     ")
             ->paginate(10);
 
-        $orderItem = OrderItem::join('orders', 'order_items.orders_id', '=', 'orders.id_orders')->join('inventories', 'order_items.inventories_id', 'inventories.id_inventories')->select('order_items.orders_id', 'order_items.quantity', 'order_items.id_order_items', 'order_items.status', 'inventories.item_name', 'orders.*')->get();
+        $orderItem = OrderItem::join('orders', 'order_items.orders_id', '=', 'orders.id_orders')
+            ->join('inventories', 'order_items.inventories_id', 'inventories.id_inventories')
+            ->select(
+                'order_items.orders_id',
+                'order_items.quantity',
+                'order_items.id_order_items',
+                'order_items.status',
+                'inventories.item_name',
+                'inventories.id_inventories', // Tambahkan ini agar bisa digunakan untuk filtering di Blade
+                'orders.*'
+            )
+            ->get();
+
 
         $dataItem = Inventory::select('code_item', 'item_name', 'img_item', 'quantity')->get();
 
