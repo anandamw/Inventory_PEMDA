@@ -10,4 +10,8 @@ class Instansi extends Model
     protected $table = 'instansis';
     protected $primaryKey = 'id_instansi';
     protected $fillable = ['nama_instansi'];
+    public function users()
+    {
+        return $this->hasMany(User::class, 'instansi_id');
+    }
 }

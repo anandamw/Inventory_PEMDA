@@ -4,14 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\QrCodeController;
-use App\Http\Controllers\HistoryController;
 // routes/web.php
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\PerbaikanController;
 use App\Http\Controllers\RekapitulasiController;
-use App\Http\Controllers\AssetController;
-use App\Http\Controllers\InstansiController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -32,18 +33,17 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/inventory/store', [InventoryController::class, 'store']);
         Route::put('/inventory/{id_inventories}/update', [InventoryController::class, 'update']);
-        Route::get('/inventory/{id}/destroy', [InventoryController::class, 'destroy']);
-        Route::get('/user/create', [UserController::class, 'create']);
+        Route::delete('/inventory/{id_inventories}/destroy', [InventoryController::class, 'destroy']) ->name('inventory.destroy');
         Route::get('/user/{id}/edit', [UserController::class, 'edit']);
-        Route::post('/user/{id}/update', [UserController::class, 'update']);
-        Route::get('/user/{id}/destroy', [UserController::class, 'destroy']);
+        Route::put('/user/{id}/update', [UserController::class, 'update'])->name('user.update');
+        Route::delete('/user/{id}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/user/store', [UserController::class, 'store']);
         Route::get('/user', [UserController::class, 'index']);
 
         Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.instansi');
         Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
         Route::put('/instansi/{id_instansi}/update', [InstansiController::class, 'update'])->name('instansi.update');
-        Route::get('/instansi/{id}/delete', [InstansiController::class, 'destroy'])->name('instansi.destroy');
+        Route::delete('/instansi/{id}/destroy', [InstansiController::class, 'destroy'])->name('instansi.destroy');
 
         Route::get('/rekapitulasi', [RekapitulasiController::class, 'index'])->name('rekapitulasi.rekapitulasi');
         Route::get('/rekapitulasi/{id}', [RekapitulasiController::class, 'show'])->name('rekapitulasi.show');
@@ -52,10 +52,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/aset', [AssetController::class, 'index'])->name('aset.aset'); // Menampilkan semua asset
         Route::post('/assets/{id}/update-status', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
         Route::post('/assets/update-description/{id}', [AssetController::class, 'updateDescription']);
-        Route::get('/aset/create', [AssetController::class, 'create'])->name('aset.aset_create'); // Menampilkan form tambah asset
         Route::post('/aset/store', [AssetController::class, 'store']); // Menyimpan asset baru
         Route::put('/assets/{id}/update', [AssetController::class, 'update'])->name('assets.update');
         Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy'); // Menghapus asset
+        // Menampilkan daftar perbaikan
+        Route::get('/perbaikan', [PerbaikanController::class, 'index']);
     });
 
 

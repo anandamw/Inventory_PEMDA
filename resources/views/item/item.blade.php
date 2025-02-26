@@ -104,10 +104,9 @@
                                                                     Edit
                                                                 </a>
 
-
-
                                                                 <!-- Delete Button -->
-                                                                <a href="/inventory/{{ $item->id_inventories }}/destroy"
+                                                                <a href="{{ route('inventory.destroy', $item->id_inventories) }}"
+                                                                    data-confirm-delete="true"
                                                                     class="dropdown-item text-danger">
                                                                     Delete
                                                                 </a>
@@ -115,8 +114,6 @@
                                                         </div>
                                                     </td>
                                                 @endif
-
-
 
                                             </tr>
                                         @endforeach
@@ -297,15 +294,6 @@
                 document.getElementById("previewEditImage").src = reader.result;
             };
             reader.readAsDataURL(event.target.files[0]);
-        }
-    </script>
-
-    <!-- Script Konfirmasi Delete -->
-    <script>
-        function confirmDelete(itemId) {
-            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-                document.getElementById('delete-form-' + itemId).submit();
-            }
         }
     </script>
 

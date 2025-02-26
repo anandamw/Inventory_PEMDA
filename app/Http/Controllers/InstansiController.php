@@ -10,6 +10,11 @@ class InstansiController extends Controller
     {
         $headerText = 'Data Instansi';
         $instansis = Instansi::all();
+
+        $title = 'Delete It!';
+        $text = "Apakah anda yakin ingin menghapusnya?";
+        confirmDelete($title, $text);
+
         return view('instansi.instansi', compact('instansis', 'headerText'));
     }
 
@@ -40,7 +45,7 @@ class InstansiController extends Controller
         $instansi = Instansi::findOrFail($id_instansi);
         $instansi->delete();
     
-        return redirect('instansi');
+        return redirect('/instansi');
     }
     
 }

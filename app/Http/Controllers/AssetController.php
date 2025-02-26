@@ -14,6 +14,10 @@ class AssetController extends Controller
     {
         $headerText = 'Data Aset';
         $assets = Asset::all();
+
+        $title = 'Delete It!';
+        $text = "Apakah anda yakin ingin menghapusnya?";
+        confirmDelete($title, $text);
         return view('aset.aset', compact('assets','headerText'));
     }
 
@@ -33,13 +37,6 @@ class AssetController extends Controller
         return response()->json(['success' => true, 'description' => $asset->description]);
     }
     
-
-
-    public function create()
-    {    $headerText = 'Create Aset';
-        return view('aset.aset_create', compact('headerText'));
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([

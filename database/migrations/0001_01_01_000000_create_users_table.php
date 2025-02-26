@@ -11,6 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('instansis', function (Blueprint $table) {
+            $table->unsignedBigInteger('id_instansi')->autoIncrement();
+            $table->string('nama_instansi');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('token');
@@ -19,6 +25,8 @@ return new class extends Migration
             $table->string('password');
 
             $table->string('nip', 15)->unique();
+            $table->unsignedBigInteger('id_instansi')->nullable();
+            $table->foreign('id_instansi')->references('id_instansi')->on('instansis')->onDelete('set null');
             
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->rememberToken();
@@ -46,7 +54,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-
+        Schema::dropIfExists('instansis');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

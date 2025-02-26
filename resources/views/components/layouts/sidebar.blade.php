@@ -54,17 +54,25 @@
                               <span class="nav-text">Instansi</span>
                           </a>
                       </li>
-                      <li><a href="/rekapitulasi" class="" aria-expanded="false">
-                              <i class="bi bi-book"></i>
-                              <span class="nav-text">Rekapitulasi</span>
+                      <li class="separator">
+                          <hr>
+                      </li>
+                      <li><a href="/perbaikan" class="" aria-expanded="false">
+                              <i class="bi bi-tools"></i> </i>
+                              <span class="nav-text">Perbaikan</span>
+                          </a>
+                      </li>
+                      <li><a href="/aset" class="" aria-expanded="false">
+                              <i class="bi bi-briefcase"></i>
+                              <span class="nav-text">Assets</span>
                           </a>
                       </li>
                       <li class="separator">
                           <hr>
                       </li>
-                      <li><a href="/aset" class="" aria-expanded="false">
-                              <i class="bi bi-briefcase"></i>
-                              <span class="nav-text">Assets</span>
+                      <li><a href="/rekapitulasi" class="" aria-expanded="false">
+                              <i class="bi bi-book"></i>
+                              <span class="nav-text">Rekapitulasi</span>
                           </a>
                       </li>
                       <li class="separator">
@@ -85,6 +93,17 @@
                               <i class="bi bi-box-seam"></i>
                               <span class="nav-text">Items</span>
                           </a>
+                      </li>
+                      <li class="separator">
+                          <hr>
+                      </li>
+                      <li><a href="/perbaikan" class="" aria-expanded="false">
+                              <i class="bi bi-tools"></i> </i>
+                              <span class="nav-text">Perbaikan</span>
+                          </a>
+                      </li>
+                      <li class="separator">
+                          <hr>
                       </li>
 
                       <li><a href="/logout" class="" aria-expanded="false">

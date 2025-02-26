@@ -98,7 +98,8 @@
                                                                     <div class="media me-3">
                                                                         <a href="{{ url('/inventory') }}">
                                                                             <img src="{{ $item->img_item ? asset('uploads/items/' . $item->img_item) : asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50" style="border-radius: 20%">
+                                                                                alt="Item Image" width="50"
+                                                                                style="border-radius: 20%">
                                                                         </a>
                                                                     </div>
                                                                     <div class="media-body">
@@ -130,13 +131,17 @@
                                                                     <div class="media me-3">
                                                                         <a href="{{ url('/aset') }}">
                                                                             <img src="{{ $asset->image ? asset('uploads/aset/' . $asset->image) : asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50" style="border-radius: 20%">
+                                                                                alt="Item Image" width="50"
+                                                                                style="border-radius: 20%">
                                                                         </a>
                                                                     </div>
                                                                     <div class="media-body flex-grow-1">
                                                                         <!-- flex-grow-1 agar teks menyesuaikan lebar -->
-                                                                        <h6 class="mb-1">{{ $asset->name }} || <span class="text-danger">{{ $asset->status }}</span></h6>
-                                                                        <small class="d-block">{{ $asset->description }}</small>
+                                                                        <h6 class="mb-1">{{ $asset->name }} || <span
+                                                                                class="text-danger">{{ $asset->status }}</span>
+                                                                        </h6>
+                                                                        <small
+                                                                            class="d-block">{{ $asset->description }}</small>
                                                                     </div>
                                                                 </div>
 
@@ -181,11 +186,26 @@
                             </div>
                         @endif
 
-                        <ul></ul>
+                        <!-- Trigger Button -->
+                        <ul>
+                            <li class="nav-item dropdown notification_dropdown">
+                                <a class="nav-link position-relative" href="#" role="button"
+                                    data-bs-toggle="modal" data-bs-target="#tradeModal">
+                                    <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M6.6 10.8C8.3 13.9 10.7 16.3 13.8 18L16 15.8C16.3 15.5 16.8 15.4 17.2 15.6C18.4 16 19.7 16.2 21 16.2C21.6 16.2 22 16.6 22 17.2V21C22 21.6 21.6 22 21 22C10.5 22 2 13.5 2 3C2 2.4 2.4 2 3 2H6.8C7.4 2 7.8 2.4 7.8 3C7.8 4.3 8 5.6 8.4 6.8C8.6 7.2 8.5 7.7 8.2 8L6.6 10.8Z"
+                                            fill="#130F26" />
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+
 
                         <ul>
                             <li class="nav-item dropdown header-profile">
-                                <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link" href="javascript:void(0);" role="button"
+                                    data-bs-toggle="dropdown">
                                     <img width="50" height="50"
                                         src="{{ Auth::user()->profile ? asset(Auth::user()->profile) : asset('uploads/profile/no-profile.jpg') }}"
                                         alt="User Profile">
@@ -225,6 +245,96 @@
                 </div>
             </div>
         </nav>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="tradeModal" tabindex="-1" aria-labelledby="tradeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-0">
+                <nav class="buy-sell">
+                    <div class="nav nav-tabs" id="nav-tab2" role="tablist">
+                        <button class="nav-link active" id="nav-buy-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-buy" type="button" role="tab" aria-controls="nav-buy"
+                            aria-selected="true">Perbaikan</button>
+                        <button class="nav-link" id="nav-sell-tab" data-bs-toggle="tab" data-bs-target="#nav-sell"
+                            type="button" role="tab" aria-controls="nav-sell"
+                            aria-selected="false">Pemberitahuan</button>
+                    </div>
+                </nav>
+                <div class="tab-content mt-4" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-buy" role="tabpanel"
+                        aria-labelledby="nav-buy-tab">
+                        <div class="row">
+                            <!-- Kiri: Detail Profil -->
+                            <div class="col-md-4">
+                                <div class="card card-bx profile-card author-profile mb-1">
+                                    <div class="card-body text-center">
+                                        <div class="author-profile">
+                                            <div class="author-media mt-3">
+                                                <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
+                                                    alt="Profile Picture" class="img-fluid rounded-circle">
+                                                <div class="author-info mt-2">
+                                                    <h6 class="title">{{ auth()->user()->name }}</h6>
+                                                    <span>{{ auth()->user()->nip }}</span>
+                                                    <span>{{ auth()->user()->instansi->nama_instansi ?? 'Tidak ada instansi' }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Kanan: Form Input -->
+                            <div class="col-md-8">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Perihal : </label>
+                                        <div class="input-group">
+                                            <textarea class="form-control" placeholder="Masukkan Masalah Perbaikan..." style="height: 200px;"></textarea>
+                                        </div>                                        
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary w-75">Kirim</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
+                        <form>
+                            <!-- Pesan dari Admin -->
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Message from Admin</label>
+                                <textarea class="form-control" rows="3" placeholder="Approval message..." readonly></textarea>
+                            </div>
+                            
+                            <!-- Detail Admin yang Mengacc -->
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Approved by</label>
+                                <input type="text" class="form-control" placeholder="Admin Name" readonly>
+                            </div>
+                            
+                            <!-- Tanggal Perbaikan -->
+                            <div class="mb-3">
+                                <label class="form-label text-primary">Correction Date</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-danger w-75">SELL BTC</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!--**********************************

@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="card-body pt-0">
-                                <div class="table-responsive" style="max-height: 505px; overflow-y: auto;">
+                                <div class="table-responsive" style="max-height: 210px; overflow-y: auto;">
                                     <table class="table table-sell verticle-middle mb-0">
                                         <thead
                                             style="position: sticky; top: 0; background-color: rgba(255, 255, 255, 0.9);  z-index: 2;">
@@ -98,96 +98,125 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-sm mb-0">
-                                    <thead class="text-white bg-primary text-center">
-                                        <tr>
-                                            <th class="align-middle">No</th>
-                                            <th class="align-middle">Name</th>
-                                            <th class="align-middle pe-7">Acara</th>
-                                            <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
-
-                                            <th class="align-middle">Status</th>
-                                            <th class="align-middle">Date Time</th>
-
-
-                                            <th class="align-middle">Action</th>
-
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="orders" class="text-center">
-                                        @foreach ($orders as $get)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $get->name }}</td>
-                                                {{-- <td>
-                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
-                                                        alt="Item Image" width="50">
-                                                </td> --}}
-                                                <td>{{ $get->events }}</td>
-                                                <td>{{ $get->phone }}</td>
-
-
-                                                @if ($get->status == 'success')
-                                                    <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
-                                                @elseif($get->status == 'canceled')
-                                                    <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
-                                                @elseif($get->status == 'pending')
-                                                    <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
-                                                @endif
-
-
-
-                                                <td>{{ $get->created_at }}</td>
-
-
-                                                <td class="text-end ps-0">
-                                                    <div class="dropdown dropup d-flex justify-content-center">
-                                                        <a href="javascript:void(0);"
-                                                            class="btn-link btn sharp tp-btn btn-primary pill"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <svg width="24" height="24" viewBox="0 0 24 24"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                                                                    fill="#A098AE" />
-                                                            </svg>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <button type="button" class="dropdown-item"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">
-                                                                Edit
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-
-                                            </tr>
-                                        @endforeach
-
-                                        <tr class="no-data" style="display: none;">
-                                            <td colspan="7" class="text-center py-3">Tidak ada data di keranjang</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="card border-0 pb-0">
+                            <div class="card-header border-0 pb-0">
+                                <h4 class="card-title">Message</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <div id="DZ_W_Todo3" class="widget-media dz-scroll height210 my-4 px-4">
+                                    <ul class="timeline">
+                                        <li>
+                                            <div class="timeline-panel">
+                                                <div class="media me-2">
+                                                    <img alt="image" width="50" src="images/avatar/1.jpg">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h5 class="mb-1">Alfie Mason <small class="">- 29 July
+                                                            2020</small>
+                                                    </h5>
+                                                    <p class="mb-1">I shared this on my fb wall a few months back..</p>
+                                                    <a href="#" class="btn btn-primary btn-xxs shadow">Reply</a>
+                                                    <a href="#" class="btn btn-danger btn-xxs">Delete</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
-
             </div>
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead class="text-white bg-primary text-center">
+                                    <tr>
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Name</th>
+                                        <th class="align-middle pe-7">Acara</th>
+                                        <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
+
+                                        <th class="align-middle">Status</th>
+                                        <th class="align-middle">Date Time</th>
+
+
+                                        <th class="align-middle">Action</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody id="orders" class="text-center">
+                                    @foreach ($orders as $get)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $get->name }}</td>
+                                            {{-- <td>
+                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
+                                                        alt="Item Image" width="50">
+                                                </td> --}}
+                                            <td>{{ $get->events }}</td>
+                                            <td>{{ $get->phone }}</td>
+
+
+                                            @if ($get->status == 'success')
+                                                <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
+                                            @elseif($get->status == 'canceled')
+                                                <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
+                                            @elseif($get->status == 'pending')
+                                                <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
+                                            @endif
+
+
+
+                                            <td>{{ $get->created_at }}</td>
+
+
+                                            <td class="text-end ps-0">
+                                                <div class="dropdown dropup d-flex justify-content-center">
+                                                    <a href="javascript:void(0);"
+                                                        class="btn-link btn sharp tp-btn btn-primary pill"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <svg width="24" height="24" viewBox="0 0 24 24"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                                                fill="#A098AE" />
+                                                        </svg>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <button type="button" class="dropdown-item"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal{{ $get->id_orders }}">
+                                                            Edit
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+
+                                        </tr>
+                                    @endforeach
+
+                                    <tr class="no-data" style="display: none;">
+                                        <td colspan="7" class="text-center py-3">Tidak ada data di keranjang</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
+
 
 
     @foreach ($orders as $item)

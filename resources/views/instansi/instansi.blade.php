@@ -12,7 +12,7 @@
                                 class="btn btn-primary btn-info d-flex align-items-center justify-content-center"
                                 data-bs-toggle="modal" data-bs-target="#addInstansiModal">
                                 <span class="btn-icon-start text-info">
-                                    <i class="bi bi-building"></i>
+                                    <i class="fa fa-plus color-info"></i>
                                 </span>
                                 Add
                             </button>
@@ -33,48 +33,22 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $ins->nama_instansi }}</td>
                                                 <td>
-                                                    <div class="d-flex justify-content-center">
+                                                    <div class="d-flex ">
+
                                                         <button type="button"
-                                                            class="btn btn-primary shadow btn-xs sharp me-1 btn-edit"
+                                                            class="btn btn-primary shadow btn-xs sharp me-1 btn-edits"
                                                             data-id="{{ $ins->id_instansi }}"
                                                             data-nama="{{ $ins->nama_instansi }}">
                                                             <i class="fas fa-pencil-alt"></i>
-                                                        </button>
+                                                        </button> 
+                                                        <a href="{{ route('instansi.destroy', $ins->id_instansi) }}" data-confirm-delete="true">
                                                         <button type="button"
-                                                            class="btn btn-danger shadow btn-xs sharp btn-delete"
-                                                            class="btn btn-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#deleteInstansiModal{{ $ins->id_instansi }}">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
+                                                            class="btn btn-danger shadow btn-xs sharp btn-delete">
+                                                        <i class="fa fa-trash" style="color: aliceblue"></i>
+                                                        </button></a>
                                                     </div>
                                                 </td>
                                             </tr>
-
-                                            <!-- Modal delete Instansi -->
-                                            <div class="modal fade" id="deleteInstansiModal{{ $ins->id_instansi }}"
-                                                tabindex="-1" aria-labelledby="editInstansiModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="editInstansiModalLabel">Edit
-                                                                Instansi</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <h1>apkah sffdhfdhdhfd</h1>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-danger"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <a href="/instansi/{{ $ins->id_instansi }}/delete"
-                                                                class="btn btn-primary" id="saveChanges"
-                                                                form="editInstansiForm">Hapus
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -99,7 +73,8 @@
                         @csrf
                         <div class="mb-3">
                             <label for="add_nama_instansi" class="form-label">Nama Instansi</label>
-                            <input type="text" class="form-control" id="add_nama_instansi" name="nama_instansi" required>
+                            <input type="text" class="form-control" id="add_nama_instansi" name="nama_instansi"
+                                placeholder="Masukkan Nama Instansi....." required>
                         </div>
                     </form>
                 </div>
@@ -144,7 +119,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const editButtons = document.querySelectorAll(".btn-edit");
+            const editButtons = document.querySelectorAll(".btn-edits");
 
             editButtons.forEach(button => {
                 button.addEventListener("click", function() {

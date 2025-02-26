@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'nip', 'role', 'token', 'password', 'profile'];
+    protected $fillable = ['name', 'nip', 'role', 'token', 'password', 'id_instansi','profile'];
 
     protected $casts = [
         'last_seen' => 'datetime',
@@ -28,6 +28,11 @@ class User extends Authenticatable
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class, 'inventories_id');
+    }
+
+    public function instansi()
+    {
+        return $this->belongsTo(Instansi::class, 'id_instansi');
     }
      
     /**

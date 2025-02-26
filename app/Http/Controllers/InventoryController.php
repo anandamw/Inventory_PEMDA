@@ -17,6 +17,10 @@ class InventoryController extends Controller
     {
         $headerText = 'Data Inventory';
         $items = Inventory::orderBy('created_at', 'desc')->get();
+
+        $title = 'Delete It!';
+        $text = "Apakah anda yakin ingin menghapusnya?";
+        confirmDelete($title, $text);
         return view('item.item', compact('items', 'headerText'));
     }
 
@@ -110,28 +114,11 @@ class InventoryController extends Controller
     /**
      * Hapus data inventory
      */
-    public function destroy($id)
+    public function destroy($id_inventories)
     {
-        $inventory = Inventory::findOrFail($id);
-    
-        // Cek apakah data ditemukan sebelum menghapus
-        if (!$inventory) {
-            return redirect()->back()->with('error', 'Item tidak ditemukan');
-        }
-    
-        
-    
-        // Hapus gambar jika ada
-        if ($inventory->img_item) {
-            $imagePath = public_path('uploads/items/' . $inventory->img_item);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
-        }
-    
-        // Hapus item dari database
+        $inventory = Inventory::findOrFail($id_inventories);
         $inventory->delete();
     
-        return redirect()->back()->with('success', 'Item berhasil dihapus');
+        return redirect("/inventory");
     }
 }
