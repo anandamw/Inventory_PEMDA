@@ -180,6 +180,9 @@ class DashboardController extends Controller
         return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount'));
     }
 
+
+   
+
     public function updateStatus(Request $request)
     {
         $request->validate([
