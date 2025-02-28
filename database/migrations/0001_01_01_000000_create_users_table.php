@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('password');
 
             $table->string('nip', 15)->unique();
+            
             $table->unsignedBigInteger('id_instansi')->nullable();
             $table->foreign('id_instansi')->references('id_instansi')->on('instansis')->onDelete('set null');
             
