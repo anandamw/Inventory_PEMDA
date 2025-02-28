@@ -12,13 +12,23 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
+
     <style>
         body {
             font-family: Arial, sans-serif;
             height: 200vh;
             margin: 0;
             background: #000;
+        }
+
+        input,
+        button {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: none;
+            background-color: #f0f0f0;
         }
 
         .logo-container {
@@ -108,6 +118,17 @@
             height: 350px;
             border-radius: 10px;
             background: #ffffff;
+        }
+
+        #user-form{
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            background: #ffffff; 
+        }
+
+        .hidden {
+            display: none;
         }
 
         /* Media query untuk perangkat mobile */
@@ -274,12 +295,43 @@
             <div class="card-body text-center" style="margin-left: 2.5%">
                 <h3 class="card-title mb-4" style="color: white"><i class="fas fa-qrcode"></i> QR Code Scanner</h3>
                 <div id="qr-reader" style="width: 100%"></div>
+                <!-- Form Input, awalnya tersembunyi -->
+                <div id="user-form" class="hidden">
+                    <input type="email" id="email" placeholder="Alamat Email">
+                    <input type="text" id="nama" placeholder="Nama">
+                    <input type="text" id="nip" placeholder="NIP">
+                    <input type="text" id="nama_instansi" placeholder="Nama Instansi">
+                    <button id="submit-form" style="width: 50%; background-color:#008B8B; color:white; border-radius:50;">Submit</button>
+                    <button id="back-to-qr" class="btn-back" style="width: 50%; background-color:#be0000; color:white; border-radius:50;">Back to QR</button>
+                </div>
+                
+                <!-- Tambahkan tempat untuk menampilkan pesan -->
+                <div id="message" style="color: white; text-align: center; margin-top: 10px;"></div>                
+
+
+                <!-- Tombol untuk mengganti tampilan -->
                 <div class="mt-5">
+                    <button id="get-qr" class="btn btn-light border-4 col-6 mt-0" style="color: #008B8B;">Get QR</button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script>
+        $(document).ready(function() {
+            $("#get-qr").click(function() {
+                $("#qr-reader").hide(); // Sembunyikan scanner
+                $("#get-qr").hide(); // Sembunyikan tombol "Get QR"
+                $("#user-form").removeClass("hidden"); // Tampilkan form
+            });
 
+            $("#back-to-qr").click(function() {
+                $("#qr-reader").show(); // Tampilkan scanner kembali
+                $("#get-qr").show(); // Tampilkan kembali tombol "Get QR"
+                $("#user-form").addClass("hidden"); // Sembunyikan form
+            });
+        });
+    </script>
 
     <script>
         let hue = 008 B8B;

@@ -11,13 +11,14 @@
                             <div class="card-body d-flex justify-content-center">
                                 <div class="p-5">
                                     <div class="author-profile">
-                                        <div class="author-media">
+                                        <div class="author-media mt-3">
                                             <img src="{{ auth()->user()->profile ? asset(auth()->user()->profile) : asset('assets/images/no-profile.jpg') }}"
-                                                alt="">
-                                        </div>
-                                        <div class="author-info">
-                                            <h6 class="title">{{ auth()->user()->name }}</h6>
-                                            <span>{{ auth()->user()->nip }}</span>
+                                                alt="Profile Picture" class="img-fluid rounded-circle">
+                                            <div class="author-info mt-2">
+                                                <h6 class="title">{{ auth()->user()->name }}</h6>
+                                                <span>{{ auth()->user()->nip }}</span>
+                                                <span>{{ auth()->user()->instansi->nama_instansi ?? 'Tidak ada instansi' }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

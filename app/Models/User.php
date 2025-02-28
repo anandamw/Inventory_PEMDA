@@ -34,6 +34,17 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Instansi::class, 'id_instansi');
     }
+
+    public function repairs()
+{
+    return $this->hasMany(Repair::class, 'user_id');
+}
+
+public function scheduledRepairs()
+{
+    return $this->hasMany(Repair::class, 'admin_id');
+}
+
      
     /**
      * The attributes that should be hidden for serialization.

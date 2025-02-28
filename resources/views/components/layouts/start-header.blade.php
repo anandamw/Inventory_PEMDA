@@ -296,7 +296,7 @@
                                         <label class="form-label text-primary">Perihal : </label>
                                         <div class="input-group">
                                             <textarea class="form-control" placeholder="Masukkan Masalah Perbaikan..." style="height: 200px;"></textarea>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary w-75">Kirim</button>
@@ -307,31 +307,31 @@
                     </div>
 
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
-                        <form>
-                            <!-- Pesan dari Admin -->
-                            <div class="mb-3">
-                                <label class="form-label text-primary">Message from Admin</label>
-                                <textarea class="form-control" rows="3" placeholder="Approval message..." readonly></textarea>
-                            </div>
-                            
-                            <!-- Detail Admin yang Mengacc -->
-                            <div class="mb-3">
-                                <label class="form-label text-primary">Approved by</label>
-                                <input type="text" class="form-control" placeholder="Admin Name" readonly>
-                            </div>
-                            
-                            <!-- Tanggal Perbaikan -->
-                            <div class="mb-3">
-                                <label class="form-label text-primary">Correction Date</label>
-                                <input type="date" class="form-control">
-                            </div>
-                            
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-danger w-75">SELL BTC</button>
-                            </div>
-                        </form>
+                        <ul class="list-unstyled">
+                            <li>
+                                <div class="timeline-panel d-flex align-items-center p-3"
+                                    style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                                    <div class="media me-3">
+                                        <a href="#">
+                                            <img src="gambar-admin.jpg" alt="Item Image" width="50"
+                                                height="50"
+                                                style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h6 class="mb-1" style="font-weight: 600; color: #333;">Nama Admin</h6>
+                                        <small class="d-block text-muted"><i class="fas fa-calendar-alt me-1"></i> 24
+                                            Februari 2025</small>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <a href="#" class="btn btn-sm btn-outline-primary">Detail</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    
+
+
                 </div>
             </div>
         </div>

@@ -33,6 +33,20 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('repairs', function (Blueprint $table) {
+            $table->id('id_repair');
+            $table->unsignedBigInteger('user_id'); // user yang melaporkan
+            $table->unsignedBigInteger('admin_id')->nullable(); // admin yang menjadwalkan
+            $table->text('repair'); // deskripsi perbaikan
+            $table->date('scheduled_date')->nullable(); // jadwal perbaikan
+            $table->enum('status', ['pending', 'scheduled', 'completed'])->default('pending');
+            $table->timestamps();
+        
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('set null');
+        });
+        
+
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');

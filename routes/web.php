@@ -47,8 +47,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/rekapitulasi', [RekapitulasiController::class, 'index'])->name('rekapitulasi.rekapitulasi');
         Route::get('/rekapitulasi/{id}', [RekapitulasiController::class, 'show'])->name('rekapitulasi.show');
-        Route::get('/rekapitulasi/download/{id}', [RekapitulasiController::class, 'downloadPdf'])->name('rekapitulasi.download');  
-
+        Route::get('/rekapitulasi/download/{id}', [RekapitulasiController::class, 'downloadPdf'])->name('rekapitulasi.download');
+        
+     
         Route::get('/aset', [AssetController::class, 'index'])->name('aset.aset'); // Menampilkan semua asset
         Route::post('/assets/{id}/update-status', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
         Route::post('/assets/update-description/{id}', [AssetController::class, 'updateDescription']);
