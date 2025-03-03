@@ -20,8 +20,9 @@
                                             <a href="/item" class="btn btn-primary">Ambil Barang</a>
                                         </div>
                                         <div class="coin-img d-none d-md-block">
-                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid" alt="" />
-                                        </div>                                        
+                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid"
+                                                alt="" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -208,10 +209,11 @@
                                                                     <small>-
                                                                         {{ $repair->user->instansi->nama_instansi ?? 'Tidak ada instansi' }}
                                                                         @if ($repair->scheduled_date)
-                                                                        <span class="text-success"> | Scheduled on
-                                                                            {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
-                                                                            by 
-                                                                            <span class="text-danger">{{ $repair->admin->name ?? 'Unknown Admin' }}</span>
+                                                                            <span class="text-success"> | Scheduled on
+                                                                                {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
+                                                                                by
+                                                                                <span
+                                                                                    class="text-danger">{{ $repair->admin->name ?? 'Unknown Admin' }}</span>
                                                                             </span>
                                                                         @endif
                                                                     </small>
@@ -302,8 +304,9 @@
                                 <div class="card bg-secondary email-susb">
                                     <div class="card-body text-center">
                                         <div style="width: 100%; max-width: 500px; overflow: hidden;">
-                                            <img src="{{ asset('assets/images/metaverse.png') }}" alt="" style="width: 65%; height: auto; object-fit: cover;">
-                                        </div>                                        
+                                            <img src="{{ asset('assets/images/metaverse.png') }}" alt=""
+                                                style="width: 65%; height: auto; object-fit: cover;">
+                                        </div>
                                         <div class="toatal-email mt-0">
                                             <h5>Butuh Perbaikan Kami Siap Melayani!</h5>
                                         </div>
@@ -426,13 +429,10 @@
                                         alt="Image" class="img-fluid">
                                 </div>
 
-
-
                                 <!-- Description Section (right) -->
                                 <div class="col-md-8">
                                     <h5>Nama: <span id="nama">{{ $item->name }}</span></h5>
                                     <p>NIP: <span id="nip">{{ $item->nip }}</span></p>
-
 
                                     <!-- Detail Barang (table) -->
                                     <h6>Detail Barang:</h6>
@@ -485,7 +485,7 @@
                                         <table class="table table-bordered" id="tableadd">
                                             <thead>
                                                 <tr>
-                                                    <th>inventories_id</th>
+
                                                     <th>Item</th>
                                                     <th>Quantity</th>
                                                     <th>Status</th>
@@ -502,10 +502,6 @@
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
 
-
-                                {{-- table item --}}
-
-
                                 @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
                                     <div class="col-lg-12">
                                         <div class="card">
@@ -518,8 +514,6 @@
                                             <div class="card-body" style="padding: 0 20px">
                                                 <div class="table-responsive"
                                                     style="max-height: 330px; overflow-y: auto;">
-
-                                                    {{-- tabel item --}}
                                                     <table id="mytable" class="table table-responsive-md text-center">
                                                         <thead>
                                                             <tr>
@@ -527,7 +521,6 @@
                                                                 <th>Photo</th>
                                                                 <th>Item</th>
                                                                 <th>Stok</th>
-
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
@@ -541,7 +534,6 @@
                                                                     </td>
                                                                     <td>{{ $getItem->item_name }}</td>
                                                                     <td>{{ $getItem->quantity }}</td>
-
                                                                     <td>
                                                                         <div class="shopping-cart">
                                                                             <a class="btn btn-primary"
@@ -558,18 +550,12 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
-
                                                 </div>
                                                 <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
                                             </div>
                                         </div>
                                     </div>
-<<<<<<< HEAD
                                 @endif
-=======
-                                </div>
->>>>>>> 112702f0de1a8f046668fa1c4df6b7d66ffb3667
-
                             </div>
                         </div>
                     </div>
@@ -597,13 +583,11 @@
                                 Acara Selesai
                             </button>
                         @endif
-
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
-
 
 
 
@@ -798,7 +782,8 @@
                 let newRow = document.createElement("tr");
                 newRow.dataset.inventoryId = inventoryId;
                 newRow.innerHTML = `
-                <td>${inventoryId}</td>
+                <td class="d-none">${inventoryId}</td>
+                
                 <td>${itemName}</td>
                 <td class="py-2 text-center">
                     <div class="input-group quantity-control">
