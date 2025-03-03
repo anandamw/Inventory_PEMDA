@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Asset; 
+use App\Models\Repair;
 use App\Models\Inventory;
 use Illuminate\Support\Facades\View;
 use Illuminate\Contracts\Http\Kernel;
-
 use Illuminate\Support\Facades\Schema;
 use App\Http\Middleware\UpdateLastSeen;
 use Illuminate\Support\ServiceProvider;
@@ -53,5 +53,27 @@ class AppServiceProvider extends ServiceProvider
                  View::share('pendingAssetCount', $pendingAssetCount);
              }
          }
+
+         if (!app()->runningInConsole() || app()->runningUnitTests()) {
+            if (Schema::hasTable('repairs')) {
+                View::composer('*', function ($view) {
+                    $userRepairs = collect();
+                    $scheduledRepairsCount = 0;
+    
+                    if (auth()->check()) {
+                        $userRepairs = Repair::where('user_id', auth()->id())
+                            ->with('admin')
+                            ->orderBy('scheduled_date', 'desc')
+                            ->get();
+    
+                        $scheduledRepairsCount = $userRepairs->where('status', 'scheduled')->count();
+                    }
+    
+                    $view->with('userRepairs', $userRepairs);
+                    $view->with('scheduledRepairsCount', $scheduledRepairsCount);
+                });
+            }
+    
      }
+}
 }

@@ -97,14 +97,6 @@
                       <li class="separator">
                           <hr>
                       </li>
-                      <li><a href="/perbaikan" class="" aria-expanded="false">
-                              <i class="bi bi-tools"></i> </i>
-                              <span class="nav-text">Perbaikan</span>
-                          </a>
-                      </li>
-                      <li class="separator">
-                          <hr>
-                      </li>
 
                       <li><a href="/logout" class="" aria-expanded="false">
                               <i class="bi bi-box-arrow-right"></i>

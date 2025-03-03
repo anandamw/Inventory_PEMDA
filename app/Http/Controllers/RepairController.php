@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Repair;
 use Illuminate\Http\Request;
 
-class PerbaikanController extends Controller
+class RepairController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $headerText = 'Perbaikan';
-        return view('perbaikan.perbaikan', compact('headerText'));
+        $headerText = 'Rekap Perbaikan';
+        $repairs = Repair::where('status', 'completed')->get();
+    
+        return view('perbaikan.perbaikan', compact('headerText', 'repairs'));
+    
     }
 
     /**
