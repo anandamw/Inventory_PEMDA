@@ -18,6 +18,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
     Route::post('/scan-qr-code', [AuthController::class, 'scanQrCode'])->name('scanQrCode');
     Route::get('/qrcode', [QrCodeController::class, 'index']);
+    Route::post('/register/action', [AuthController::class, 'register_action'])->name('register_action');
+    Route::get('/success={random}', [AuthController::class, 'verify']);
 });
 
 // auth middleware
@@ -33,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/inventory/store', [InventoryController::class, 'store']);
         Route::put('/inventory/{id_inventories}/update', [InventoryController::class, 'update']);
-        Route::delete('/inventory/{id_inventories}/destroy', [InventoryController::class, 'destroy']) ->name('inventory.destroy');
+        Route::delete('/inventory/{id_inventories}/destroy', [InventoryController::class, 'destroy'])->name('inventory.destroy');
         Route::get('/user/{id}/edit', [UserController::class, 'edit']);
         Route::put('/user/{id}/update', [UserController::class, 'update'])->name('user.update');
         Route::delete('/user/{id}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
@@ -48,8 +50,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/rekapitulasi', [RekapitulasiController::class, 'index'])->name('rekapitulasi.rekapitulasi');
         Route::get('/rekapitulasi/{id}', [RekapitulasiController::class, 'show'])->name('rekapitulasi.show');
         Route::get('/rekapitulasi/download/{id}', [RekapitulasiController::class, 'downloadPdf'])->name('rekapitulasi.download');
-        
-     
+
+
         Route::get('/aset', [AssetController::class, 'index'])->name('aset.aset'); // Menampilkan semua asset
         Route::post('/assets/{id}/update-status', [AssetController::class, 'updateStatus'])->name('assets.updateStatus');
         Route::post('/assets/update-description/{id}', [AssetController::class, 'updateDescription']);

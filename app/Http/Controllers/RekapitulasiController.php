@@ -14,7 +14,7 @@ class RekapitulasiController extends Controller
 {
     public function index()
     {
- 
+
         $orders = Order::with('user')->orderBy('id_orders')->get();
 
 
@@ -23,7 +23,7 @@ class RekapitulasiController extends Controller
 
         $headerText = 'Rekapitulasi';
 
-        return view('rekapitulasi.rekapitulasi', compact('orders', 'orderItem','headerText'));
+        return view('rekapitulasi.rekapitulasi', compact('orders', 'orderItem', 'headerText'));
     }
 
 
@@ -41,8 +41,9 @@ class RekapitulasiController extends Controller
                 'order_items.quantity',
                 'order_items.status',
                 'orders.created_at'
-            );
-    
+            )
+            ->where('order_items.status', 'success');
+
         if ($filter === 'day') {
             $query->whereDate('orders.created_at', now()->toDateString());
         } elseif ($filter === 'week') {
@@ -50,11 +51,9 @@ class RekapitulasiController extends Controller
         } elseif ($filter === 'month') {
             $query->whereMonth('orders.created_at', now()->month);
         }
-    
+
         $orders = $query->orderBy('orders.created_at', 'desc')->get();
-    
+
         return response()->json($orders);
     }
-    
-
 }

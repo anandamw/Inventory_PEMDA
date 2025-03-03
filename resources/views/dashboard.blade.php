@@ -394,62 +394,65 @@
 
                                 {{-- table item --}}
 
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                            <div class="search-box">
-                                                <input type="text" id="tableSearch" class="form-control"
-                                                    placeholder="Search...">
+
+                                @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <div class="search-box">
+                                                    <input type="text" id="tableSearch" class="form-control"
+                                                        placeholder="Search...">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-body" style="padding: 0 20px">
-                                            <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
+                                            <div class="card-body" style="padding: 0 20px">
+                                                <div class="table-responsive"
+                                                    style="max-height: 330px; overflow-y: auto;">
 
-                                                {{-- tabel item --}}
-                                                <table id="mytable" class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Photo</th>
-                                                            <th>Item</th>
-                                                            <th>Stok</th>
-
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($items as $getItem)
+                                                    {{-- tabel item --}}
+                                                    <table id="mytable" class="table table-responsive-md text-center">
+                                                        <thead>
                                                             <tr>
-                                                                <td>{{ $loop->iteration }}</td>
-                                                                <td>
-                                                                    <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                        alt="Item Image" width="50">
-                                                                </td>
-                                                                <td>{{ $getItem->item_name }}</td>
-                                                                <td>{{ $getItem->quantity }}</td>
+                                                                <th>No</th>
+                                                                <th>Photo</th>
+                                                                <th>Item</th>
+                                                                <th>Stok</th>
 
-                                                                <td>
-                                                                    <div class="shopping-cart">
-                                                                        <a class="btn btn-primary"
-                                                                            href="javascript:void(0);"
-                                                                            data-order-id="{{ $item->id_orders }}"
-                                                                            data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                            onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                            <i class="fa fa-shopping-basket me-2"></i>
-                                                                            Save
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
+                                                                <th>Action</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($items as $getItem)
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </td>
+                                                                    <td>{{ $getItem->item_name }}</td>
+                                                                    <td>{{ $getItem->quantity }}</td>
 
+                                                                    <td>
+                                                                        <div class="shopping-cart">
+                                                                            <a class="btn btn-primary"
+                                                                                href="javascript:void(0);"
+                                                                                data-order-id="{{ $item->id_orders }}"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                <i class="fa fa-shopping-basket me-2"></i>
+                                                                                Save
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
                                             </div>
-                                            <div id="pagination" class="mt-3 d-flex justify-content-center"></div>
                                         </div>
                                     </div>
-                                </div>
                                 @endif
 
                             </div>

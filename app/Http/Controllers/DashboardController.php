@@ -119,7 +119,8 @@ class DashboardController extends Controller
                 'orders.users_id',
                 DB::raw('MAX(order_items.status) as status')
             )
-            ->where('users.role', Auth::user()->role) // Pastikan role diterapkan di users
+            ->where('users.role', Auth::user()->role)  
+            
             ->groupBy(
                 'orders.id_orders',
                 'users.name',

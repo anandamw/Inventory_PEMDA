@@ -16,7 +16,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class UserController extends Controller
 {
     public function index()
-    {   
+    {
         $instansis = Instansi::all(); // Ambil semua instansi dari database
         $users = User::all();
 
@@ -30,35 +30,35 @@ class UserController extends Controller
     }
 
     public function profile()
-{
-    $user = Auth::user(); // Ambil data pengguna yang sedang login
-    $headerText = 'My Profile';
-    return view('profile', compact('headerText','user'));
-}
-
-public function post_profile(Request $request)
-{
-    $request->validate([
-        'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-    ]);
-
-    $user = Auth::user();
-
-    // Hapus gambar lama jika ada
-    if ($user->profile && File::exists(public_path('uploads/profile/' . $user->profile))) {
-        File::delete(public_path('uploads/profile/' . $user->profile));
+    {
+        $user = Auth::user(); // Ambil data pengguna yang sedang login
+        $headerText = 'My Profile';
+        return view('profile', compact('headerText', 'user'));
     }
 
-    // Simpan gambar baru di folder public/uploads/profile
-    $file = $request->file('profile');
-    $fileName = time() . '_' . $file->getClientOriginalName();
-    $file->move(public_path('uploads/profile/'), $fileName);
+    public function post_profile(Request $request)
+    {
+        $request->validate([
+            'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
-    // Update database dengan nama file baru
-    $user->update(['profile' => 'uploads/profile/' . $fileName]);
+        $user = Auth::user();
 
-    return response()->json(['success' => true, 'profile' => asset('uploads/profile/' . $fileName)]);
-}
+        // Hapus gambar lama jika ada
+        if ($user->profile && File::exists(public_path('uploads/profile/' . $user->profile))) {
+            File::delete(public_path('uploads/profile/' . $user->profile));
+        }
+
+        // Simpan gambar baru di folder public/uploads/profile
+        $file = $request->file('profile');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/profile/'), $fileName);
+
+        // Update database dengan nama file baru
+        $user->update(['profile' => 'uploads/profile/' . $fileName]);
+
+        return response()->json(['success' => true, 'profile' => asset('uploads/profile/' . $fileName)]);
+    }
 
 
 
@@ -70,9 +70,9 @@ public function post_profile(Request $request)
             'role' => 'required',
             'id_instansi' => 'required' // Pastikan instansi dipilih
         ]);
-    
+
         $token = Str::random(15);
-    
+
         $data = [
             'token' => $token,
             'name' => $request->name,
@@ -81,30 +81,30 @@ public function post_profile(Request $request)
             'password' => bcrypt($token), // Pastikan password terenkripsi
             'id_instansi' => $request->id_instansi, // Tambahkan id_instansi
         ];
-    
+
         $jsonDATAtoken = [
             'token' => $token
         ];
-    
+
         $user = User::create($data);
-    
+
         // Generate QR Code
         $jsonData = json_encode($jsonDATAtoken);
         $path = public_path('Pictures/qrcode');
-    
+
         if (!File::exists($path)) {
             File::makeDirectory($path, 0755, true, true);
         }
-    
+
         $fileName = "$user->name.png";
-    
+
         QrCode::format('png')
             ->size(250)->margin(2)
             ->generate($jsonData, $path . '/' . $fileName);
-    
+
         return redirect('/user');
     }
-    
+
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -119,7 +119,7 @@ public function post_profile(Request $request)
             'role' => 'required',
             'instansi' => 'required' // Pastikan instansi divalidasi
         ]);
-    
+
         $user = User::findOrFail($id);
         $user->update([
             'name' => $request->name,
@@ -127,17 +127,16 @@ public function post_profile(Request $request)
             'role' => $request->role,
             'id_instansi' => $request->instansi, // Pastikan ini sesuai dengan nama kolom di database
         ]);
-    
+
         return redirect('/user');
     }
-    
 
-public function destroy($id)
-{
-    $user = User::findOrFail($id);
-    $user->delete();
 
-    return redirect('/user');
-}
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
+        return redirect('/user');
+    }
 }

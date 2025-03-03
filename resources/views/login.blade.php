@@ -120,11 +120,11 @@
             background: #ffffff;
         }
 
-        #user-form{
+        #user-form {
             width: 100%;
             height: 400px;
             border-radius: 10px;
-            background: #ffffff; 
+            background: #ffffff;
         }
 
         .hidden {
@@ -295,28 +295,34 @@
             <div class="card-body text-center" style="margin-left: 2.5%">
                 <h3 class="card-title mb-4" style="color: white"><i class="fas fa-qrcode"></i> QR Code Scanner</h3>
                 <div id="qr-reader" style="width: 100%"></div>
-                <!-- Form Input, awalnya tersembunyi -->
-                <div id="user-form" class="hidden">
-                    <input type="email" id="email" placeholder="Alamat Email">
-                    <input type="text" id="nama" placeholder="Nama">
-                    <input type="text" id="nip" placeholder="NIP">
-                    <input type="text" id="nama_instansi" placeholder="Nama Instansi">
-                    <button id="submit-form" style="width: 50%; background-color:#008B8B; color:white; border-radius:50;">Submit</button>
-                    <button id="back-to-qr" class="btn-back" style="width: 50%; background-color:#be0000; color:white; border-radius:50;">Back to QR</button>
-                </div>
-                
-                <!-- Tambahkan tempat untuk menampilkan pesan -->
-                <div id="message" style="color: white; text-align: center; margin-top: 10px;"></div>                
+                <form action="/register/action" method="POST" id="register-form">
+                    @csrf <!-- Form Input, awalnya tersembunyi -->
+                    <div id="user-form" class="hidden">
+                        <input type="email" id="email" name="email" placeholder="Alamat Email">
+                        <input type="text" id="nama" name="name" placeholder="Nama">
+                        <input type="text" id="nip" name="nip" placeholder="NIP">
+                        <input type="text" id="nama_instansi" name="nama_instansi" placeholder="Nama Instansi">
+                        <button type="submit" id="submit-form" class="btn"
+                            style="width: 50%; background-color:#008B8B; color:white; border-radius:50;">Submit</button>
+                        <div id="back-to-qr" class="btn-back btn"
+                            style="width: 50%; background-color:#be0000; color:white; border-radius:50;">Back to
+                            QR</div>
+                    </div>
+
+                </form> <!-- Tambahkan tempat untuk menampilkan pesan -->
+                <div id="message" style="color: white; text-align: center; margin-top: 10px;"></div>
 
 
                 <!-- Tombol untuk mengganti tampilan -->
                 <div class="mt-5">
-                    <button id="get-qr" class="btn btn-light border-4 col-6 mt-0" style="color: #008B8B;">Get QR</button>
+                    <button id="get-qr" class="btn btn-light border-4 col-6 mt-0" style="color: #008B8B;">Get
+                        QR</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
+
     <script>
         $(document).ready(function() {
             $("#get-qr").click(function() {
