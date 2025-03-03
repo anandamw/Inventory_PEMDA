@@ -19,10 +19,9 @@
                                             </p>
                                             <a href="/item" class="btn btn-primary">Ambil Barang</a>
                                         </div>
-                                        <div class="coin-img">
-                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid"
-                                                alt="" />
-                                        </div>
+                                        <div class="coin-img d-none d-md-block">
+                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid" alt="" />
+                                        </div>                                        
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +141,6 @@
                     </div>
                 </div>
 
-
                 <div class="col-xl-4">
                     <div class="col-xl-12 col-lg-6">
                         <div class="card bg-primary">
@@ -177,32 +175,145 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card border-0 pb-0">
-                            <div class="card-header border-0 pb-0">
-                                <h4 class="card-title">Message</h4>
-                            </div>
-                            <div class="card-body p-0">
-                                <div id="DZ_W_Todo3" class="widget-media dz-scroll height210 my-4 px-4">
-                                    <ul class="timeline">
-                                        <li>
-                                            <div class="timeline-panel">
-                                                <div class="media me-2">
-                                                    <img alt="image" width="50" src="images/avatar/1.jpg">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h5 class="mb-1">Alfie Mason <small class="">- 29 July
-                                                            2020</small>
-                                                    </h5>
-                                                    <p class="mb-1">I shared this on my fb wall a few months back..</p>
-                                                    <a href="#" class="btn btn-primary btn-xxs shadow">Reply</a>
-                                                    <a href="#" class="btn btn-danger btn-xxs">Delete</a>
-                                                </div>
+                        @if (auth()->user()->role == 'admin')
+                            <div class="card border-0 pb-0">
+                                <div class="card-header border-0 pb-0">
+                                    <h4 class="card-title">Message</h4>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div id="DZ_W_Todo3" class="widget-media dz-scroll height210 my-4 px-4">
+                                        @php
+                                            $pendingRepairs = $repairs->filter(function ($repair) {
+                                                return $repair->status != 'completed';
+                                            });
+                                        @endphp
+
+                                        @if ($pendingRepairs->isEmpty())
+                                            <!-- Tampilkan gambar no-messages ketika tidak ada repair yang belum selesai -->
+                                            <div class="text-center my-4">
+                                                <img src="{{ asset('assets/images/no-messages.png') }}" alt="No Messages"
+                                                    style="width: 140px;">
                                             </div>
-                                        </li>
-                                    </ul>
+                                        @else
+                                            <ul class="timeline">
+                                                @foreach ($pendingRepairs as $repair)
+                                                    <li>
+                                                        <div class="timeline-panel">
+                                                            <div class="media me-2">
+                                                                <img alt="image" width="50"
+                                                                    src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/no-profile.jpg') }}">
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h5 class="mb-1">{{ $repair->user->name }}
+                                                                    <small>-
+                                                                        {{ $repair->user->instansi->nama_instansi ?? 'Tidak ada instansi' }}
+                                                                        @if ($repair->scheduled_date)
+                                                                        <span class="text-success"> | Scheduled on
+                                                                            {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
+                                                                            by 
+                                                                            <span class="text-danger">{{ $repair->admin->name ?? 'Unknown Admin' }}</span>
+                                                                            </span>
+                                                                        @endif
+                                                                    </small>
+                                                                </h5>
+                                                                <p class="mb-1">{{ $repair->repair }}</p>
+                                                                <button class="btn btn-primary btn-xxs shadow"
+                                                                    onclick="openScheduleModal({{ $repair->id_repair }})">Reply</button>
+                                                                <a href="{{ route('repair.delete', $repair->id_repair) }}"
+                                                                    class="btn btn-danger btn-xxs">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- Modal Perbaikan -->
+                            <div class="modal fade" id="repairActionModal" tabindex="-1"
+                                aria-labelledby="repairActionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg"> <!-- Tambah kelas modal-lg biar besar -->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="repairActionModalLabel">Aksi Perbaikan</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Pilih tindakan yang ingin dilakukan untuk perbaikan ini.</p>
+                                            <input type="hidden" id="repair_id" name="repair_id">
+
+                                            <!-- Form untuk atur perbaikan (misal isi tanggal dan catatan) -->
+                                            <form id="scheduleRepairForm" action="" method="POST">
+                                                @csrf
+                                                <input type="hidden" id="form_repair_id" name="repair_id">
+                                                <div class="mb-3">
+                                                    <label for="scheduled_date">Tanggal Perbaikan</label>
+                                                    <input type="date" name="scheduled_date" class="form-control"
+                                                        required>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-end">
+                                            <button type="button" class="btn btn-warning me-2"
+                                                onclick="submitForm()">Atur Jadwal</button>
+                                            <button type="button" class="btn btn-primary me-2"
+                                                onclick="completeRepair()">Perbaikan Selesai</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <script>
+                                // Buka modal dan simpan repair_id
+                                function openScheduleModal(repairId) {
+                                    document.getElementById('form_repair_id').value = repairId;
+
+                                    let form = document.getElementById('scheduleRepairForm');
+                                    form.action = `/repair/schedule/${repairId}`;
+
+                                    var repairModal = new bootstrap.Modal(document.getElementById('repairActionModal'));
+                                    repairModal.show();
+                                }
+
+
+                                // Menampilkan form atur perbaikan
+                                function showScheduleForm() {
+                                    document.getElementById('scheduleRepairForm').style.display = 'block';
+                                }
+
+                                function submitForm() {
+                                    document.getElementById('scheduleRepairForm').submit();
+                                }
+
+                                // Perbaikan selesai
+                                function completeRepair() {
+                                    const repairId = document.getElementById('form_repair_id').value; // Ambil dari modal
+                                    if (confirm('Tandai perbaikan ini sebagai selesai?')) {
+                                        window.location.href = `/repair/complete/${repairId}`;
+                                    }
+                                }
+                            </script>
+                        @elseif (auth()->user()->role == 'user')
+                            <!-- Bagian khusus user -->
+                            <div class="col-xl-12 col-sm-6">
+                                <div class="card bg-secondary email-susb">
+                                    <div class="card-body text-center">
+                                        <div style="width: 100%; max-width: 500px; overflow: hidden;">
+                                            <img src="{{ asset('assets/images/metaverse.png') }}" alt="" style="width: 65%; height: auto; object-fit: cover;">
+                                        </div>                                        
+                                        <div class="toatal-email mt-0">
+                                            <h5>Butuh Perbaikan Kami Siap Melayani!</h5>
+                                        </div>
+                                        <a href="#" class="btn btn-primary email-btn p-2" data-bs-toggle="modal"
+                                            data-bs-target="#tradeModal">Hubungi Kami</a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
 
                 </div>
@@ -450,7 +561,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
 
                             </div>
                         </div>

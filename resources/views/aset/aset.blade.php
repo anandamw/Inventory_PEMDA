@@ -69,12 +69,12 @@
                                 <input type="text" id="tableSearch" class="form-control" placeholder="Search...">
                             </div>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#addAsetModal">
-                            <span class="btn-icon-start text-info">
-                                <i class="fa fa-plus color-info"></i>
-                            </span>
-                            Add
-                        </button>
+                                data-bs-target="#addAsetModal">
+                                <span class="btn-icon-start text-info">
+                                    <i class="fa fa-plus color-info"></i>
+                                </span>
+                                Add
+                            </button>
                         </div>
                         <div class="card-body" style="padding: 0 20px">
                             <div class="table-responsive" style="max-height: 330px; overflow-y: auto;">
@@ -94,7 +94,8 @@
                                         @foreach ($assets as $key => $asset)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
-                                                <td><img src="{{ asset('storage/' . $asset->image) }}" width="50"></td>
+                                                <td><img src="{{ asset('uploads/aset/' . $asset->image) }}" style="border-radius:25% " width="50">
+                                                </td>
                                                 <td>{{ $asset->name }}</td>
                                                 <td>{{ $asset->quantity }}</td>
                                                 <td class="status-text">
@@ -150,7 +151,7 @@
                                                                     class="dropdown-item text-danger">
                                                                     Delete
                                                                 </a>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -168,58 +169,58 @@
     </div>
 
 
-        <!-- Modal Add User -->
-        <div class="modal fade" id="addAsetModal" tabindex="-1" aria-labelledby="addAsetModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Aset</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addAsetForm" action="/aset/store" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <!-- Kolom Kiri: Input Data -->
-                                <div class="col-md-8">
-                                    <div class="mb-3">
-                                        <label for="item_name" class="form-label">Nama Aset</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                            placeholder="Masukkan Nama Aset..." style="opacity: 0.6;" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="quantity" class="form-label">Quantity</label>
-                                        <input type="number" class="form-control" id="quantity" name="quantity"
-                                            placeholder="Masukkan Quantity..." style="opacity: 0.6;" required>
-                                    </div>
+    <!-- Modal Add User -->
+    <div class="modal fade" id="addAsetModal" tabindex="-1" aria-labelledby="addAsetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Aset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAsetForm" action="/aset/store" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <!-- Kolom Kiri: Input Data -->
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="item_name" class="form-label">Nama Aset</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Masukkan Nama Aset..." style="opacity: 0.6;" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity"
+                                        placeholder="Masukkan Quantity..." style="opacity: 0.6;" required>
+                                </div>
+                            </div>
 
-                                <!-- Kolom Kanan: Input Gambar dengan Drag & Drop -->
-                                <div class="col-md-4 text-center">
-                                    <label class="form-label d-block">Item Picture</label>
-                                    <div class="card p-1 shadow-sm d-flex align-items-center">
-                                        <div id="dropZone"
-                                            class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
-                                            style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;">
-                                            <img id="previewImage" src="{{asset('assets/images/no-image.png')}}"
-                                                alt="Drag & Drop" class="img-thumbnail"
-                                                style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
-                                            <input type="file" id="formFile" name="image" accept="image/*" hidden
-                                                onchange="previewFile(event)">
-                                        </div>
+                            <!-- Kolom Kanan: Input Gambar dengan Drag & Drop -->
+                            <div class="col-md-4 text-center">
+                                <label class="form-label d-block">Item Picture</label>
+                                <div class="card p-1 shadow-sm d-flex align-items-center">
+                                    <div id="dropZone"
+                                        class="border rounded d-flex flex-column align-items-center justify-content-center position-relative"
+                                        style="width: 120px; height: 120px; border: 2px dashed #ccc; cursor: pointer; background-color: #f8f9fa; overflow: hidden;">
+                                        <img id="previewImage" src="{{ asset('assets/images/no-image.png') }}"
+                                            alt="Drag & Drop" class="img-thumbnail"
+                                            style="max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 8px;">
+                                        <input type="file" id="formFile" name="image" accept="image/*" hidden
+                                            data-preview-target="previewImage" onchange="previewFile(event)">
                                     </div>
                                 </div>
                             </div>
-        
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" form="addAsetForm">Save</button>
-                    </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="addAsetForm">Save</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- Modal Edit Aset -->
     <div class="modal fade" id="modalEditAsset" tabindex="-1">
@@ -239,7 +240,8 @@
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label class="form-label">Asset Name</label>
-                                    <input type="text" class="form-control" id="editAssetName" name="name" required>
+                                    <input type="text" class="form-control" id="editAssetName" name="name"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Quantity</label>
@@ -276,146 +278,206 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             // Edit Asset Modal Handling
             document.querySelectorAll(".editAssetBtn").forEach(button => {
-                button.addEventListener("click", function () {
+                button.addEventListener("click", function() {
                     let id = this.getAttribute("data-id");
                     let name = this.getAttribute("data-name");
                     let quantity = this.getAttribute("data-quantity");
-                    let image = this.getAttribute("data-image") || "{{ asset('assets/images/no-image.png') }}";
-    
+                    let image = this.getAttribute("data-image") ||
+                        "{{ asset('assets/images/no-image.png') }}";
+
                     document.getElementById("editAssetId").value = id;
                     document.getElementById("editAssetName").value = name;
                     document.getElementById("editAssetQuantity").value = quantity;
                     document.getElementById("previewEditAssetImage").src = image;
-    
+
                     var modal = new bootstrap.Modal(document.getElementById('modalEditAsset'));
                     modal.show();
                 });
             });
-    
-            // Handle Edit Asset Form Submission
-            document.getElementById("editAssetForm").addEventListener("submit", function (event) {
-                event.preventDefault();
-                let formData = new FormData(this);
-                let id = document.getElementById("editAssetId").value;
-    
-                formData.append("_method", "PUT");
-    
-                fetch(`/assets/${id}/update`, {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                        "Accept": "application/json"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        alert("Failed to update asset.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("Update failed, try again.");
-                });
-            });
-    
-            // Preview Image for Edit Asset
-            document.getElementById("formFile").addEventListener("change", function (event) {
-                let file = event.target.files[0];
+
+            // ✅ Preview file untuk tambah aset (ini tetap benar)
+            function previewFile(event) {
+                const file = event.target.files[0];
+                const previewImage = document.getElementById('previewImage');
+
                 if (file) {
-                    let reader = new FileReader();
-                    reader.onload = function () {
-                        document.getElementById("previewEditAssetImage").src = reader.result;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 }
+            }
+
+            // ✅ Preview file untuk edit aset (dijamin kepanggil di input file edit modal)
+            function previewEditAssetFile(event) {
+                const file = event.target.files[0];
+                const previewImage = document.getElementById('previewEditAssetImage');
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // ✅ Bind previewFile ke form tambah aset
+            const formFileAddAset = document.getElementById('formFile');
+            if (formFileAddAset) {
+                formFileAddAset.addEventListener('change', previewFile);
+            }
+
+            // ✅ Bind previewEditAssetFile ke form edit aset (optional tambahan jaga-jaga)
+            const editAssetFile = document.getElementById('editAssetFile');
+            if (editAssetFile) {
+                editAssetFile.addEventListener('change', previewEditAssetFile);
+            }
+
+            // ✅ Handle form submit edit aset (tetap dipertahankan)
+            document.getElementById("editAssetForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                let formData = new FormData(this);
+                let id = document.getElementById("editAssetId").value;
+
+                formData.append("_method", "PUT");
+
+                fetch(`/assets/${id}/update`, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content"),
+                            "Accept": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            location.reload();
+                        } else {
+                            alert("Failed to update asset.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Update failed, try again.");
+                    });
             });
-    
-            // Drag & Drop for Image Upload
+
+            // ✅ Drag & Drop untuk tambah aset
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('formFile');
             const previewImage = document.getElementById('previewImage');
-    
-            dropZone.addEventListener('click', () => fileInput.click());
-    
-            dropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dropZone.style.borderColor = "#007bff";
-            });
-    
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.style.borderColor = "#ccc";
-            });
-    
-            dropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                dropZone.style.borderColor = "#ccc";
-    
-                if (event.dataTransfer.files.length > 0) {
-                    fileInput.files = event.dataTransfer.files;
-                    let reader = new FileReader();
-                    reader.onload = function () {
-                        previewImage.src = reader.result;
-                    };
-                    reader.readAsDataURL(event.dataTransfer.files[0]);
-                }
-            });
-    
-            // Status Toggle Handling
+
+            if (dropZone) {
+                dropZone.addEventListener('click', () => fileInput.click());
+
+                dropZone.addEventListener('dragover', (event) => {
+                    event.preventDefault();
+                    dropZone.style.borderColor = "#007bff";
+                });
+
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.style.borderColor = "#ccc";
+                });
+
+                dropZone.addEventListener('drop', (event) => {
+                    event.preventDefault();
+                    dropZone.style.borderColor = "#ccc";
+
+                    if (event.dataTransfer.files.length > 0) {
+                        fileInput.files = event.dataTransfer.files;
+                        previewFile({
+                            target: fileInput
+                        });
+                    }
+                });
+            }
+
+            // ✅ Drag & Drop untuk edit aset (tambahan supaya konsisten)
+            const dropZoneEdit = document.getElementById('dropZoneEditAsset');
+            const fileInputEdit = document.getElementById('editAssetFile');
+
+            if (dropZoneEdit) {
+                dropZoneEdit.addEventListener('click', () => fileInputEdit.click());
+
+                dropZoneEdit.addEventListener('dragover', (event) => {
+                    event.preventDefault();
+                    dropZoneEdit.style.borderColor = "#007bff";
+                });
+
+                dropZoneEdit.addEventListener('dragleave', () => {
+                    dropZoneEdit.style.borderColor = "#ccc";
+                });
+
+                dropZoneEdit.addEventListener('drop', (event) => {
+                    event.preventDefault();
+                    dropZoneEdit.style.borderColor = "#ccc";
+
+                    if (event.dataTransfer.files.length > 0) {
+                        fileInputEdit.files = event.dataTransfer.files;
+                        previewEditAssetFile({
+                            target: fileInputEdit
+                        });
+                    }
+                });
+            }
+
+            // Status Toggle Handling (tidak diubah, aman)
             document.querySelectorAll('.status-toggle').forEach(item => {
-                item.addEventListener('change', function () {
+                item.addEventListener('change', function() {
                     let assetId = this.getAttribute('data-id');
                     let newStatus = this.checked ? 'running' : 'pending';
                     let parentRow = this.closest('tr');
                     let descriptionInput = parentRow.querySelector('.description-input');
-    
-                    let descriptionValue = newStatus === 'pending' ? prompt("Masukkan deskripsi:") : "-";
+
+                    let descriptionValue = newStatus === 'pending' ? prompt("Masukkan deskripsi:") :
+                        "-";
                     if (newStatus === 'pending' && !descriptionValue) {
                         alert("Deskripsi tidak boleh kosong saat status pending!");
                         this.checked = false;
                         return;
                     }
-    
+
                     fetch(`/assets/${assetId}/update-status`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            status: newStatus,
-                            description: descriptionValue
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                status: newStatus,
+                                description: descriptionValue
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            let slider = this.nextElementSibling;
-                            slider.classList.remove('running', 'pending');
-                            slider.classList.add(newStatus);
-    
-                            let statusText = parentRow.querySelector('.status-text span');
-                            statusText.innerText = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-                            statusText.classList.remove('bg-success', 'bg-danger');
-                            statusText.classList.add(newStatus === 'running' ? 'bg-success' : 'bg-danger');
-    
-                            // Update input deskripsi
-                            descriptionInput.value = data.description;
-                            descriptionInput.disabled = newStatus === 'running';
-                        } else {
-                            alert('Gagal memperbarui status.');
-                        }
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                let slider = this.nextElementSibling;
+                                slider.classList.remove('running', 'pending');
+                                slider.classList.add(newStatus);
+
+                                let statusText = parentRow.querySelector('.status-text span');
+                                statusText.innerText = newStatus.charAt(0).toUpperCase() +
+                                    newStatus.slice(1);
+                                statusText.classList.remove('bg-success', 'bg-danger');
+                                statusText.classList.add(newStatus === 'running' ?
+                                    'bg-success' : 'bg-danger');
+
+                                descriptionInput.value = data.description;
+                                descriptionInput.disabled = newStatus === 'running';
+                            } else {
+                                alert('Gagal memperbarui status.');
+                            }
+                        });
                 });
             });
         });
     </script>
-    
 @endsection

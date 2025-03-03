@@ -18,6 +18,7 @@ class InstansiController extends Controller
         return view('instansi.instansi', compact('instansis', 'headerText'));
     }
 
+    
     public function store(Request $request)
     {
         $request->validate(['nama_instansi' => 'required']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\Repair;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+
+
 
 class DashboardController extends Controller
 {
@@ -177,11 +180,98 @@ class DashboardController extends Controller
 
         toast('Selamat datang di layanan Logishub', 'info');
 
-        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount'));
+        if (auth()->user()->role == 'admin') {
+            // Admin lihat semua repair
+            $repairs = Repair::with(['user', 'admin'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            // User hanya lihat repair milik sendiri
+            $repairs = Repair::with(['user', 'admin'])
+                ->where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+        
+     
+
+        // Data perbaikan khusus untuk user yang login - yang dia kirimkan
+        $userRepairs = Repair::where('user_id', auth()->id())
+            ->with('admin')
+            ->orderBy('scheduled_date', 'desc')
+            ->get();
+
+        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount' , 'repairs', 'userRepairs'));
+    }
+
+      /**
+     * Simpan laporan perbaikan dari user
+     */
+    public function storeRepair(Request $request)
+    {
+        \Log::info('Previous URL:', ['url' => url()->previous()]);
+        \Log::info('Current Auth User:', ['user' => auth()->user()]);
+    
+        $request->validate([
+            'repair' => 'required|string',
+        ]);
+    
+        Repair::create([
+            'user_id' => auth()->id(),
+            'repair' => $request->repair,
+            'status' => 'pending',
+        ]);
+    
+        return back()->with('success', 'Laporan perbaikan berhasil dikirim!');
+    }
+    
+
+/**
+ * Jadwalkan perbaikan oleh admin
+ */
+public function scheduleRepair(Request $request, $id)
+{
+    $repair = Repair::findOrFail($id);
+
+    $request->validate([
+        'scheduled_date' => 'required|date',
+        'note' => 'nullable|string|max:255'
+    ]);
+
+    $repair->update([
+        'status' => 'Scheduled',
+        'scheduled_date' => $request->scheduled_date,
+        'note' => $request->note,
+        'admin_id' => auth()->id()
+    ]);
+
+    return redirect()->back()->with('success', 'Perbaikan berhasil dijadwalkan.');
+}
+
+
+    
+public function complete($id)
+{
+    $repair = Repair::findOrFail($id);
+    $repair->status = 'completed';
+    $repair->save();
+
+    return redirect()->back()->with('success', 'Perbaikan berhasil diselesaikan');
+}
+
+
+    /**
+     * Hapus laporan perbaikan
+     */
+    public function deleteRepair($id)
+    {
+        $repair = Repair::findOrFail($id);
+        $repair->delete();
+
+        return back()->with('success', 'Laporan perbaikan berhasil dihapus!');
     }
 
 
-   
 
     public function updateStatus(Request $request)
     {
