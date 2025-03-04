@@ -21,14 +21,18 @@ return new class extends Migration
             $table->id();
             $table->string('token');
             $table->string('name');
+            $table->string('email')->unique()->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+
+
             $table->string('profile')->nullable();
             $table->string('password');
 
             $table->string('nip', 15)->unique();
-            
+
             $table->unsignedBigInteger('id_instansi')->nullable();
             $table->foreign('id_instansi')->references('id_instansi')->on('instansis')->onDelete('set null');
-            
+
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->rememberToken();
             $table->timestamps();
@@ -42,11 +46,11 @@ return new class extends Migration
             $table->date('scheduled_date')->nullable(); // jadwal perbaikan
             $table->enum('status', ['pending', 'scheduled', 'completed'])->default('pending');
             $table->timestamps();
-        
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('set null');
         });
-        
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
