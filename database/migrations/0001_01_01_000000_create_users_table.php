@@ -33,7 +33,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_instansi')->nullable();
             $table->foreign('id_instansi')->references('id_instansi')->on('instansis')->onDelete('set null');
 
-            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('role', ['admin', 'opd', 'team'])->default('opd');
             $table->rememberToken();
             $table->timestamps();
         });

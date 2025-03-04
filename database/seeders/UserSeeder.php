@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Rahmat Syafri Kurniaman',
                 'nip' => '2202310115',
-                'role' => 'User',
+                'role' => 'team',
                 'token' => '456456'
             ]
         ];
@@ -64,11 +64,5 @@ class UserSeeder extends Seeder
                 ->size(250)->margin(2)
                 ->generate($jsonData, $path . '/' . $fileName);
         }
-
-
-
-
-
-
     }
 }

@@ -190,6 +190,7 @@
                                 </div>
                             </div>
                         </div>
+
                         @if (auth()->user()->role == 'admin')
 
                             <div class="card border-0 shadow-lg pb-0 hover-card"
@@ -318,12 +319,12 @@
                                     }
                                 }
                             </script>
-                        @elseif (auth()->user()->role == 'user')
+                        @elseif (auth()->user()->role == 'opd')
                             <!-- Bagian khusus user -->
                             <div class="col-xl-12 col-sm-6">
                                 <div class="card bg-secondary email-susb hover-card"
-                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
-                                <div class="card-body text-center">
+                                    style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
+                                    <div class="card-body text-center">
                                         <div style="width: 100%; max-width: 500px; overflow: hidden;">
                                             <img src="{{ asset('assets/images/metaverse.png') }}" alt=""
                                                 style="width: 65%; height: auto; object-fit: cover;">

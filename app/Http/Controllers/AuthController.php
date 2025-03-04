@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Mail\MailPost;
+use App\Models\Instansi;
 use App\Models\Inventory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -23,9 +24,12 @@ class AuthController extends Controller
     public function index()
     {
 
-        return view('login');
+        $categories = Instansi::select('nama_instansi')->distinct()->get();
+        return view('login', compact('categories'));
     }
 
+
+    // login
     public function scanQrCode(Request $request)
     {
         \Log::info("📥 Received QR Code Data: ", $request->all());
@@ -68,10 +72,32 @@ class AuthController extends Controller
         \Log::info("✅ Token valid! Logging in user: " . $user->id);
         Auth::login($user);
 
+        // Redirect berdasarkan role
+        $role = $user->role;
+        \Log::info("🔍 User role: $role");
+
+        switch ($role) {
+            case 'admin':
+                $redirectUrl = route('home');
+                break;
+            case 'opd':
+                $redirectUrl = route('home');
+                break;
+            case 'team':
+                $redirectUrl = route('home');
+                break;
+            default:
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Role pengguna tidak valid.'
+                ], 401);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Login berhasil!',
-            'redirect_url' => route('home')
+            'redirect_url' => $redirectUrl
         ]);
     }
 
@@ -81,8 +107,18 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'nip' => 'required',
+            'nip' => 'required|unique:users,nip',
         ]);
+
+        $instansi = $request->input('nama_instansi');
+
+        $getInstansi = Instansi::where('nama_instansi', $instansi)->first();
+
+        if (!$getInstansi) {
+            toast('Registrasi gagal, instansi tidak ditemukan!', 'error');
+
+            return redirect()->back()->withErrors(['nama_instansi' => 'Instansi tidak ditemukan.']);
+        }
 
         $token = Str::random(15);
         // Create the user
@@ -90,12 +126,11 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt(Str::random(16)),
-            'role' => 'user',
+            'role' => 'opd',
             'token' => $token,
             'nip' => $request->nip,
+            'id_instansi' => $getInstansi->id_instansi
         ]);
-
-
 
         // Generate QR Code
         $jsonData = json_encode(['token' => $token]);
@@ -118,11 +153,9 @@ class AuthController extends Controller
         // Kirim email dengan lampiran QR code
         Mail::to($request->email)->send(new MailPost($msg, $subject, $qrcodePath));
 
-
         $random = Str::random(200);
         // Menyimpan token di cache dengan waktu kadaluwarsa (misalnya 30 menit)
-        Cache::put('verify_token_' . $random, false, now()->addMinutes(2));
-
+        Cache::put('verify_token_' . $random, false, now()->addMinutes(30));
 
         toast('Registrasi Berhasil, Silahkan cek E-mail anda sekarang!', 'info');
 

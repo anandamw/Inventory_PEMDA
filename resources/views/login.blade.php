@@ -252,6 +252,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <!-- Ombak Atas -->
     <svg class="wave wave-top" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path fill="#008B8B" fill-opacity="1"
@@ -301,17 +302,25 @@
                         <input type="email" id="email" name="email" placeholder="Alamat Email">
                         <input type="text" id="nama" name="name" placeholder="Nama">
                         <input type="text" id="nip" name="nip" placeholder="NIP">
-                        <input type="text" id="nama_instansi" name="nama_instansi" placeholder="Nama Instansi">
+
+                        <!-- Pencarian Instansi dengan Searchbox -->
+                        <input type="text" id="nama_instansi" name="nama_instansi" placeholder="Cari Instansi"
+                            list="instansi-list">
+                        <datalist id="instansi-list">
+                            @foreach ($categories as $item)
+                                <option value="{{ $item->nama_instansi }}">
+                            @endforeach
+
+                        </datalist>
+
                         <button type="submit" id="submit-form" class="btn"
                             style="width: 50%; background-color:#008B8B; color:white; border-radius:50;">Submit</button>
                         <div id="back-to-qr" class="btn-back btn"
                             style="width: 50%; background-color:#be0000; color:white; border-radius:50;">Back to
                             QR</div>
                     </div>
-
                 </form> <!-- Tambahkan tempat untuk menampilkan pesan -->
                 <div id="message" style="color: white; text-align: center; margin-top: 10px;"></div>
-
 
                 <!-- Tombol untuk mengganti tampilan -->
                 <div class="mt-5">

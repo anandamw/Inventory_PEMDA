@@ -19,7 +19,8 @@ Route::middleware('guest')->group(function () {
         Route::post('/scan-qr-code', [AuthController::class, 'scanQrCode'])->name('scanQrCode');
         Route::get('/qrcode', [QrCodeController::class, 'index']);
         Route::post('/register/action', [AuthController::class, 'register_action'])->name('register_action');
-        Route::get('/success={random}', [AuthController::class, 'verify']);
+Route::get('/instansi/search', [InstansiController::class, 'search']);
+
 });
 
 // auth middleware
@@ -70,29 +71,35 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/repair/complete/{id}', [DashboardController::class, 'complete']);
 
                 Route::get('/repair/delete/{id}', [DashboardController::class, 'deleteRepair'])->name('repair.delete');
+                Route::put('/history/dashboard-update', [DashboardController::class, 'updateHistoryDashboard'])->name('history.dashboard.update');
+                Route::put('/order/update-status', [DashboardController::class, 'updateStatus'])->name('order-items.updateStatus');
+                Route::get('/admin/item', [InventoryController::class, 'index']);
+                Route::put('/admin/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
+                Route::post('/admin/save', [SaveController::class, 'store']);
+                Route::post('/admin/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
+                Route::post('/admin/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
+                Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
         });
 
-        Route::post('/repair/store', [DashboardController::class, 'storeRepair'])->name('repair.store');
+
+        Route::middleware(['role:opd'])->group(function () {
+                Route::post('/repair/store', [DashboardController::class, 'storeRepair'])->name('repair.store');
+        });
+
+        Route::middleware(['role:team'])->group(function () {
+                Route::get('/item', [InventoryController::class, 'index']);
+                Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
+                Route::post('/save', [SaveController::class, 'store']);
+                Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
+                Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
+        });
+
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 
         Route::get('/profile', [UserController::class, 'profile']);
         Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');
 
-        Route::put('/history/dashboard-update', [DashboardController::class, 'updateHistoryDashboard'])->name('history.dashboard.update');
-        Route::put('/order/update-status', [DashboardController::class, 'updateStatus'])->name('order-items.updateStatus');
 
-        Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
-
-
-
-        Route::patch('/revised/{id}', [InventoryController::class, 'revised']);
-        Route::get('/item', [InventoryController::class, 'index']);
-        Route::post('/save', [SaveController::class, 'store']);
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
         Route::get('/logout', [AuthController::class, 'logout']);
-
-        Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
-        Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
-
-
-        Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
 });

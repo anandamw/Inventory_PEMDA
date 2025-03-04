@@ -48,5 +48,26 @@ class InstansiController extends Controller
     
         return redirect('/instansi');
     }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        $category = $request->input('category');
+
+        $query = Instansi::query();
+
+        if ($category && $category !== 'all') {
+            $query->where('nama_instansi', 'like', "%$category%");
+        }
+
+        if ($keyword) {
+            $query->where('nama_instansi', 'like', "%$keyword%");
+        }
+
+        $results = $query->get();
+        return response()->json($results);
+    }
+
+
     
 }
