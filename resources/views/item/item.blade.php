@@ -237,7 +237,7 @@
     </div>
 
 
-    <script>
+    <script defer>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".editBtn").forEach(button => {
                 button.addEventListener("click", function() {
@@ -276,15 +276,28 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
-                            location.reload();
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil!",
+                                text: data.message
+                            }).then(() => {
+                                location.reload();
+                            });
                         } else {
-                            alert("Terjadi kesalahan saat mengupdate data.");
+                            Swal.fire({
+                                icon: "error",
+                                title: "Terjadi kesalahan",
+                                text: "Terjadi kesalahan saat mengupdate data."
+                            });
                         }
                     })
                     .catch(error => {
                         console.error("Error:", error);
-                        alert("Gagal melakukan update, coba lagi.");
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal!",
+                            text: "Gagal melakukan update, coba lagi."
+                        });
                     });
             });
         });
@@ -341,21 +354,21 @@
                     const newRow = document.createElement("tr");
                     newRow.setAttribute("data-id", id);
                     newRow.innerHTML = `
-                        <td class="py-2">${ordersTableBody.children.length}</td>
-                        <td class="py-2"><strong>#${code}</strong></td>
-                        <td class="py-2"><img src="${img}" alt="Product Photo" width="50"></td>
-                        <td class="py-2">${name}</td>
-                        <td class="py-2 text-center">
-                            <div class="input-group quantity-control">
-                                <button class="btn btn-outline-primary btn-sm decrement">-</button>
-                                <input type="number" class="form-control text-center quantity" value="1" min="1">
-                                <button class="btn btn-outline-primary btn-sm increment">+</button>
-                            </div>
-                        </td>
-                        <td class="py-2">
-                            <button class="btn btn-danger btn-sm removeItem"><i class="fa fa-trash me-2"></i> Hapus</button>
-                        </td>
-                    `;
+                    <td class="py-2">${ordersTableBody.children.length}</td>
+                    <td class="py-2"><strong>#${code}</strong></td>
+                    <td class="py-2"><img src="${img}" alt="Product Photo" width="50"></td>
+                    <td class="py-2">${name}</td>
+                    <td class="py-2 text-center">
+                        <div class="input-group quantity-control">
+                            <button class="btn btn-outline-primary btn-sm decrement">-</button>
+                            <input type="number" class="form-control text-center quantity" value="1" min="1">
+                            <button class="btn btn-outline-primary btn-sm increment">+</button>
+                        </div>
+                    </td>
+                    <td class="py-2">
+                        <button class="btn btn-danger btn-sm removeItem"><i class="fa fa-trash me-2"></i> Hapus</button>
+                    </td>
+                `;
 
                     ordersTableBody.appendChild(newRow);
                     checkEmptyCart();
@@ -385,7 +398,6 @@
                 }
             });
 
-
             submitButton.addEventListener("click", function() {
                 const cartItems = [];
 
@@ -400,21 +412,25 @@
                 });
 
                 if (cartItems.length === 0) {
-                    alert("Keranjang masih kosong!");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Keranjang kosong",
+                        text: "Keranjang masih kosong!"
+                    });
                     return;
                 }
-
 
                 const events = document.getElementById("events").value;
                 const phone = document.getElementById("phone").value;
 
                 if (!events || !phone) {
-                    alert("Harap isi semua field sebelum mengirim!");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Data tidak lengkap",
+                        text: "Harap isi semua field sebelum mengirim!"
+                    });
                     return;
                 }
-
-                console.log(cartItems);
-
 
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
@@ -430,29 +446,32 @@
                             phone: phone
                         })
                     })
-                    .then(async response => {
-                        const text = await response.text(); // Ambil respons mentah untuk debugging
-                        // console.log("Raw response:", text);
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP Error ${response.status}: ${text}`);
-                        }
-                        return JSON.parse(text);
-                    })
+                    .then(response => response.json())
                     .then(data => {
-                        // console.log("Response JSON:", data);
                         if (data.success) {
-                            alert(data.message);
-                            window.location.reload();
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil!",
+                                text: data.message
+                            }).then(() => {
+                                window.location.reload();
+                            });
                         } else {
-                            alert("Terjadi kesalahan, coba lagi.");
+                            Swal.fire({
+                                icon: "error",
+                                title: "Terjadi kesalahan",
+                                text: "Terjadi kesalahan, coba lagi."
+                            });
                         }
                     })
                     .catch(error => {
                         console.error("Error:", error);
-                        alert("Terjadi kesalahan saat mengirim data.");
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal!",
+                            text: "Terjadi kesalahan saat mengirim data."
+                        });
                     });
-
             });
         });
     </script>

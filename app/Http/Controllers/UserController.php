@@ -60,19 +60,19 @@ class UserController extends Controller
         return response()->json(['success' => true, 'profile' => asset('uploads/profile/' . $fileName)]);
     }
 
-public function checkDuplicate(Request $request)
-{
-    $nip = $request->nip;
-    $excludeId = $request->exclude_id;
+    public function checkDuplicate(Request $request)
+    {
+        $nip = $request->nip;
+        $excludeId = $request->exclude_id;
 
-    $query = User::where('nip', $nip);
+        $query = User::where('nip', $nip);
 
-    if ($excludeId) {
-        $query->where('id', '!=', $excludeId);  // Supaya pas edit tidak kena validasi dirinya sendiri
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);  // Supaya pas edit tidak kena validasi dirinya sendiri
+        }
+
+        return response()->json(['exists' => $query->exists()]);
     }
-
-    return response()->json(['exists' => $query->exists()]);
-}
 
 
 
@@ -84,8 +84,9 @@ public function checkDuplicate(Request $request)
             'nip' => 'required|unique:users,nip',
             'id_instansi' => 'required',
             'role' => 'required',
-        ]);    
-    
+
+        ]);
+
         $token = Str::random(15);
 
         $data = [
@@ -127,27 +128,27 @@ public function checkDuplicate(Request $request)
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'name' => 'required',
-        'nip' => 'required|unique:users,nip,' . $id,
-        'instansi' => 'required',
-        'role' => 'required'
-    ]);
+    {
+        $request->validate([
+            'name' => 'required',
+            'nip' => 'required|unique:users,nip,' . $id,
+            'instansi' => 'required',
+            'role' => 'required'
+        ]);
 
-    $user = User::findOrFail($id);
-    $user->update([
-        'name' => $request->name,
-        'nip' => $request->nip,
-        'instansi_id' => $request->instansi,
-        'role' => $request->role
-    ]);
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => $request->name,
+            'nip' => $request->nip,
+            'instansi_id' => $request->instansi,
+            'role' => $request->role
+        ]);
 
-    return redirect()->back()->with('success', 'User berhasil diperbarui');
-}
+        return redirect()->back()->with('success', 'User berhasil diperbarui');
+    }
 
-    
-    
+
+
 
 
     public function destroy($id)
