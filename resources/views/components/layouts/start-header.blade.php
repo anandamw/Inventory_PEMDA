@@ -37,20 +37,7 @@
                     </div>
                 </div>
                 <div class="navbar-nav header-right">
-                    <div class="nav-item d-flex align-items-center">
-                        <div class="input-group search-area">
-                            <span class="input-group-text"><a href="javascript:void(0)"><svg width="24"
-                                        height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M20.5605 18.4395L16.7527 14.6317C17.5395 13.446 18 12.0262 18 10.5C18 6.3645 14.6355 3 10.5 3C6.3645 3 3 6.3645 3 10.5C3 14.6355 6.3645 18 10.5 18C12.0262 18 13.446 17.5395 14.6317 16.7527L18.4395 20.5605C19.0245 21.1462 19.9755 21.1462 20.5605 20.5605C21.1462 19.9747 21.1462 19.0252 20.5605 18.4395V18.4395ZM5.25 10.5C5.25 7.605 7.605 5.25 10.5 5.25C13.395 5.25 15.75 7.605 15.75 10.5C15.75 13.395 13.395 15.75 10.5 15.75C7.605 15.75 5.25 13.395 5.25 10.5V10.5Z"
-                                            fill="var(--primary)" />
-                                    </svg>
 
-                                </a></span>
-                            <input type="text" class="form-control" placeholder="Search here...">
-                        </div>
-                    </div>
                     <div class="dz-side-menu">
                         @if (auth()->user()->role == 'admin')
                             <div class="sidebar-social-link">
@@ -213,8 +200,7 @@
 
                         <ul>
                             <li class="nav-item dropdown header-profile">
-                                <a class="nav-link" href="javascript:void(0);" role="button"
-                                    data-bs-toggle="dropdown">
+                                <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
                                     <img width="50" height="50"
                                         src="{{ Auth::user()->profile ? asset(Auth::user()->profile) : asset('uploads/profile/no-profile.jpg') }}"
                                         alt="User Profile">
@@ -270,9 +256,28 @@
                         <button class="nav-link active" id="nav-buy-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-buy" type="button" role="tab" aria-controls="nav-buy"
                             aria-selected="true">Perbaikan</button>
-                        <button class="nav-link" id="nav-sell-tab" data-bs-toggle="tab" data-bs-target="#nav-sell"
-                            type="button" role="tab" aria-controls="nav-sell"
-                            aria-selected="false">Pemberitahuan</button>
+                        <button class="nav-link d-flex align-items-center justify-content-center gap-1"
+                            id="nav-sell-tab" data-bs-toggle="tab" data-bs-target="#nav-sell" type="button"
+                            role="tab" aria-controls="nav-sell" aria-selected="false" style="height: 100%;">
+                            Pemberitahuan
+                            @if ($scheduledRepairsCount > 0)
+                                <span class="badge bg-danger rounded-circle blink"
+                                    style="
+                                font-size: 8px;
+                                width: 14px; /* agak dinaikin biar muat angka */
+                                height: 14px;
+                                aspect-ratio: 1 / 1; /* ini kunci agar bentuknya lingkaran sempurna */
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                transform: translateY(-5px);
+                                padding: 0;
+                                line-height: 1;">
+                                    {{ $scheduledRepairsCount }}
+                                </span>
+                            @endif
+                        </button>
+
                     </div>
                 </nav>
                 <div class="tab-content mt-4" id="nav-tabContent">
@@ -318,9 +323,20 @@
                     </div>
 
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
-                        <ul class="list-unstyled">
-                            @foreach ($userRepairs as $repair)
-                                @if ($repair->status != 'completed')
+                        @php
+                            // Filter hanya repair yang belum completed
+                            $pendingRepairs = $userRepairs->filter(function ($repair) {
+                                return $repair->status != 'completed';
+                            });
+                        @endphp
+
+                        @if ($pendingRepairs->isEmpty())
+                            <div class="text-center py-4">
+                                <p class="text-muted">Belum ada pesan masuk</p>
+                            </div>
+                        @else
+                            <ul class="list-unstyled">
+                                @foreach ($pendingRepairs as $repair)
                                     <li>
                                         <div class="timeline-panel d-flex align-items-center p-3"
                                             style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
@@ -329,7 +345,6 @@
                                                     <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
                                                         alt="Item Image" width="50" height="50"
                                                         style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
-
                                                 </a>
                                             </div>
                                             <div class="media-body">
@@ -344,10 +359,11 @@
                                             </div>
                                         </div>
                                     </li>
-                                @endif
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
+
 
 
                 </div>

@@ -1,6 +1,16 @@
 @extends('components.template')
 
 @section('content')
+
+    <style>
+        .hover-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+
+
     <div class="content-body">
         <!-- row -->
         <div class="container-fluid">
@@ -8,7 +18,8 @@
                 <div class="col-xl-8">
                     <div class="row">
                         <div class="col-xl-12">
-                            <div class="card bubles">
+                            <div class="card bubles hover-card shadow-lg border-0 pb-0"
+                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); overflow: hidden; border-radius: 20px;">
                                 <div class="card-body">
                                     <div class="buy-coin bubles-down">
                                         <div>
@@ -20,14 +31,16 @@
                                             <a href="/item" class="btn btn-primary">Ambil Barang</a>
                                         </div>
                                         <div class="coin-img d-none d-md-block">
-                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid" alt="" />
-                                        </div>                                        
+                                            <img src="{{ asset('') }}assets/images/coin.png" class="img-fluid"
+                                                alt="" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-12 col-xxl-12 col-sm-12 wow fadeInRight" data-wow-delay="0.3s">
-                            <div class="card digital-cash">
+                            <div class="card digital-cash shadow-lg border-0 pb-0 hover-card"
+                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); overflow: hidden; border-radius: 20px;">
                                 <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0 heading">About</h4>
                                     <div class="dropdown custom-dropdown mb-0 tbl-orders-style">
@@ -143,7 +156,9 @@
 
                 <div class="col-xl-4">
                     <div class="col-xl-12 col-lg-6">
-                        <div class="card bg-primary">
+                        <div class="card bg-primary text-white shadow-lg position-relative overflow-hidden hover-card"
+                            style="border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); border-radius: 20px;">
+
                             <div class="card-header border-0 pb-0">
                                 <div>
                                     <h2 class="heading mb-0 text-white">Data Item</h2>
@@ -176,12 +191,14 @@
                             </div>
                         </div>
                         @if (auth()->user()->role == 'admin')
-                            <div class="card border-0 pb-0">
+
+                            <div class="card border-0 shadow-lg pb-0 hover-card"
+                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
                                 <div class="card-header border-0 pb-0">
-                                    <h4 class="card-title">Message</h4>
+                                    <h5 class="card-title heading">Messages</h5>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div id="DZ_W_Todo3" class="widget-media dz-scroll height210 my-4 px-4">
+                                    <div id="DZ_W_Todo3" class="widget-media dz-scroll height200 my-4 px-4">
                                         @php
                                             $pendingRepairs = $repairs->filter(function ($repair) {
                                                 return $repair->status != 'completed';
@@ -192,30 +209,34 @@
                                             <!-- Tampilkan gambar no-messages ketika tidak ada repair yang belum selesai -->
                                             <div class="text-center my-4">
                                                 <img src="{{ asset('assets/images/no-messages.png') }}" alt="No Messages"
-                                                    style="width: 140px;">
+                                                    style="width: 130px;">
                                             </div>
                                         @else
                                             <ul class="timeline">
                                                 @foreach ($pendingRepairs as $repair)
                                                     <li>
                                                         <div class="timeline-panel">
-                                                            <div class="media me-2">
-                                                                <img alt="image" width="50"
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-center me-2">
+                                                                <img class=" rounded-3" alt="image" width="50"
                                                                     src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/no-profile.jpg') }}">
                                                             </div>
                                                             <div class="media-body">
-                                                                <h5 class="mb-1">{{ $repair->user->name }}
-                                                                    <small>-
-                                                                        {{ $repair->user->instansi->nama_instansi ?? 'Tidak ada instansi' }}
-                                                                        @if ($repair->scheduled_date)
-                                                                        <span class="text-success"> | Scheduled on
-                                                                            {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
-                                                                            by 
-                                                                            <span class="text-danger">{{ $repair->admin->name ?? 'Unknown Admin' }}</span>
-                                                                            </span>
-                                                                        @endif
-                                                                    </small>
+                                                                <h5 class="mb-1">{{ $repair->user->name }} |
+                                                                    {{ $repair->user->instansi->nama_instansi ?? 'Tidak ada instansi' }}
+
                                                                 </h5>
+
+                                                                <!-- Baris baru untuk jadwal (jika ada) -->
+                                                                @if ($repair->scheduled_date)
+                                                                    <small class="d-block text-success">
+                                                                        On
+                                                                        {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
+                                                                        by <span
+                                                                            class="text-danger">{{ $repair->admin->name ?? 'Unknown Admin' }}</span>
+                                                                    </small>
+                                                                @endif
+
                                                                 <p class="mb-1">{{ $repair->repair }}</p>
                                                                 <button class="btn btn-primary btn-xxs shadow"
                                                                     onclick="openScheduleModal({{ $repair->id_repair }})">Reply</button>
@@ -226,6 +247,8 @@
                                                     </li>
                                                 @endforeach
                                             </ul>
+                                            <!-- Garis pembatas di akhir -->
+                                            <div class="border-top pt-3 text-center text-muted mt-3"></div>
                                         @endif
                                     </div>
                                 </div>
@@ -237,12 +260,11 @@
                                 <div class="modal-dialog modal-lg"> <!-- Tambah kelas modal-lg biar besar -->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="repairActionModalLabel">Aksi Perbaikan</h5>
+                                            <h5 class="modal-title" id="repairActionModalLabel">Atur Jadwal</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Pilih tindakan yang ingin dilakukan untuk perbaikan ini.</p>
                                             <input type="hidden" id="repair_id" name="repair_id">
 
                                             <!-- Form untuk atur perbaikan (misal isi tanggal dan catatan) -->
@@ -250,7 +272,7 @@
                                                 @csrf
                                                 <input type="hidden" id="form_repair_id" name="repair_id">
                                                 <div class="mb-3">
-                                                    <label for="scheduled_date">Tanggal Perbaikan</label>
+                                                    <label for="scheduled_date">Atur Tanggal Perbaikan</label>
                                                     <input type="date" name="scheduled_date" class="form-control"
                                                         required>
                                                 </div>
@@ -299,11 +321,13 @@
                         @elseif (auth()->user()->role == 'user')
                             <!-- Bagian khusus user -->
                             <div class="col-xl-12 col-sm-6">
-                                <div class="card bg-secondary email-susb">
-                                    <div class="card-body text-center">
+                                <div class="card bg-secondary email-susb hover-card"
+                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
+                                <div class="card-body text-center">
                                         <div style="width: 100%; max-width: 500px; overflow: hidden;">
-                                            <img src="{{ asset('assets/images/metaverse.png') }}" alt="" style="width: 65%; height: auto; object-fit: cover;">
-                                        </div>                                        
+                                            <img src="{{ asset('assets/images/metaverse.png') }}" alt=""
+                                                style="width: 65%; height: auto; object-fit: cover;">
+                                        </div>
                                         <div class="toatal-email mt-0">
                                             <h5>Butuh Perbaikan Kami Siap Melayani!</h5>
                                         </div>
@@ -321,7 +345,8 @@
             </div>
 
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card border-0 shadow-lg pb-0 hover-card"
+                    style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-sm mb-0">
