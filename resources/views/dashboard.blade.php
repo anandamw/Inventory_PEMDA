@@ -598,7 +598,6 @@
             let updatedItems = [];
             let newItems = [];
 
-            // Ambil semua input quantity di tabel Detail Barang
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
                 let newQuantity = parseInt(input.value) || 0;
@@ -621,21 +620,19 @@
                         item_name: itemName,
                         quantity: quantity,
                         orders_id: orderId,
-                        status: status // Menambahkan status jika ada
+                        status: status
                     });
                 }
             });
 
             if (updatedItems.length === 0 && newItems.length === 0) {
-                alert("Tidak ada perubahan yang disimpan.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Tidak ada perubahan",
+                    text: "Tidak ada perubahan yang disimpan."
+                });
                 return;
             }
-            console.log("Data yang dikirim:", JSON.stringify({
-                orderId: orderId,
-                updatedItems: updatedItems,
-                newItems: newItems,
-                status: status
-            }, null, 2));
 
             try {
                 let response = await fetch("/update-order-items-status", {
@@ -649,7 +646,7 @@
                         orderId: orderId,
                         updatedItems: updatedItems,
                         newItems: newItems,
-                        status: status // Kirim status jika ada
+                        status: status
                     })
                 });
 
@@ -660,18 +657,32 @@
                 let data = await response.json();
 
                 if (data.success) {
-                    alert("Perubahan berhasil disimpan!");
-                    location.reload();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: "Perubahan berhasil disimpan!"
+                    }).then(() => {
+                        location.reload();
+                    });
                 } else {
                     console.error("Error dari server:", data.error);
-                    alert("Terjadi kesalahan: " + data.error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan",
+                        text: data.error
+                    });
                 }
             } catch (error) {
                 console.error("Fetch error:", error);
-                alert("Gagal menyimpan perubahan.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal!",
+                    text: "Gagal menyimpan perubahan."
+                });
             }
         }
     </script>
+
 
 
     {{-- simpan perubahan --}}
@@ -680,7 +691,6 @@
             let updatedItems = [];
             let newItems = [];
 
-            // Ambil semua input quantity di tabel Detail Barang
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
                 let newQuantity = parseInt(input.value) || 0;
@@ -708,7 +718,11 @@
             });
 
             if (updatedItems.length === 0 && newItems.length === 0) {
-                alert("Tidak ada perubahan yang disimpan.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Tidak ada perubahan",
+                    text: "Tidak ada perubahan yang disimpan."
+                });
                 return;
             }
 
@@ -734,18 +748,32 @@
                 let data = await response.json();
 
                 if (data.success) {
-                    alert("Perubahan berhasil disimpan!");
-                    location.reload();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: "Perubahan berhasil disimpan!"
+                    }).then(() => {
+                        location.reload();
+                    });
                 } else {
                     console.error("Error dari server:", data.error);
-                    alert("Terjadi kesalahan: " + data.error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Terjadi kesalahan",
+                        text: data.error
+                    });
                 }
             } catch (error) {
                 console.error("Fetch error:", error);
-                alert("Gagal menyimpan perubahan.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal!",
+                    text: "Gagal menyimpan perubahan."
+                });
             }
         }
     </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

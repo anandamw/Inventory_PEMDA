@@ -90,17 +90,15 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt(Str::random(16)),
-            'role' => 'admin',
+            'role' => 'user',
             'token' => $token,
             'nip' => $request->nip,
         ]);
 
-        $jsonDATAtoken = [
-            'token' => $token
-        ];
+
 
         // Generate QR Code
-        $jsonData = json_encode($jsonDATAtoken);
+        $jsonData = json_encode(['token' => $token]);
         $path = public_path('Pictures/qrcode');
 
         if (!File::exists($path)) {
@@ -125,8 +123,11 @@ class AuthController extends Controller
         // Menyimpan token di cache dengan waktu kadaluwarsa (misalnya 30 menit)
         Cache::put('verify_token_' . $random, false, now()->addMinutes(2));
 
+
+        toast('Registrasi Berhasil, Silahkan cek E-mail anda sekarang!', 'info');
+
         // Generate random URL untuk redirect
-        return redirect('/success=' . $random);
+        return redirect('/');
     }
 
     public function verify($random1)
