@@ -174,8 +174,7 @@
                                 </ul>
                             </div>
                         @endif
-
-                        @if (auth()->check() && auth()->user()->role == 'user')
+                        @if (auth()->check() && auth()->user()->role == 'opd')
                             <ul>
                                 <li class="nav-item dropdown notification_dropdown position-relative">
                                     <a class="nav-link position-relative" href="#" role="button"
@@ -195,9 +194,8 @@
                                 </li>
                             </ul>
                         @endif
-
-
-
+                            
+                        <ul></ul>
                         <ul>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
@@ -325,43 +323,36 @@
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
                         @php
                             // Filter hanya repair yang belum completed
-                            $pendingRepairs = $userRepairs->filter(function ($repair) {
-                                return $repair->status != 'completed';
-                            });
+                            $pendingRepairs = $userRepairs;
                         @endphp
-
-                        @if ($pendingRepairs->isEmpty())
-                            <div class="text-center py-4">
-                                <p class="text-muted">Belum ada pesan masuk</p>
-                            </div>
-                        @else
-                            <ul class="list-unstyled">
-                                @foreach ($pendingRepairs as $repair)
-                                    <li>
-                                        <div class="timeline-panel d-flex align-items-center p-3"
-                                            style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                                            <div class="media me-3">
-                                                <a href="#">
-                                                    <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
-                                                        alt="Item Image" width="50" height="50"
-                                                        style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <h6 class="mb-1" style="font-weight: 600; color: #333;">
-                                                    {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
-                                                </h6>
-                                                <small class="d-block text-muted">
-                                                    <i class="fas fa-calendar-alt me-1"></i>
-                                                    {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
-                                                    - {{ $repair->status }}
-                                                </small>
-                                            </div>
+                        <ul class="list-unstyled">
+                            @foreach ($pendingRepairs as $repair)
+                                <li>
+                                    <div class="timeline-panel d-flex align-items-center p-3"
+                                        style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                                        <div class="media me-3">
+                                            <a href="#">
+                                                <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
+                                                    alt="Item Image" width="50" height="50"
+                                                    style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                            </a>
                                         </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
+                                        <div class="media-body">
+                                            <h6 class="mb-1" style="font-weight: 600; color: #333;">
+                                                {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
+                                            </h6>
+
+                                            <small class="d-block">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
+                                                - <span
+                                                    style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">{{ $repair->status }}</span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
 
 

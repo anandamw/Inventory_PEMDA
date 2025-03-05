@@ -9,9 +9,11 @@
 
 <!-- Dashboard 1 -->
 <script src="{{ asset('') }}assets/js/dashboard/dashboard-1.js"></script>
+<script src="{{ asset('') }}assets/js/dashboard/dashboard-4.js"></script>
 <!-- Apex Chart -->
 <script src="{{ asset('') }}assets/vendor/apexchart/apexchart.js"></script>
 <script src="{{ asset('') }}assets/vendor/swiper/js/swiper-bundle.min.js"></script>
+<script src="{{ asset('') }}assets/vendor/webticker/jquery.webticker.min.js"></script>
 {{-- <script src="../../s3.tradingview.com/tv.js"></script> --}}
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script> --}}
 
@@ -25,7 +27,6 @@
 <script src="{{ asset('') }}assets/js/demo.js"></script>
 <script src="{{ asset('') }}assets/js/styleSwitcher.js"></script>
 {{-- <script src="{{ asset('') }}assets/js/dashboard/tradingview-1.js"></script> --}}
-
 
 
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

@@ -43,11 +43,6 @@
         @include('components.layouts.checkbox')
         @include('components.layouts.start-header')
         @include('components.layouts.sidebar')
-
-
-
-
-
         <!--**********************************
             Content body start
         ***********************************-->

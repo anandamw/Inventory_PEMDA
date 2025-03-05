@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::middleware(['role:opd'])->group(function () {
                 Route::post('/repair/store', [DashboardController::class, 'storeRepair'])->name('repair.store');
+                Route::get('/Home', [DashboardController::class, 'opdDashboard'])->name('opdhome');
         });
 
         Route::middleware(['role:team'])->group(function () {
@@ -92,8 +93,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/save', [SaveController::class, 'store']);
                 Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
                 Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
+                Route::post('/mark-notification-completed/{repairId}', [DashboardController::class, 'markCompleted']);
         });
 
+        Route::post('/repairs/{id}/assign', [DashboardController::class, 'assignToTeam'])->name('repairs.assign');
+        Route::post('/repairs/{id}/complete', [DashboardController::class, 'complete'])->name('repairs.complete');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 

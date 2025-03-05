@@ -156,40 +156,42 @@
 
                 <div class="col-xl-4">
                     <div class="col-xl-12 col-lg-6">
-                        <div class="card bg-primary text-white shadow-lg position-relative overflow-hidden hover-card"
-                            style="border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); border-radius: 20px;">
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'team')
+                            <div class="card bg-primary text-white shadow-lg position-relative overflow-hidden hover-card"
+                                style="border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); border-radius: 20px;">
 
-                            <div class="card-header border-0 pb-0">
-                                <div>
-                                    <h2 class="heading mb-0 text-white">Data Item</h2>
+                                <div class="card-header border-0 pb-0">
+                                    <div>
+                                        <h2 class="heading mb-0 text-white">Data Item</h2>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body pt-0">
-                                <div class="table-responsive" style="max-height: 210px; overflow-y: auto;">
-                                    <table class="table table-sell verticle-middle mb-0">
-                                        <thead
-                                            style="position: sticky; top: 0; background-color: rgba(255, 255, 255, 0.9);  z-index: 2;">
-                                            <tr class="text-dark">
-                                                <th scope="col">Code</th>
-                                                <th class="text-center" scope="col">Item</th>
-                                                <th class="text-end" scope="col">Stok</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach ($dataItem as $item)
-                                                <tr class="text-white">
-                                                    <td>{{ $item->code_item }}</td>
-                                                    <td class="text-center">{{ $item->item_name }}</td>
-                                                    <td class="text-end">{{ $item->quantity }}</td>
+                                <div class="card-body pt-0">
+                                    <div class="table-responsive" style="max-height: 210px; overflow-y: auto;">
+                                        <table class="table table-sell verticle-middle mb-0">
+                                            <thead
+                                                style="position: sticky; top: 0; background-color: rgba(255, 255, 255, 0.9);  z-index: 2;">
+                                                <tr class="text-dark">
+                                                    <th scope="col">Code</th>
+                                                    <th class="text-center" scope="col">Item</th>
+                                                    <th class="text-end" scope="col">Stok</th>
                                                 </tr>
-                                            @endforeach
+                                            </thead>
+                                            <tbody>
 
-                                        </tbody>
-                                    </table>
+                                                @foreach ($dataItem as $item)
+                                                    <tr class="text-white">
+                                                        <td>{{ $item->code_item }}</td>
+                                                        <td class="text-center">{{ $item->item_name }}</td>
+                                                        <td class="text-end">{{ $item->quantity }}</td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         @if (auth()->user()->role == 'admin')
 
@@ -223,11 +225,8 @@
                                                                     src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/no-profile.jpg') }}">
                                                             </div>
                                                             <div class="media-body">
-                                                                <h5 class="mb-1">{{ $repair->user->name }} |
-                                                                    {{ $repair->user->instansi->nama_instansi ?? 'Tidak ada instansi' }}
-
+                                                                <h5 class="mb-1">{{ $repair->user->name }}
                                                                 </h5>
-
                                                                 <!-- Baris baru untuk jadwal (jika ada) -->
                                                                 @if ($repair->scheduled_date)
                                                                     <small class="d-block text-success">
@@ -239,11 +238,50 @@
                                                                 @endif
 
                                                                 <p class="mb-1">{{ $repair->repair }}</p>
-                                                                <button class="btn btn-primary btn-xxs shadow"
-                                                                    onclick="openScheduleModal({{ $repair->id_repair }})">Reply</button>
-                                                                <a href="{{ route('repair.delete', $repair->id_repair) }}"
-                                                                    class="btn btn-danger btn-xxs">Delete</a>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <button class="btn btn-primary btn-xs shadow"
+                                                                        onclick="openScheduleModal({{ $repair->id_repair }})">
+                                                                        Reply
+                                                                    </button>
+
+                                                                    <a href="{{ route('repair.delete', $repair->id_repair) }}"
+                                                                        class="btn btn-danger btn-xs">
+                                                                        Delete
+                                                                    </a>
+
+                                                                    @php
+                                                                        $repairData = [
+                                                                            'user' => [
+                                                                                'name' => $repair->user->name,
+                                                                                'instansi' =>
+                                                                                    $repair->user->instansi
+                                                                                        ->nama_instansi ??
+                                                                                    'Tidak ada instansi',
+                                                                                'nip' => $repair->user->nip,
+                                                                            ],
+                                                                            'repair'=>$repair->repair,
+                                                                            'scheduled_date' => \Carbon\Carbon::parse(
+                                                                                $repair->scheduled_date,
+                                                                            )->translatedFormat('d F Y'),
+                                                                            'teams' => $repair->teams
+                                                                                ->pluck('name')
+                                                                                ->toArray(), // ambil nama tim aja
+                                                                        ];
+                                                                    @endphp
+
+                                                                    <a href="javascript:void(0)"
+                                                                        class="btn btn-info btn-xs btn-warning"
+                                                                        onclick="openTeamModal({{ $repair->id_repair }})"
+                                                                        data-repair='@json($repairData)'>
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
+
+
+                                                                </div>
                                                             </div>
+
+
+
                                                         </div>
                                                     </li>
                                                 @endforeach
@@ -251,10 +289,12 @@
                                             <!-- Garis pembatas di akhir -->
                                             <div class="border-top pt-3 text-center text-muted mt-3"></div>
                                         @endif
+
                                     </div>
                                 </div>
 
                             </div>
+
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
                                 aria-labelledby="repairActionModalLabel" aria-hidden="true">
@@ -277,48 +317,40 @@
                                                     <input type="date" name="scheduled_date" class="form-control"
                                                         required>
                                                 </div>
+                                                <div class="mb-3">
+                                                    <label for="team_id">Pilih Tim</label><small class="text-muted">
+                                                        (Centang tim yang mau diberangkatkan.)</small>
+
+                                                    <!-- Input filter cari tim -->
+                                                    <input type="text" id="teamSearch" class="form-control mb-2"
+                                                        placeholder="Cari nama tim...">
+
+                                                    <div class="border p-2" style="max-height: 200px; overflow-y: auto;"
+                                                        id="teamList">
+                                                        @foreach ($teams as $team)
+                                                            <div class="form-check team-item">
+                                                                <input type="checkbox" class="form-check-input"
+                                                                    name="team_ids[]" value="{{ $team->id }}"
+                                                                    id="team_{{ $team->id }}">
+                                                                <label class="form-check-label"
+                                                                    for="team_{{ $team->id }}">
+                                                                    {{ $team->name }}
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                         <div class="modal-footer d-flex justify-content-end">
                                             <button type="button" class="btn btn-warning me-2"
                                                 onclick="submitForm()">Atur Jadwal</button>
-                                            <button type="button" class="btn btn-primary me-2"
-                                                onclick="completeRepair()">Perbaikan Selesai</button>
+                                            {{-- <button type="button" class="btn btn-primary me-2"
+                                                onclick="completeRepair()">Perbaikan Selesai</button> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <script>
-                                // Buka modal dan simpan repair_id
-                                function openScheduleModal(repairId) {
-                                    document.getElementById('form_repair_id').value = repairId;
-
-                                    let form = document.getElementById('scheduleRepairForm');
-                                    form.action = `/repair/schedule/${repairId}`;
-
-                                    var repairModal = new bootstrap.Modal(document.getElementById('repairActionModal'));
-                                    repairModal.show();
-                                }
-
-
-                                // Menampilkan form atur perbaikan
-                                function showScheduleForm() {
-                                    document.getElementById('scheduleRepairForm').style.display = 'block';
-                                }
-
-                                function submitForm() {
-                                    document.getElementById('scheduleRepairForm').submit();
-                                }
-
-                                // Perbaikan selesai
-                                function completeRepair() {
-                                    const repairId = document.getElementById('form_repair_id').value; // Ambil dari modal
-                                    if (confirm('Tandai perbaikan ini sebagai selesai?')) {
-                                        window.location.href = `/repair/complete/${repairId}`;
-                                    }
-                                }
-                            </script>
                         @elseif (auth()->user()->role == 'opd')
                             <!-- Bagian khusus user -->
                             <div class="col-xl-12 col-sm-6">
@@ -337,97 +369,323 @@
                                     </div>
                                 </div>
                             </div>
+                        @else
+                            <div class="card border-0 shadow-lg pb-0 hover-card"
+                                style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
+                                <div class="card-header border-0 pb-0">
+                                    <h5 class="card-title heading">Messages</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div id="DZ_W_Todo3" class="widget-media dz-scroll height200 my-4 px-4">
+
+                                        @if ($teamRepairs->isEmpty())
+                                            <div class="text-center my-4">
+                                                <img src="{{ asset('assets/images/no-messages.png') }}" alt="No Messages"
+                                                    style="width: 130px;">
+                                            </div>
+                                        @else
+                                            <ul class="timeline">
+                                                @foreach ($teamRepairs as $repair)
+                                                    <li>
+                                                        <div class="timeline-panel p-3 border rounded shadow-sm">
+                                                            <div class="d-flex align-items-start mb-2">
+                                                                <div class="media me-2">
+                                                                    🛠️
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h7 class="mb-1 fw-bold">
+                                                                        Perbaikan Dijadwalkan pada Anda
+                                                                    </h7>
+                                                                    <small class="text-success d-block">
+                                                                        <span><i class="fas fa-calendar-alt"></i>
+                                                                            {{ \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') }}</span>
+                                                                        | <span><strong>
+                                                                                {{ $repair->user->instansi->nama_instansi ?? '-' }}</strong></span>
+                                                                    </small>
+                                                                    <small class="text-muted d-block">
+                                                                        <strong>Diminta oleh:
+                                                                        </strong>{{ $repair->user->name ?? '-' }} (NIP:
+                                                                        {{ $repair->user->nip ?? '-' }})
+                                                                    </small>
+                                                                    <small class="text-muted d-block mb-2">
+                                                                        <strong>Permintaan:
+                                                                        </strong>{{ $repair->repair ?? 'Tidak ada deskripsi' }}
+                                                                    </small>
+                                                                    <div class="d-flex align-items-center gap-2 mt-2">
+                                                                        <form action="{{ route('repairs.complete', $repair->id_repair) }}" method="POST" class="d-inline">
+                                                                            @csrf
+                                                                            <button type="submit" class="btn btn-success btn-sm">Selesai</button>
+                                                                        </form>
+
+                                                                        @php
+                                                                            $repairData = [
+                                                                                'user' => [
+                                                                                    'name' => $repair->user->name,
+                                                                                    'instansi' =>
+                                                                                        $repair->user->instansi
+                                                                                            ->nama_instansi ??
+                                                                                        'Tidak ada instansi',
+                                                                                    'nip' => $repair->user->nip,
+                                                                                ],
+                                                                                'repair'=>$repair->repair,
+                                                                                'scheduled_date' => \Carbon\Carbon::parse(
+                                                                                    $repair->scheduled_date,
+                                                                                )->translatedFormat('d F Y'),
+                                                                                'teams' => $repair->teams
+                                                                                    ->pluck('name')
+                                                                                    ->toArray(),
+                                                                            ];
+                                                                        @endphp
+
+                                                                        <a href="javascript:void(0)"
+                                                                            class="btn btn-warning btn-xs"
+                                                                            onclick="openTeamModal({{ $repair->id_repair }})"
+                                                                            data-repair='@json($repairData)'>
+                                                                            <i class="fas fa-eye"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+
+                                    </div>
+                                </div>
+                            </div>
+
                         @endif
 
                     </div>
 
                 </div>
-
             </div>
 
-            <div class="col-lg-12">
-                <div class="card border-0 shadow-lg pb-0 hover-card"
-                    style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-sm mb-0">
-                                <thead class="text-white bg-primary text-center">
-                                    <tr>
-                                        <th class="align-middle">No</th>
-                                        <th class="align-middle">Name</th>
-                                        <th class="align-middle pe-7">Acara</th>
-                                        <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
-
-                                        <th class="align-middle">Status</th>
-                                        <th class="align-middle">Date Time</th>
-
-
-                                        <th class="align-middle">Action</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody id="orders" class="text-center">
-                                    @foreach ($orders as $get)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $get->name }}</td>
-                                            {{-- <td>
-                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
-                                                        alt="Item Image" width="50">
-                                                </td> --}}
-                                            <td>{{ $get->events }}</td>
-                                            <td>{{ $get->phone }}</td>
-
-
-                                            @if ($get->status == 'success')
-                                                <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
-                                            @elseif($get->status == 'canceled')
-                                                <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
-                                            @elseif($get->status == 'pending')
-                                                <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
-                                            @endif
 
 
 
-                                            <td>{{ $get->created_at }}</td>
+            <!-- Modal Global di luar Loop -->
+            <div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content rounded-3 border border-primary">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-white"><i class="fas fa-info-circle"></i> Detail Tim dan Jadwal Perbaikan
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
 
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <h6 class="text-primary"><i class="fas fa-user"></i> Data Pelapor</h6>
+                                <div class="p-3 border rounded bg-light opacity-50 text-white">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><strong>Nama:</strong> <span id="modalPelaporNama" class="text-white"></span>
+                                        </li>
+                                        <li><strong>Instansi:</strong> <span id="modalPelaporInstansi"
+                                                class="text-white"></span></li>
+                                        <li><strong>NIP:</strong> <span id="modalPelaporNip" class="text-white"></span>
+                                        </li>
+                                        <li><strong>Problem:</strong> <span id="modalPelaporRepair" class="text-white"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
-                                            <td class="text-end ps-0">
-                                                <div class="dropdown dropup d-flex justify-content-center">
-                                                    <a href="javascript:void(0);"
-                                                        class="btn-link btn sharp tp-btn btn-primary pill"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <svg width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                                                                fill="#A098AE" />
-                                                        </svg>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <button type="button" class="dropdown-item"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal{{ $get->id_orders }}">
-                                                            Edit
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
+                            <div class="mb-3">
+                                <h6 class="text-primary"><i class="fas fa-calendar-alt"></i> Jadwal Perbaikan</h6>
+                                <div class="p-3 border rounded bg-light opacity-50 text-white">
+                                    <p class="mb-0">
+                                        <strong>Tanggal:</strong> <span id="modalTanggalPerbaikan"
+                                            class="text-white"></span>
+                                    </p>
+                                </div>
+                            </div>
 
+                            <div>
+                                <h6 class="text-primary"><i class="fas fa-users"></i> Tim yang Diberangkatkan</h6>
+                                <div class="p-3 border rounded bg-light opacity-50 text-white">
+                                    <ul id="modalTimList" class="list-unstyled mb-0"></ul>
+                                </div>
+                            </div>
+                        </div>
 
-                                        </tr>
-                                    @endforeach
-
-                                    <tr class="no-data" style="display: none;">
-                                        <td colspan="7" class="text-center py-3">Tidak ada data di keranjang</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Tutup
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <script>
+                document.getElementById('teamSearch').addEventListener('keyup', function() {
+                    let filter = this.value.toLowerCase();
+                    let teamItems = document.querySelectorAll('#teamList .team-item');
+
+                    teamItems.forEach(function(item) {
+                        let label = item.querySelector('label').textContent.toLowerCase();
+                        if (label.includes(filter)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
+
+            <script>
+                // Buka modal dan simpan repair_id
+                function openScheduleModal(repairId) {
+                    document.getElementById('form_repair_id').value = repairId;
+
+                    let form = document.getElementById('scheduleRepairForm');
+                    form.action = `/repair/schedule/${repairId}`;
+
+                    var repairModal = new bootstrap.Modal(document.getElementById('repairActionModal'));
+                    repairModal.show();
+                }
+
+
+                // Menampilkan form atur perbaikan
+                function showScheduleForm() {
+                    document.getElementById('scheduleRepairForm').style.display = 'block';
+                }
+
+                function submitForm() {
+                    document.getElementById('scheduleRepairForm').submit();
+                }
+
+                // Perbaikan selesai
+                function completeRepair() {
+                    const repairId = document.getElementById('form_repair_id').value; // Ambil dari modal
+                    if (confirm('Tandai perbaikan ini sebagai selesai?')) {
+                        window.location.href = `/repair/complete/${repairId}`;
+                    }
+                }
+            </script>
+
+            <!-- Script untuk handle klik dan isi modal -->
+            <script>
+                function openTeamModal(repairId) {
+                    const button = document.querySelector(`[onclick="openTeamModal(${repairId})"]`);
+                    const repairData = JSON.parse(button.getAttribute('data-repair'));
+
+                    // Isi data ke dalam modal
+                    document.getElementById('modalPelaporNama').innerText = repairData.user.name;
+                    document.getElementById('modalPelaporInstansi').innerText = repairData.user.instansi;
+                    document.getElementById('modalPelaporNip').innerText = repairData.user.nip;
+                    document.getElementById('modalTanggalPerbaikan').innerText = repairData.scheduled_date;
+                    document.getElementById('modalPelaporRepair').innerText = repairData.repair;
+
+                    const teamList = document.getElementById('modalTimList');
+                    teamList.innerHTML = '';
+
+                    if (repairData.teams.length > 0) {
+                        repairData.teams.forEach(team => {
+                            const li = document.createElement('li');
+                            li.innerText = team;
+                            teamList.appendChild(li);
+                        });
+                    } else {
+                        teamList.innerHTML = '<li class="text-muted">Belum ada tim yang diberangkatkan.</li>';
+                    }
+
+                    // Tampilkan modalnya
+                    const modal = new bootstrap.Modal(document.getElementById('teamModal'));
+                    modal.show();
+                }
+            </script>
+
+
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'team')
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-lg pb-0 hover-card"
+                        style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm mb-0">
+                                    <thead class="text-white bg-primary text-center">
+                                        <tr>
+                                            <th class="align-middle">No</th>
+                                            <th class="align-middle">Name</th>
+                                            <th class="align-middle pe-7">Acara</th>
+                                            <th class="align-middle" style="min-width: 12.5rem;">No Telepon</th>
+
+                                            <th class="align-middle">Status</th>
+                                            <th class="align-middle">Date Time</th>
+
+
+                                            <th class="align-middle">Action</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="orders" class="text-center">
+                                        @foreach ($orders as $get)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $get->name }}</td>
+                                                {{-- <td>
+                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
+                                                        alt="Item Image" width="50">
+                                                </td> --}}
+                                                <td>{{ $get->events }}</td>
+                                                <td>{{ $get->phone }}</td>
+
+
+                                                @if ($get->status == 'success')
+                                                    <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
+                                                @elseif($get->status == 'canceled')
+                                                    <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
+                                                @elseif($get->status == 'pending')
+                                                    <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
+                                                @endif
+
+
+
+                                                <td>{{ $get->created_at }}</td>
+
+
+                                                <td class="text-end ps-0">
+                                                    <div class="dropdown dropup d-flex justify-content-center">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn-link btn sharp tp-btn btn-primary pill"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-9 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm18 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                                                    fill="#A098AE" />
+                                                            </svg>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <button type="button" class="dropdown-item"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">
+                                                                Edit
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                        @endforeach
+
+                                        <tr class="no-data" style="display: none;">
+                                            <td colspan="7" class="text-center py-3">Tidak ada data di keranjang</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
 
         </div>

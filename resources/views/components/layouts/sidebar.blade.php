@@ -34,7 +34,7 @@
                               <span class="nav-text">Dashboard</span>
                           </a>
                       </li>
-                      <li><a href="/item" class="" aria-expanded="false">
+                      <li><a href="/admin/item" class="" aria-expanded="false">
                               <i class="bi bi-box-seam"></i>
                               <span class="nav-text">Items</span>
                           </a>
@@ -83,7 +83,7 @@
                               <span class="nav-text">Logout</span>
                           </a>
                       </li>
-                  @else
+                  @elseif(auth()->user()->role == 'team')
                       <li><a href="/dashboard" class="" aria-expanded="false">
                               <i class="bi bi-speedometer2"></i>
                               <span class="nav-text">Dashboard</span>
@@ -92,6 +92,21 @@
                       <li><a href="/item" class="" aria-expanded="false">
                               <i class="bi bi-box-seam"></i>
                               <span class="nav-text">Items</span>
+                          </a>
+                      </li>
+                      <li class="separator">
+                          <hr>
+                      </li>
+
+                      <li><a href="/logout" class="" aria-expanded="false">
+                              <i class="bi bi-box-arrow-right"></i>
+                              <span class="nav-text">Logout</span>
+                          </a>
+                      </li>
+                  @else
+                      <li><a href="/Home" class="" aria-expanded="false">
+                              <i class="bi bi-house"></i>
+                              <span class="nav-text">Home</span>
                           </a>
                       </li>
                       <li class="separator">

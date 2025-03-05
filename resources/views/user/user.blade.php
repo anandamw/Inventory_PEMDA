@@ -110,7 +110,8 @@
                             <select class="form-control" id="role" name="role" style="opacity: 0.6;" required>
                                 <option value="" disabled selected>Pilih Role...</option>
                                 <option value="admin">Admin</option>
-                                <option value="user">User</option>
+                                <option value="team">team</option>
+                                <option value="opd">Opd</option>
                             </select>
                         </div>
                     </form>

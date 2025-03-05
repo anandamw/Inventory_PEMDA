@@ -81,7 +81,7 @@ class AuthController extends Controller
                 $redirectUrl = route('home');
                 break;
             case 'opd':
-                $redirectUrl = route('home');
+                $redirectUrl = route('opdhome');
                 break;
             case 'team':
                 $redirectUrl = route('home');

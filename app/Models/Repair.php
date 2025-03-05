@@ -13,7 +13,7 @@ class Repair extends Model
     protected $primaryKey = 'id_repair';
 
     protected $fillable = [
-        'user_id', 'admin_id', 'repair', 'scheduled_date', 'status'
+        'user_id', 'admin_id','team_id','repair', 'scheduled_date', 'status'
     ];
 
     public function user()
@@ -26,4 +26,9 @@ class Repair extends Model
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
+
+    public function teams()
+{
+    return $this->belongsToMany(User::class, 'repair_teams', 'repair_id', 'user_id');
+}
 }

@@ -2,12 +2,24 @@
             Nav header start
         ***********************************-->
   <div class="nav-header">
-      <a href="/dashboard" class="brand-logo">
-          <img src="{{ asset('')}}assets/images/logo/logo.png" class="logo-abbr" alt="">
-          <img src="{{ asset('')}}assets/images/logo/logo-text.png" class="brand-title" alt="">
-          <img src="{{ asset('')}}assets/images/logo/logo-color.png" class="logo-color" alt="">
-          <img src="{{ asset('')}}assets/images/logo/logo-text-color.png" class="brand-title color-title" alt="">
-      </a>
+      @if (auth()->user()->role == 'admin' || auth()->user()->role == 'team')
+          <a href="/dashboard" class="brand-logo">
+              <img src="{{ asset('assets/images/logo/logo.png') }}" class="logo-abbr" alt="">
+              <img src="{{ asset('assets/images/logo/logo-text.png') }}" class="brand-title" alt="">
+              <img src="{{ asset('assets/images/logo/logo-color.png') }}" class="logo-color" alt="">
+              <img src="{{ asset('assets/images/logo/logo-text-color.png') }}" class="brand-title color-title"
+                  alt="">
+          </a>
+      @else
+          <a href="/Home" class="brand-logo">
+              <img src="{{ asset('assets/images/logo/logo.png') }}" class="logo-abbr" alt="">
+              <img src="{{ asset('assets/images/logo/logo-text.png') }}" class="brand-title" alt="">
+              <img src="{{ asset('assets/images/logo/logo-color.png') }}" class="logo-color" alt="">
+              <img src="{{ asset('assets/images/logo/logo-text-color.png') }}" class="brand-title color-title"
+                  alt="">
+          </a>
+      @endif
+
       <div class="nav-control">
           <div class="hamburger">
               <span class="line"></span><span class="line"></span><span class="line"></span>

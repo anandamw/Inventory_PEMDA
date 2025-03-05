@@ -15,7 +15,6 @@
 
 
 
-
 <style>
     .dataTables_wrapper .dataTables_paginate .paginate_button {
         padding: 5px 10px;
