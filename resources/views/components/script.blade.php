@@ -17,6 +17,8 @@
 {{-- <script src="../../s3.tradingview.com/tv.js"></script> --}}
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script> --}}
 
+{{-- <script src="{{ asset('') }}assets/vendor/peity/jquery.peity.min.js"></script>
+<script src="{{ asset('') }}assets/js/plugins-init/piety-init.js"></script> --}}
 {{-- <script src="../../cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script> --}}
 
 <script src="{{ asset('') }}assets/vendor/raphael/raphael.min.js"></script>

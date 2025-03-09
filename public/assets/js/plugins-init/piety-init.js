@@ -174,8 +174,8 @@ var dlabPiety = function(){
     
     var handlePietyUpdatingChart = function(){
 		var t = $(".updating-chart").peity("line", {
-			fill: ['rgba(149, 104, 255,1)'],
-			stroke: 'rgb(149, 104, 255)', 
+			fill: ['var(--primary)'],
+			stroke: 'var(--secondary)', 
 			width: "100%",
 			height: 100
 		});
