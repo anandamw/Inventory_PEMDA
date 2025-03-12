@@ -8,6 +8,7 @@ use App\Models\Repair;
 use App\Models\Inventory;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -99,22 +100,22 @@ class DashboardController extends Controller
     }
 
     public function opdDashboard()
-{
-    $headerText = 'Home';
+    {
+        $headerText = 'Home';
 
-    // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
-    $repairs = Repair::with(['user', 'admin'])
-        ->where('user_id', auth()->id())
-        ->orderBy('created_at', 'desc')
-        ->get();
+        // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
+        $repairs = Repair::with(['user', 'admin'])
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    $userRepairs = Repair::where('user_id', auth()->id())
-        ->with('admin')
-        ->orderBy('scheduled_date', 'desc')
-        ->get();
+        $userRepairs = Repair::where('user_id', auth()->id())
+            ->with('admin')
+            ->orderBy('scheduled_date', 'desc')
+            ->get();
 
-    return view('home', compact('headerText', 'repairs', 'userRepairs'));
-}
+        return view('home', compact('headerText', 'repairs', 'userRepairs'));
+    }
 
 
     public function index()
@@ -142,8 +143,8 @@ class DashboardController extends Controller
                 'orders.users_id',
                 DB::raw('MAX(order_items.status) as status')
             )
-            ->where('users.role', Auth::user()->role)  
-            
+            ->where('users.role', Auth::user()->role)
+
             ->groupBy(
                 'orders.id_orders',
                 'users.name',
@@ -200,9 +201,9 @@ class DashboardController extends Controller
             ->get();
 
         toast('Selamat datang di layanan Logishub', 'info');
-            
+
         $teams = User::where('role', 'team')->get();
-        
+
         if (auth()->user()->role == 'admin') {
             // Admin lihat semua repair
             $repairs = Repair::with(['user', 'admin'])
@@ -215,118 +216,118 @@ class DashboardController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
-        
-$teamRepairs = Repair::whereHas('teams', function ($query) {
-    $query->where('users.id', auth()->id());  // cek user login apakah bagian dari team
-})
-->with(['user', 'admin'])
-->where('status', '!=', 'completed')
-->orderBy('scheduled_date', 'desc')
-->get();
-     
+
+        $teamRepairs = Repair::whereHas('teams', function ($query) {
+            $query->where('users.id', auth()->id());  // cek user login apakah bagian dari team
+        })
+            ->with(['user', 'admin'])
+            ->where('status', '!=', 'completed')
+            ->orderBy('scheduled_date', 'desc')
+            ->get();
+
         // Data perbaikan khusus untuk user yang login - yang dia kirimkan
         $userRepairs = Repair::where('user_id', auth()->id())
             ->with('admin')
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount' , 'repairs', 'userRepairs', 'teams','teamRepairs'));
+        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount', 'repairs', 'userRepairs', 'teams', 'teamRepairs'));
     }
 
-      /**
+    /**
      * Simpan laporan perbaikan dari user
      */
     public function storeRepair(Request $request)
     {
         \Log::info('Previous URL:', ['url' => url()->previous()]);
         \Log::info('Current Auth User:', ['user' => auth()->user()]);
-    
+
         $request->validate([
             'repair' => 'required|string',
         ]);
-    
+
         Repair::create([
             'user_id' => auth()->id(),
             'repair' => $request->repair,
             'status' => 'pending',
         ]);
-    
+
         return back()->with('success', 'Laporan perbaikan berhasil dikirim!');
     }
-    
-
-/**
- * Jadwalkan perbaikan oleh admin
- */
-public function scheduleRepair(Request $request, $id)
-{
-    $repair = Repair::findOrFail($id);
-
-    $request->validate([
-        'scheduled_date' => 'required|date',
-        'note' => 'nullable|string|max:255',
-        'team_ids' => 'required|array',
-        'team_ids.*' => 'exists:users,id'
-    ]);
-
-    $repair->update([
-        'status' => 'scheduled', // perbaikan status agar konsisten (huruf kecil/sesuai existing kamu)
-        'scheduled_date' => $request->scheduled_date,
-        'note' => $request->note,
-        'admin_id' => auth()->id()
-    ]);
-
-    // Hapus tim lama, masukkan tim baru
-    $repair->teams()->sync($request->team_ids);
 
 
-    return redirect()->back()->with('success', 'Perbaikan berhasil dijadwalkan.');
-}
+    /**
+     * Jadwalkan perbaikan oleh admin
+     */
+    public function scheduleRepair(Request $request, $id)
+    {
+        $repair = Repair::findOrFail($id);
 
-// Assign ke tim (biasanya dari form admin)
-public function assignToTeam(Request $request, $id)
-{
-    $request->validate([
-        'team_id' => 'required|exists:teams,id',
-    ]);
+        $request->validate([
+            'scheduled_date' => 'required|date',
+            'note' => 'nullable|string|max:255',
+            'team_ids' => 'required|array',
+            'team_ids.*' => 'exists:users,id'
+        ]);
 
-    $repair = Repair::findOrFail($id);
-    $repair->update([
-        'team_id' => $request->team_id,
-        'status' => 'in_progress',
-    ]);
+        $repair->update([
+            'status' => 'scheduled', // perbaikan status agar konsisten (huruf kecil/sesuai existing kamu)
+            'scheduled_date' => $request->scheduled_date,
+            'note' => $request->note,
+            'admin_id' => auth()->id()
+        ]);
 
-    return back()->with('success', 'Perbaikan telah diassign ke tim.');
-}
+        // Hapus tim lama, masukkan tim baru
+        $repair->teams()->sync($request->team_ids);
 
-// Tim klik "Selesai"
-public function complete($id)
-{
-    $repair = Repair::findOrFail($id);
 
-    // Ambil semua user_id yang termasuk dalam tim yang menangani repair ini
-    $teamUserIds = \DB::table('repair_teams')
-        ->where('repair_id', $repair->id_repair)
-        ->pluck('user_id')
-        ->toArray();
-
-    if (!in_array(auth()->id(), $teamUserIds)) {
-        return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
+        return redirect()->back()->with('success', 'Perbaikan berhasil dijadwalkan.');
     }
 
-    // Set repair ini dan semua repair yang punya team yang sama jadi completed
-    $relatedRepairs = \DB::table('repair_teams')
-        ->whereIn('user_id', $teamUserIds)
-        ->pluck('repair_id')
-        ->unique()
-        ->toArray();
+    // Assign ke tim (biasanya dari form admin)
+    public function assignToTeam(Request $request, $id)
+    {
+        $request->validate([
+            'team_id' => 'required|exists:teams,id',
+        ]);
 
-    Repair::whereIn('id_repair', $relatedRepairs)->update([
-        'status' => 'completed',
-    ]);
+        $repair = Repair::findOrFail($id);
+        $repair->update([
+            'team_id' => $request->team_id,
+            'status' => 'in_progress',
+        ]);
 
-    return back()->with('success', 'Semua perbaikan tim telah diselesaikan.');
-}
+        return back()->with('success', 'Perbaikan telah diassign ke tim.');
+    }
+
+    // Tim klik "Selesai"
+    public function complete($id)
+    {
+        $repair = Repair::findOrFail($id);
+
+        // Ambil semua user_id yang termasuk dalam tim yang menangani repair ini
+        $teamUserIds = \DB::table('repair_teams')
+            ->where('repair_id', $repair->id_repair)
+            ->pluck('user_id')
+            ->toArray();
+
+        if (!in_array(auth()->id(), $teamUserIds)) {
+            return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
+        }
+
+        // Set repair ini dan semua repair yang punya team yang sama jadi completed
+        $relatedRepairs = \DB::table('repair_teams')
+            ->whereIn('user_id', $teamUserIds)
+            ->pluck('repair_id')
+            ->unique()
+            ->toArray();
+
+        Repair::whereIn('id_repair', $relatedRepairs)->update([
+            'status' => 'completed',
+        ]);
+
+        return back()->with('success', 'Semua perbaikan tim telah diselesaikan.');
+    }
 
 
 
@@ -502,5 +503,12 @@ public function complete($id)
             DB::rollBack();
             return response()->json(['message' => 'Terjadi kesalahan!', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    public function notifToOpd()
+    {
+        $overdueRepairs = Repair::where('scheduled_date', '<', Carbon::today())
+            ->where('status', 'scheduled')
+            ->get();
     }
 }

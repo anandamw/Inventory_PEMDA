@@ -259,7 +259,7 @@
                                                                                     'Tidak ada instansi',
                                                                                 'nip' => $repair->user->nip,
                                                                             ],
-                                                                            'repair'=>$repair->repair,
+                                                                            'repair' => $repair->repair,
                                                                             'scheduled_date' => \Carbon\Carbon::parse(
                                                                                 $repair->scheduled_date,
                                                                             )->translatedFormat('d F Y'),
@@ -412,9 +412,12 @@
                                                                         </strong>{{ $repair->repair ?? 'Tidak ada deskripsi' }}
                                                                     </small>
                                                                     <div class="d-flex align-items-center gap-2 mt-2">
-                                                                        <form action="{{ route('repairs.complete', $repair->id_repair) }}" method="POST" class="d-inline">
+                                                                        <form
+                                                                            action="{{ route('repairs.complete', $repair->id_repair) }}"
+                                                                            method="POST" class="d-inline">
                                                                             @csrf
-                                                                            <button type="submit" class="btn btn-success btn-sm">Selesai</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-success btn-sm">Selesai</button>
                                                                         </form>
 
                                                                         @php
@@ -427,7 +430,7 @@
                                                                                         'Tidak ada instansi',
                                                                                     'nip' => $repair->user->nip,
                                                                                 ],
-                                                                                'repair'=>$repair->repair,
+                                                                                'repair' => $repair->repair,
                                                                                 'scheduled_date' => \Carbon\Carbon::parse(
                                                                                     $repair->scheduled_date,
                                                                                 )->translatedFormat('d F Y'),
@@ -471,7 +474,8 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content rounded-3 border border-primary">
                         <div class="modal-header bg-primary text-white">
-                            <h5 class="modal-title text-white"><i class="fas fa-info-circle"></i> Detail Tim dan Jadwal Perbaikan
+                            <h5 class="modal-title text-white"><i class="fas fa-info-circle"></i> Detail Tim dan Jadwal
+                                Perbaikan
                             </h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
@@ -488,7 +492,8 @@
                                                 class="text-white"></span></li>
                                         <li><strong>NIP:</strong> <span id="modalPelaporNip" class="text-white"></span>
                                         </li>
-                                        <li><strong>Problem:</strong> <span id="modalPelaporRepair" class="text-white"></span>
+                                        <li><strong>Problem:</strong> <span id="modalPelaporRepair"
+                                                class="text-white"></span>
                                         </li>
                                     </ul>
                                 </div>
