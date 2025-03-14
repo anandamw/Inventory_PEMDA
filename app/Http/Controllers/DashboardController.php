@@ -101,7 +101,10 @@ class DashboardController extends Controller
     public function opdDashboard()
 {
     $headerText = 'Home';
-
+    $totalInventories = Inventory::count();
+    $totalQuantity = \App\Models\Inventory::sum('quantity');
+    $users = User::whereIn('role', ['admin', 'team'])->get();
+    $totalTeams = User::where('role', 'team')->count();
     // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
     $repairs = Repair::with(['user', 'admin'])
         ->where('user_id', auth()->id())
@@ -113,7 +116,7 @@ class DashboardController extends Controller
         ->orderBy('scheduled_date', 'desc')
         ->get();
 
-    return view('home', compact('headerText', 'repairs', 'userRepairs'));
+    return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams'));
 }
 
 

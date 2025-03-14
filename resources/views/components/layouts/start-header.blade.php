@@ -322,9 +322,10 @@
 
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
                         @php
-                            // Filter hanya repair yang belum completed
-                            $pendingRepairs = $userRepairs;
-                        @endphp
+                        // Filter hanya repair yang belum completed
+                        $pendingRepairs = $userRepairs->sortByDesc('scheduled_date');
+                    @endphp
+                    
                         <ul class="list-unstyled">
                             @foreach ($pendingRepairs as $repair)
                                 <li>
