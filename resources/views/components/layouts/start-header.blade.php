@@ -42,8 +42,6 @@
                         @if (auth()->user()->role == 'admin')
                             <div class="sidebar-social-link">
                                 <ul>
-
-
                                     <li class="nav-item dropdown notification_dropdown">
                                         <a class="nav-link position-relative" href="javascript:void(0);" role="button"
                                             data-bs-toggle="dropdown">
@@ -171,6 +169,139 @@
                                         </script>
 
                                     </li>
+                                    <li class="nav-item dropdown notification_dropdown">
+                                        <a class="nav-link position-relative" href="javascript:void(0);" role="button"
+                                            data-bs-toggle="dropdown">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M4 4H20C21.1 4 22 4.9 22 6V16C22 17.1 21.1 18 20 18H7L3 22V6C3 4.9 3.9 4 5 4Z"
+                                                    fill="#130F26" />
+                                            </svg>
+
+                                            @if ($lowStockCount > 0 || $pendingAssetCount > 0)
+                                                <span class="badge bg-danger rounded-circle blink notification-badge">
+                                                    {{ $lowStockCount + $pendingAssetCount }}
+                                                </span>
+                                            @endif
+
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-end custom-tab-1"
+                                            data-bs-auto-close="outside" id="dropdownMenu">
+                                            <ul class="nav nav-tabs justify-content-center w-100">
+                                                <!-- Menengahkan dan buat full width -->
+                                                <li class="nav-item w-50 text-center">
+                                                    <!-- Membuat tab rata dan sejajar -->
+                                                    <a class="nav-link active" style="background: none;"
+                                                        data-bs-toggle="tab" href="#items">Pesan</a>
+                                                </li>
+                                            </ul>
+
+
+                                            <div class="tab-content p-3" style="height:380px; overflow-y:auto;">
+                                                <div id="items" class="tab-pane show active">
+                                                    <!-- Removed fade -->
+                                                    <ul class="timeline">
+                                                        @forelse ($overdueRepairs as $item)
+                                                            <li>
+                                                                <div class="timeline-panel d-flex align-items-center">
+                                                                    <div class="media me-3">
+                                                                        <a href="{{ url('/inventory') }}">
+                                                                            <img src="{{ asset('assets/images/no-image.png') }}"
+                                                                                alt="Item Image" width="50"
+                                                                                style="border-radius: 20%">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1 text-primary">
+                                                                            {{ $item->reporter_name }}
+                                                                            | {{ $item->scheduled_date }}
+                                                                        </h6>
+                                                                        <small class="d-block text-black">
+                                                                            {{ $item->repair }} | Tim :
+                                                                            <strong
+                                                                                class="text-danger">{{ $item->team_names }}</strong>
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @empty
+                                                            <li>
+                                                                <div class="timeline-panel">
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1">Tidak ada Pesan</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforelse
+                                                    </ul>
+
+
+
+                                                </div>
+
+                                                <div id="assets" class="tab-pane"> <!-- Removed fade -->
+                                                    <ul class="timeline">
+                                                        @forelse ($pendingAssets as $asset)
+                                                            <li>
+                                                                <div class="timeline-panel d-flex align-items-center">
+                                                                    <!-- Tambahkan d-flex untuk flexbox -->
+                                                                    <div class="media me-3">
+                                                                        <a href="{{ url('/aset') }}">
+                                                                            <img src="{{ $asset->image ? asset('uploads/aset/' . $asset->image) : asset('assets/images/no-image.png') }}"
+                                                                                alt="Item Image" width="50"
+                                                                                style="border-radius: 20%">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="media-body flex-grow-1">
+                                                                        <!-- flex-grow-1 agar teks menyesuaikan lebar -->
+                                                                        <h6 class="mb-1">{{ $asset->name }} ||
+                                                                            <span
+                                                                                class="text-danger">{{ $asset->status }}</span>
+                                                                        </h6>
+                                                                        <small
+                                                                            class="d-block">{{ $asset->description }}</small>
+                                                                    </div>
+                                                                </div>
+
+                                                            </li>
+                                                        @empty
+                                                            <li>
+                                                                <div class="timeline-panel">
+                                                                    <div class="media-body">
+                                                                        <h6 class="mb-1">Tidak ada aset yang pending
+                                                                        </h6>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        @endforelse
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                var tabs = document.querySelectorAll(".nav-link");
+                                                tabs.forEach(tab => {
+                                                    tab.addEventListener("click", function(event) {
+                                                        event.stopPropagation(); // Mencegah dropdown tertutup saat tab diklik
+                                                        setTimeout(() => {
+                                                            let activeTab = document.querySelector(".tab-pane.active");
+                                                            activeTab.style.opacity = "1";
+                                                        }, 100);
+                                                    });
+                                                });
+
+                                                // Mencegah dropdown tertutup saat kontennya diklik
+                                                document.getElementById("dropdownMenu").addEventListener("click", function(event) {
+                                                    event.stopPropagation();
+                                                });
+                                            });
+                                        </script>
+
+                                    </li>
                                 </ul>
                             </div>
                         @endif
@@ -194,11 +325,12 @@
                                 </li>
                             </ul>
                         @endif
-                            
+
                         <ul></ul>
                         <ul>
                             <li class="nav-item dropdown header-profile">
-                                <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link" href="javascript:void(0);" role="button"
+                                    data-bs-toggle="dropdown">
                                     <img width="50" height="50"
                                         src="{{ Auth::user()->profile ? asset(Auth::user()->profile) : asset('uploads/profile/no-profile.jpg') }}"
                                         alt="User Profile">

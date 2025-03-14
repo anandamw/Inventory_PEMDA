@@ -32,14 +32,12 @@ class AuthController extends Controller
     // login
     public function scanQrCode(Request $request)
     {
-        \Log::info("📥 Received QR Code Data: ", $request->all());
 
         $validator = Validator::make($request->all(), [
             'token' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            \Log::error("❌ Validation Failed: Token is required!");
             return response()->json([
                 'status' => 'error',
                 'message' => 'Token tidak boleh kosong.'
@@ -47,13 +45,11 @@ class AuthController extends Controller
         }
 
         $token = $request->input('token');
-        \Log::info("🔍 Searching for user with token: $token");
 
         // Cari user berdasarkan token
         $user = User::where('token', $token)->first();
 
         if (!$user) {
-            \Log::error("❌ Token not found in database!");
             return response()->json([
                 'status' => 'error',
                 'message' => 'Token tidak valid atau pengguna tidak ditemukan.'
@@ -62,19 +58,16 @@ class AuthController extends Controller
 
         // Pastikan token tidak kosong di database
         if (empty($user->token)) {
-            \Log::error("❌ Token found in database, but it's empty!");
             return response()->json([
                 'status' => 'error',
                 'message' => 'Token di database kosong. Tidak bisa login.'
             ], 401);
         }
 
-        \Log::info("✅ Token valid! Logging in user: " . $user->id);
         Auth::login($user);
 
         // Redirect berdasarkan role
         $role = $user->role;
-        \Log::info("🔍 User role: $role");
 
         switch ($role) {
             case 'admin':
