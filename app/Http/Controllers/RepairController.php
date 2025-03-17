@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Repair;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RepairController extends Controller
 {
@@ -16,15 +17,23 @@ class RepairController extends Controller
         $query = Repair::with(['user', 'user.instansi', 'teams'])
             ->where('status', 'completed');
     
-        // Filter by tanggal (jika ada request dari form filter)
         if (request()->has('start_date') && request()->has('end_date')) {
             $query->whereBetween('updated_at', [request('start_date'), request('end_date')]);
         }
     
         $repairs = $query->orderBy('updated_at', 'desc')->get();
     
-        return view('perbaikan.perbaikan', compact('headerText', 'repairs'));
+        // Rekap jumlah perbaikan per teknisi
+        $technicianRepairs = DB::table('repair_teams')
+            ->join('users', 'repair_teams.user_id', '=', 'users.id')
+            ->select('users.name', 'users.nip', DB::raw('COUNT(repair_teams.repair_id) as total_repairs'))
+            ->groupBy('users.name', 'users.nip')
+            ->orderByDesc('total_repairs')
+            ->get();
+    
+        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'technicianRepairs'));
     }
+    
     
 
     /**

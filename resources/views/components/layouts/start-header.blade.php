@@ -179,9 +179,9 @@
                                                     fill="#130F26" />
                                             </svg>
 
-                                            @if ($lowStockCount > 0 || $pendingAssetCount > 0)
+                                            @if ($overdueRepairsCount > 0)
                                                 <span class="badge bg-danger rounded-circle blink notification-badge">
-                                                    {{ $lowStockCount + $pendingAssetCount }}
+                                                    {{ $overdueRepairsCount }}
                                                 </span>
                                             @endif
 
@@ -190,118 +190,77 @@
                                         <div class="dropdown-menu dropdown-menu-end custom-tab-1"
                                             data-bs-auto-close="outside" id="dropdownMenu">
                                             <ul class="nav nav-tabs justify-content-center w-100">
-                                                <!-- Menengahkan dan buat full width -->
                                                 <li class="nav-item w-50 text-center">
-                                                    <!-- Membuat tab rata dan sejajar -->
                                                     <a class="nav-link active" style="background: none;"
                                                         data-bs-toggle="tab" href="#items">Pesan</a>
                                                 </li>
                                             </ul>
 
-
                                             <div class="tab-content p-3" style="height:380px; overflow-y:auto;">
                                                 <div id="items" class="tab-pane show active">
-                                                    <!-- Removed fade -->
-                                                    <ul class="timeline">
-                                                        @forelse ($overdueRepairs as $item)
-                                                            <li>
-                                                                <div class="timeline-panel d-flex align-items-center">
-                                                                    <div class="media me-3">
-                                                                        <a href="{{ url('/inventory') }}">
-                                                                            <img src="{{ asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50"
-                                                                                style="border-radius: 20%">
-                                                                        </a>
+                                                    @if ($overdueRepairs->isNotEmpty())
+                                                        <ul class="timeline">
+                                                            @foreach ($overdueRepairs as $item)
+                                                                <li>
+                                                                    <div
+                                                                        class="timeline-panel d-flex align-items-center">
+                                                                        <div class="media me-3">
+                                                                            <a href="{{ url('/inventory') }}">
+                                                                                <img src="{{ asset('assets/images/no-image.png') }}"
+                                                                                    alt="Item Image" width="50"
+                                                                                    style="border-radius: 20%;">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="media-body">
+                                                                            <h6 class="mb-1 text-primary">
+                                                                                {{ $item->reporter_name }} |
+                                                                                {{ $item->scheduled_date }}
+                                                                            </h6>
+                                                                            <small class="d-block text-black">
+                                                                                {{ $item->repair }} | Tim :
+                                                                                <strong
+                                                                                    class="text-danger">{{ $item->team_names }}</strong>
+                                                                            </small>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="media-body">
-                                                                        <h6 class="mb-1 text-primary">
-                                                                            {{ $item->reporter_name }}
-                                                                            | {{ $item->scheduled_date }}
-                                                                        </h6>
-                                                                        <small class="d-block text-black">
-                                                                            {{ $item->repair }} | Tim :
-                                                                            <strong
-                                                                                class="text-danger">{{ $item->team_names }}</strong>
-                                                                        </small>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        @empty
-                                                            <li>
-                                                                <div class="timeline-panel">
-                                                                    <div class="media-body">
-                                                                        <h6 class="mb-1">Tidak ada Pesan</h6>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        @endforelse
-                                                    </ul>
-
-
-
-                                                </div>
-
-                                                <div id="assets" class="tab-pane"> <!-- Removed fade -->
-                                                    <ul class="timeline">
-                                                        @forelse ($pendingAssets as $asset)
-                                                            <li>
-                                                                <div class="timeline-panel d-flex align-items-center">
-                                                                    <!-- Tambahkan d-flex untuk flexbox -->
-                                                                    <div class="media me-3">
-                                                                        <a href="{{ url('/aset') }}">
-                                                                            <img src="{{ $asset->image ? asset('uploads/aset/' . $asset->image) : asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50"
-                                                                                style="border-radius: 20%">
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="media-body flex-grow-1">
-                                                                        <!-- flex-grow-1 agar teks menyesuaikan lebar -->
-                                                                        <h6 class="mb-1">{{ $asset->name }} ||
-                                                                            <span
-                                                                                class="text-danger">{{ $asset->status }}</span>
-                                                                        </h6>
-                                                                        <small
-                                                                            class="d-block">{{ $asset->description }}</small>
-                                                                    </div>
-                                                                </div>
-
-                                                            </li>
-                                                        @empty
-                                                            <li>
-                                                                <div class="timeline-panel">
-                                                                    <div class="media-body">
-                                                                        <h6 class="mb-1">Tidak ada aset yang pending
-                                                                        </h6>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        @endforelse
-                                                    </ul>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        <div class="timeline-panel text-center">
+                                                            <h6 class="mb-1">Tidak ada Pesan</h6>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
+                                    </li>
 
-                                        <script>
-                                            document.addEventListener("DOMContentLoaded", function() {
-                                                var tabs = document.querySelectorAll(".nav-link");
-                                                tabs.forEach(tab => {
-                                                    tab.addEventListener("click", function(event) {
-                                                        event.stopPropagation(); // Mencegah dropdown tertutup saat tab diklik
-                                                        setTimeout(() => {
-                                                            let activeTab = document.querySelector(".tab-pane.active");
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            // Pastikan dropdown tidak tertutup saat tab atau isi dropdown diklik
+                                            document.querySelectorAll(".nav-link").forEach(tab => {
+                                                tab.addEventListener("click", function(event) {
+                                                    event.stopPropagation(); // Mencegah dropdown tertutup saat tab diklik
+                                                    setTimeout(() => {
+                                                        let activeTab = document.querySelector(".tab-pane.active");
+                                                        if (activeTab) {
                                                             activeTab.style.opacity = "1";
-                                                        }, 100);
-                                                    });
-                                                });
-
-                                                // Mencegah dropdown tertutup saat kontennya diklik
-                                                document.getElementById("dropdownMenu").addEventListener("click", function(event) {
-                                                    event.stopPropagation();
+                                                        }
+                                                    }, 100);
                                                 });
                                             });
-                                        </script>
 
-                                    </li>
+                                            // Cegah dropdown tertutup saat klik di dalam dropdown
+                                            let dropdownMenu = document.getElementById("dropdownMenu");
+                                            if (dropdownMenu) {
+                                                dropdownMenu.addEventListener("click", function(event) {
+                                                    event.stopPropagation();
+                                                });
+                                            }
+                                        });
+                                    </script>
+
                                 </ul>
                             </div>
                         @endif
@@ -454,10 +413,10 @@
 
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
                         @php
-                        // Filter hanya repair yang belum completed
-                        $pendingRepairs = $userRepairs->sortByDesc('scheduled_date');
-                    @endphp
-                    
+                            // Filter hanya repair yang belum completed
+                            $pendingRepairs = $userRepairs->sortByDesc('scheduled_date');
+                        @endphp
+
                         <ul class="list-unstyled">
                             @foreach ($pendingRepairs as $repair)
                                 <li>

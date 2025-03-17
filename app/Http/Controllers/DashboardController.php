@@ -100,7 +100,6 @@ class DashboardController extends Controller
     }
 
     public function opdDashboard()
-<<<<<<< HEAD
 {
     $headerText = 'Home';
     $totalInventories = Inventory::count();
@@ -112,29 +111,14 @@ class DashboardController extends Controller
         ->where('user_id', auth()->id())
         ->orderBy('created_at', 'desc')
         ->get();
-=======
-    {
-        $headerText = 'Home';
-
-        // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
-        $repairs = Repair::with(['user', 'admin'])
-            ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->get();
->>>>>>> 7322159f67c817cedea27a5af9402897f3937f61
 
         $userRepairs = Repair::where('user_id', auth()->id())
             ->with('admin')
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-<<<<<<< HEAD
     return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams'));
 }
-=======
-        return view('home', compact('headerText', 'repairs', 'userRepairs'));
-    }
->>>>>>> 7322159f67c817cedea27a5af9402897f3937f61
 
 
     public function index()
