@@ -304,33 +304,28 @@ class DashboardController extends Controller
     }
 
     // Tim klik "Selesai"
-    public function complete($id)
-    {
+    public function complete($id) {
+        // Cari perbaikan berdasarkan ID
         $repair = Repair::findOrFail($id);
-
-        // Ambil semua user_id yang termasuk dalam tim yang menangani repair ini
-        $teamUserIds = \DB::table('repair_teams')
+    
+        // Cek apakah user tergabung dalam tim yang menangani perbaikan ini
+        $isUserInTeam = \DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
-            ->pluck('user_id')
-            ->toArray();
-
-        if (!in_array(auth()->id(), $teamUserIds)) {
+            ->where('user_id', auth()->id())
+            ->exists();
+    
+        if (!$isUserInTeam) {
             return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
         }
-
-        // Set repair ini dan semua repair yang punya team yang sama jadi completed
-        $relatedRepairs = \DB::table('repair_teams')
-            ->whereIn('user_id', $teamUserIds)
-            ->pluck('repair_id')
-            ->unique()
-            ->toArray();
-
-        Repair::whereIn('id_repair', $relatedRepairs)->update([
-            'status' => 'completed',
+    
+        // Hanya update perbaikan yang dipilih
+        $repair->update([
+            'status' => 'completed'
         ]);
-
-        return back()->with('success', 'Semua perbaikan tim telah diselesaikan.');
+    
+        return back()->with('success', 'Perbaikan telah diselesaikan.');
     }
+    
 
 
 
