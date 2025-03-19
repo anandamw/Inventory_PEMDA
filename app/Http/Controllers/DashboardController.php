@@ -100,25 +100,25 @@ class DashboardController extends Controller
     }
 
     public function opdDashboard()
-{
-    $headerText = 'Home';
-    $totalInventories = Inventory::count();
-    $totalQuantity = \App\Models\Inventory::sum('quantity');
-    $users = User::whereIn('role', ['admin', 'team'])->get();
-    $totalTeams = User::where('role', 'team')->count();
-    // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
-    $repairs = Repair::with(['user', 'admin'])
-        ->where('user_id', auth()->id())
-        ->orderBy('created_at', 'desc')
-        ->get();
+    {
+        $headerText = 'Home';
+        $totalInventories = Inventory::count();
+        $totalQuantity = \App\Models\Inventory::sum('quantity');
+        $users = User::whereIn('role', ['admin', 'team'])->get();
+        $totalTeams = User::where('role', 'team')->count();
+        // Ambil repair yang terkait dengan user (sama kayak logic di index tadi)
+        $repairs = Repair::with(['user', 'admin'])
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $userRepairs = Repair::where('user_id', auth()->id())
             ->with('admin')
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-    return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams'));
-}
+        return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams'));
+    }
 
 
     public function index()
@@ -309,7 +309,7 @@ class DashboardController extends Controller
         $repair = Repair::findOrFail($id);
 
         // Ambil semua user_id yang termasuk dalam tim yang menangani repair ini
-        $teamUserIds = \DB::table('repair_teams')
+        $teamUserIds = DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
             ->pluck('user_id')
             ->toArray();
@@ -318,13 +318,14 @@ class DashboardController extends Controller
             return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
         }
 
-        // Set repair ini dan semua repair yang punya team yang sama jadi completed
-        $relatedRepairs = \DB::table('repair_teams')
-            ->whereIn('user_id', $teamUserIds)
+        // Ambil semua repair_id yang dikerjakan oleh tim yang sama
+        $relatedRepairs = DB::table('repair_teams')
+            ->whereIn('user_id', $teamUserIds) // Perbaikan di sini
             ->pluck('repair_id')
             ->unique()
             ->toArray();
 
+        // Update semua perbaikan yang terkait menjadi 'completed'
         Repair::whereIn('id_repair', $relatedRepairs)->update([
             'status' => 'completed',
         ]);

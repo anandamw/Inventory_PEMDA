@@ -84,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
                                 ->leftJoin('repair_teams', 'repairs.id_repair', '=', 'repair_teams.repair_id')  // Hubungan ke tim
                                 ->leftJoin('users as users_team', 'repair_teams.user_id', '=', 'users_team.id')  // Tim yang menangani
                                 ->where('repairs.scheduled_date', '<', Carbon::today())
-                                ->where('repairs.status', 'scheduled')
+                                ->where('repairs.status', 'failed')
                                 ->select(
                                     'repairs.id_repair',
                                     'repairs.repair',

@@ -39,7 +39,6 @@ return new class extends Migration
         });
 
 
-
         Schema::create('repairs', function (Blueprint $table) {
             $table->id('id_repair');
             $table->unsignedBigInteger('user_id'); // user yang melaporkan

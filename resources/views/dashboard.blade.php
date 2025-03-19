@@ -335,42 +335,55 @@
                                                                         <strong>Permintaan:
                                                                         </strong>{{ $repair->repair ?? 'Tidak ada deskripsi' }}
                                                                     </small>
-                                                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                                                        <form
-                                                                            action="{{ route('repairs.complete', $repair->id_repair) }}"
-                                                                            method="POST" class="d-inline">
-                                                                            @csrf
+
+
+                                                                    @if (\Carbon\Carbon::parse($repair->scheduled_date)->lessThan(\Carbon\Carbon::today()))
+                                                                        <div class="d-flex align-items-center gap-2 mt-2">
                                                                             <button type="submit"
-                                                                                class="btn btn-success btn-sm">Selesai</button>
-                                                                        </form>
+                                                                                class="btn btn-danger btn-sm"
+                                                                                disabled>Failed</button>
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="d-flex align-items-center gap-2 mt-2">
+                                                                            <form
+                                                                                action="{{ route('repairs.complete', $repair->id_repair) }}"
+                                                                                method="POST" class="d-inline">
+                                                                                @csrf
+                                                                                <button type="submit"
+                                                                                    class="btn btn-success btn-sm">Selesai
+                                                                                </button>
+                                                                            </form>
 
-                                                                        @php
-                                                                            $repairData = [
-                                                                                'user' => [
-                                                                                    'name' => $repair->user->name,
-                                                                                    'instansi' =>
-                                                                                        $repair->user->instansi
-                                                                                            ->nama_instansi ??
-                                                                                        'Tidak ada instansi',
-                                                                                    'nip' => $repair->user->nip,
-                                                                                ],
-                                                                                'repair' => $repair->repair,
-                                                                                'scheduled_date' => \Carbon\Carbon::parse(
-                                                                                    $repair->scheduled_date,
-                                                                                )->translatedFormat('d F Y'),
-                                                                                'teams' => $repair->teams
-                                                                                    ->pluck('name')
-                                                                                    ->toArray(),
-                                                                            ];
-                                                                        @endphp
+                                                                            @php
+                                                                                $repairData = [
+                                                                                    'user' => [
+                                                                                        'name' => $repair->user->name,
+                                                                                        'instansi' =>
+                                                                                            $repair->user->instansi
+                                                                                                ->nama_instansi ??
+                                                                                            'Tidak ada instansi',
+                                                                                        'nip' => $repair->user->nip,
+                                                                                    ],
+                                                                                    'repair' => $repair->repair,
+                                                                                    'scheduled_date' => \Carbon\Carbon::parse(
+                                                                                        $repair->scheduled_date,
+                                                                                    )->translatedFormat('d F Y'),
+                                                                                    'teams' => $repair->teams
+                                                                                        ->pluck('name')
+                                                                                        ->toArray(),
+                                                                                ];
+                                                                            @endphp
 
-                                                                        <a href="javascript:void(0)"
-                                                                            class="btn btn-warning btn-xs"
-                                                                            onclick="openTeamModal({{ $repair->id_repair }})"
-                                                                            data-repair='@json($repairData)'>
-                                                                            <i class="fas fa-eye"></i>
-                                                                        </a>
-                                                                    </div>
+                                                                            <a href="javascript:void(0)"
+                                                                                class="btn btn-warning btn-xs"
+                                                                                onclick="openTeamModal({{ $repair->id_repair }})"
+                                                                                data-repair='@json($repairData)'>
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    @endif
+
+
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Repair;
+use App\Models\RateUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
 class RepairController extends Controller
@@ -13,6 +16,7 @@ class RepairController extends Controller
      */
     public function index()
     {
+ 
         $headerText = 'Rekap Perbaikan';
         $query = Repair::with(['user', 'user.instansi', 'teams'])
             ->where('status', 'completed');
@@ -22,24 +26,19 @@ class RepairController extends Controller
         }
 
         $repairs = $query->orderBy('updated_at', 'desc')->get();
-
-        // Rekap jumlah perbaikan per teknisi berdasarkan status completed, failed, dan scheduled
-        $technicianRepairs = DB::table('repair_teams')
-            ->join('users', 'repair_teams.user_id', '=', 'users.id')
+        $rateUser = RateUser::join('users', 'rateuser.users_id', '=', 'users.id')
             ->select(
                 'users.name',
                 'users.nip',
-                DB::raw('COUNT(repair_teams.repair_id) as total_repairs'),
-                DB::raw('SUM(CASE WHEN repairs.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
-                DB::raw('SUM(CASE WHEN repairs.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
-                DB::raw('SUM(CASE WHEN repairs.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs')
+                \DB::raw('COUNT(rateuser.id) as total_repairs'),
+                \DB::raw('SUM(CASE WHEN rateuser.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
+                \DB::raw('SUM(CASE WHEN rateuser.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
+                \DB::raw('SUM(CASE WHEN rateuser.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs')
             )
-            ->join('repairs', 'repair_teams.repair_id', '=', 'repairs.id_repair')
             ->groupBy('users.name', 'users.nip')
-            ->orderByDesc('total_repairs')
             ->get();
 
-        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'technicianRepairs'));
+        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser'));
     }
 
     /**
