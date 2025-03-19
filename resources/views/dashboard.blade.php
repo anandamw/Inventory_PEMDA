@@ -11,6 +11,7 @@
     </style>
 
 
+
     <div class="content-body">
         <!-- row -->
         <div class="container-fluid">
@@ -23,7 +24,7 @@
                                 <div class="card-body">
                                     <div class="buy-coin bubles-down">
                                         <div>
-                                            <h2>Grab Items Easy & Fast!</h2>
+                                            <h2>Grab Items Easy & Fast! </h2>
                                             <p>
                                                 Permudah ambil barang dengan sistem yang cepat dan transparan. Klik untuk
                                                 memulai!
@@ -75,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="col-xl-4">
                     <div class="col-xl-12 col-lg-6">

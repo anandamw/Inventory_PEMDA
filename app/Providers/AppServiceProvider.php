@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
                     ->select('name', 'quantity', 'image', 'status', 'description')
                     ->get();
                 $pendingAssetCount = $pendingAssets->count();
-                
+
 
 
                 // Share data ke semua view
@@ -64,6 +64,8 @@ class AppServiceProvider extends ServiceProvider
                     $userRepairs = collect();
                     $scheduledRepairsCount = 0;
                     $overdueRepairs = collect();
+                    $overdueRepairsCount = 0;
+
 
                     if (auth()->check()) {
                         $userRepairs = Repair::where('user_id', auth()->id())
@@ -96,8 +98,8 @@ class AppServiceProvider extends ServiceProvider
                                 ->orderBy('repairs.scheduled_date', 'desc')
                                 ->get();
 
- 
-                               $overdueRepairsCount = $overdueRepairs->count();
+
+                            $overdueRepairsCount = $overdueRepairs->count();
                         }
                     }
                     $view->with('overdueRepairs', $overdueRepairs);

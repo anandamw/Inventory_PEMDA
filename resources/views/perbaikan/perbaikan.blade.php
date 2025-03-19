@@ -68,19 +68,25 @@
                                     <table id="example3" class="display" style="min-width: 845px">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Name</th>
-                                                <th>NIP</th>
-                                                <th>Total Repairs</th>
+                                                <th class="text-center">No</th>
+                                                <th class="text-center">Name</th>
+                                                <th class="text-center">NIP</th>
+                                                <th class="text-center">Total Repairs</th>
+                                                <th class="text-center">Completed Repairs</th>
+                                                <th class="text-center">Failed Repairs</th>
+                                                <th class="text-center">Scheduled Repairs</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($technicianRepairs as $index => $tech)
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $tech->name }}</td>
-                                                    <td>{{ $tech->nip }}</td>
-                                                    <td>{{ $tech->total_repairs }}</td>
+                                                    <td class="text-center">{{ $index + 1 }}</td>
+                                                    <td class="text-center">{{ $tech->name }}</td>
+                                                    <td class="text-center">{{ $tech->nip }}</td>
+                                                    <td class="text-center">{{ $tech->total_repairs }}</td>
+                                                    <td class="text-center text-success">{{ $tech->completed_repairs }}</td>
+                                                    <td class="text-center text-danger">{{ $tech->failed_repairs }}</td>
+                                                    <td class="text-center text-warning">{{ $tech->scheduled_repairs }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

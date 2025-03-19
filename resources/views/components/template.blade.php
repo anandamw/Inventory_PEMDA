@@ -6,15 +6,21 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <meta name="keywords" content="" />
-    <meta name="author" content="" />
-    <meta name="robots" content="" />
+    <meta name="keywords"
+        content="Ananda Maulana Wahyudi, Nama Teman Anda, Portfolio, Web Developer, Programmer, UI/UX, Software Engineer" />
+    <meta name="author" content="Ananda Maulana Wahyudi, Nama Teman Anda" />
+    <meta name="robots" content="index, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="CryptoZone : Crypto Trading Admin Bootstrap 5 Template" />
-    <meta property="og:title" content="CryptoZone  :Crypto Trading Admin Bootstrap 5 Template" />
-    <meta property="og:description" content="CryptoZone  :Crypto Trading Admin  Admin Bootstrap 5 Template" />
-    <meta property="og:image" content="social-image.png" />
-    <meta name="format-detection" content="telephone=no" />
+    <meta name="description"
+        content="Portofolio Ananda Maulana Wahyudi & Nama Teman Anda - Web Developer & Software Engineer" />
+    <meta property="og:title" content="Ananda Maulana Wahyudi & Nama Teman Anda | Portfolio" />
+    <meta property="og:description"
+        content="Lihat portofolio dan proyek kami di bidang pengembangan web, UI/UX, dan software engineering." />
+    <meta property="og:image" content="portfolio-image.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
@@ -141,7 +147,7 @@
                 <p>
                     Copyright © Developed by
                     <a href="https://mywebsite-fri.vercel.app/" target="_blank">FriemZ </a>&
-                    <a href="https://dexignzone.com/" target="_blank">Anandamw</a>
+                    <a href="https://anandamw.turbo-main.com/" target="_blank">Anandamw</a>
                     2025
                 </p>
             </div>
