@@ -344,6 +344,7 @@
                                                                                 disabled>Failed</button>
                                                                         </div>
                                                                     @else
+                                                                        {{-- tombol selesai --}}
                                                                         <div class="d-flex align-items-center gap-2 mt-2">
                                                                             <form
                                                                                 action="{{ route('repairs.complete', $repair->id_repair) }}"

@@ -72,7 +72,6 @@
                                                 <th class="text-center">Total Repairs</th>
                                                 <th class="text-center">Completed Repairs</th>
                                                 <th class="text-center">Failed Repairs</th>
-                                               
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,7 +84,6 @@
                                                     <td class="text-center text-success">{{ $tech->completed_repairs }}
                                                     </td>
                                                     <td class="text-center text-danger">{{ $tech->failed_repairs }}</td>
-                                                     
                                                 </tr>
                                             @endforeach
                                         </tbody>

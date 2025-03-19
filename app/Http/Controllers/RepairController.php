@@ -14,32 +14,47 @@ class RepairController extends Controller
     /**
      * Display a listing of the resource.
      */
+  
     public function index()
     {
- 
         $headerText = 'Rekap Perbaikan';
+
+        // **1. Ambil data Repair yang sudah completed**
         $query = Repair::with(['user', 'user.instansi', 'teams'])
             ->where('status', 'completed');
 
+        // **2. Filter berdasarkan tanggal jika tersedia**
         if (request()->has('start_date') && request()->has('end_date')) {
-            $query->whereBetween('updated_at', [request('start_date'), request('end_date')]);
+            $startDate = request('start_date');
+            $endDate = request('end_date');
+
+            if ($startDate && $endDate) { // Pastikan tidak null
+                $query->whereBetween('updated_at', [$startDate, $endDate]);
+            }
         }
 
+        // **3. Ambil data repair yang sudah difilter**
         $repairs = $query->orderBy('updated_at', 'desc')->get();
-        $rateUser = RateUser::join('users', 'rateuser.users_id', '=', 'users.id')
+
+        // **4. Ambil rekap data tim perbaikan dari repair_teams**
+        $rateUser = DB::table('repair_teams')
+            ->join('users', 'repair_teams.user_id', '=', 'users.id') // Perbaiki nama tabel
             ->select(
                 'users.name',
                 'users.nip',
-                \DB::raw('COUNT(rateuser.id) as total_repairs'),
-                \DB::raw('SUM(CASE WHEN rateuser.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
-                \DB::raw('SUM(CASE WHEN rateuser.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
-                \DB::raw('SUM(CASE WHEN rateuser.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs')
+                DB::raw('COUNT(repair_teams.id) as total_repairs'),
+                DB::raw('SUM(CASE WHEN repair_teams.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
+                DB::raw('SUM(CASE WHEN repair_teams.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
+                DB::raw('SUM(CASE WHEN repair_teams.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs')
             )
+            ->where('users.role', 'team') // Hanya ambil user dengan role "team"
             ->groupBy('users.name', 'users.nip')
             ->get();
 
+        // **5. Return view dengan data yang sudah diperbaiki**
         return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser'));
     }
+
 
     /**
      * Show the form for creating a new resource.

@@ -58,6 +58,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('repair_id');
             $table->unsignedBigInteger('user_id'); // ini user team
+            $table->string('status')->nullable();
+            $table->string('repair')->nullable();
             $table->timestamps();
 
             $table->foreign('repair_id')->references('id_repair')->on('repairs')->onDelete('cascade');
