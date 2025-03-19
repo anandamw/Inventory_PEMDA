@@ -306,17 +306,15 @@ class DashboardController extends Controller
     // Tim klik "Selesai"
     public function complete($id)
     {
+        // Cari perbaikan berdasarkan ID
         $repair = Repair::findOrFail($id);
 
         // Ambil semua user_id yang termasuk dalam tim yang menangani repair ini
         $teamUserIds = DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
-            ->pluck('user_id')
-            ->toArray();
+            ->where('user_id', auth()->id())
+            ->exists();
 
-        if (!in_array(auth()->id(), $teamUserIds)) {
-            return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
-        }
 
         // Ambil semua repair_id yang dikerjakan oleh tim yang sama
         $relatedRepairs = DB::table('repair_teams')
@@ -330,8 +328,9 @@ class DashboardController extends Controller
             'status' => 'completed',
         ]);
 
-        return back()->with('success', 'Semua perbaikan tim telah diselesaikan.');
+        return back()->with('success', 'Perbaikan telah diselesaikan.');
     }
+
 
 
 
