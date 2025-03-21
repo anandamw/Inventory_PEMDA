@@ -224,9 +224,10 @@ class DashboardController extends Controller
             $query->where('users.id', auth()->id());  // cek user login apakah bagian dari team
         })
             ->with(['user', 'admin'])
-            ->where('status', '!=', 'completed')
+            ->whereNotIn('status', ['completed', 'expired']) // Menyembunyikan status 'completed' dan 'expired'
             ->orderBy('scheduled_date', 'desc')
             ->get();
+
 
         // Data perbaikan khusus untuk user yang login - yang dia kirimkan
         $userRepairs = Repair::where('user_id', auth()->id())
@@ -273,19 +274,41 @@ class DashboardController extends Controller
             'team_ids.*' => 'exists:users,id'
         ]);
 
+        if ($repair->status === 'failed') {
+            // Create a new repair entry with 'scheduled' status
+            $newRepair = Repair::create([
+                'user_id' => $repair->user_id,
+                'admin_id' => auth()->id(),
+                'repair' => $repair->repair,
+                'scheduled_date' => $request->scheduled_date,
+                'status' => 'scheduled',
+            ]);
+
+            // Assign new team to the newly created repair
+            $newRepair->teams()->sync($request->team_ids);
+
+            // Update the old failed repair status to 'expired'
+            $repair->update([
+                'status' => 'expired'
+            ]);
+
+            return redirect()->back()->with('success', 'Previous failed repair has been marked as expired, and a new repair has been scheduled.');
+        }
+
+        // If the repair is not 'failed', update the existing repair
         $repair->update([
-            'status' => 'scheduled', // perbaikan status agar konsisten (huruf kecil/sesuai existing kamu)
+            'status' => 'scheduled',
             'scheduled_date' => $request->scheduled_date,
             'note' => $request->note,
             'admin_id' => auth()->id()
         ]);
 
-        // Hapus tim lama, masukkan tim baru
         $repair->teams()->sync($request->team_ids);
 
-
-        return redirect()->back()->with('success', 'Perbaikan berhasil dijadwalkan.');
+        return redirect()->back()->with('success', 'Repair successfully scheduled.');
     }
+
+
 
     // Assign ke tim (biasanya dari form admin)
     public function assignToTeam(Request $request, $id)
@@ -304,28 +327,29 @@ class DashboardController extends Controller
     }
 
     // Tim klik "Selesai"
-    public function complete($id) {
+    public function complete($id)
+    {
         // Cari perbaikan berdasarkan ID
         $repair = Repair::findOrFail($id);
-    
+
         // Cek apakah user tergabung dalam tim yang menangani perbaikan ini
         $isUserInTeam = \DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
             ->where('user_id', auth()->id())
             ->exists();
-    
+
         if (!$isUserInTeam) {
             return back()->with('error', 'Anda tidak tergabung dalam tim perbaikan ini.');
         }
-    
+
         // Hanya update perbaikan yang dipilih
         $repair->update([
             'status' => 'completed'
         ]);
-    
+
         return back()->with('success', 'Perbaikan telah diselesaikan.');
     }
-    
+
 
 
 

@@ -23,10 +23,6 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-
-
-
-
     /**
      * Bootstrap any application services.
      */
@@ -47,8 +43,6 @@ class AppServiceProvider extends ServiceProvider
                     ->select('name', 'quantity', 'image', 'status', 'description')
                     ->get();
                 $pendingAssetCount = $pendingAssets->count();
-
-
 
                 // Share data ke semua view
                 View::share('lowStockCount', $lowStockCount);

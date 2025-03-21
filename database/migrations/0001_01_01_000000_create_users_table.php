@@ -46,7 +46,7 @@ return new class extends Migration
             $table->text('repair'); // deskripsi perbaikan
             $table->date('scheduled_date')->nullable(); // jadwal perbaikan
             $table->unsignedBigInteger('team_id')->nullable(); // Team yang ditugaskan
-            $table->enum('status', ['pending', 'scheduled', 'completed', 'failed'])->default('pending');
+            $table->enum('status', ['pending', 'scheduled', 'completed', 'failed', 'expired'])->default('pending');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

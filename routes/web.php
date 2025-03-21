@@ -19,8 +19,7 @@ Route::middleware('guest')->group(function () {
         Route::post('/scan-qr-code', [AuthController::class, 'scanQrCode'])->name('scanQrCode');
         Route::get('/qrcode', [QrCodeController::class, 'index']);
         Route::post('/register/action', [AuthController::class, 'register_action'])->name('register_action');
-Route::get('/instansi/search', [InstansiController::class, 'search']);
-
+        Route::get('/instansi/search', [InstansiController::class, 'search']);
 });
 
 // auth middleware
@@ -38,10 +37,10 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/inventory/{id_inventories}/update', [InventoryController::class, 'update']);
                 Route::delete('/inventory/{id_inventories}/destroy', [InventoryController::class, 'destroy'])->name('inventory.destroy');
 
+                Route::get('/user', [UserController::class, 'index']);
                 Route::put('/user/{id}/update', [UserController::class, 'update'])->name('user.update');
                 Route::delete('/user/{id}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
                 Route::post('/user/store', [UserController::class, 'store']);
-                Route::get('/user', [UserController::class, 'index']);
                 Route::get('/user/check-duplicate', [UserController::class, 'checkDuplicate']);
 
                 Route::get('/autocomplete-instansi', [InstansiController::class, 'autocomplete']);

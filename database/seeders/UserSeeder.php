@@ -32,6 +32,12 @@ class UserSeeder extends Seeder
                 'nip' => '2202310115',
                 'role' => 'team',
                 'token' => '456456'
+            ],
+            [
+                'name' => 'OPD BOSS',
+                'nip' => '2202310332',
+                'role' => 'opd',
+                'token' => '556665'
             ]
         ];
 

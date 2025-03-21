@@ -161,7 +161,8 @@
                             <label for="editRole" class="form-label">Role</label>
                             <select class="form-control" id="editRole" name="role" required>
                                 <option value="admin">Admin</option>
-                                <option value="user">User</option>
+                                <option value="team">Team</option>
+                                <option value="opd">OPD</option>
                             </select>
                         </div>
 

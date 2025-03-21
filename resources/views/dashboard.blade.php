@@ -39,6 +39,8 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="col-xl-12 col-xxl-12 col-sm-12 wow fadeInRight" data-wow-delay="0.3s">
                             <div class="card digital-cash shadow-lg border-0 pb-0 hover-card"
                                 style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); overflow: hidden; border-radius: 20px;">
@@ -128,9 +130,10 @@
                                     <div id="DZ_W_Todo3" class="widget-media dz-scroll height200 my-4 px-4">
                                         @php
                                             $pendingRepairs = $repairs->filter(function ($repair) {
-                                                return $repair->status != 'completed';
+                                                return !in_array($repair->status, ['completed', 'expired']);
                                             });
                                         @endphp
+
 
                                         @if ($pendingRepairs->isEmpty())
                                             <!-- Tampilkan gambar no-messages ketika tidak ada repair yang belum selesai -->
@@ -390,6 +393,7 @@
                                                         </div>
                                                     </li>
                                                 @endforeach
+
                                             </ul>
                                         @endif
 
