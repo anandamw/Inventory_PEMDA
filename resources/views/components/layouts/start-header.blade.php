@@ -420,34 +420,101 @@
                         <ul class="list-unstyled">
                             @foreach ($pendingRepairs as $repair)
                                 <li>
-                                    <div class="timeline-panel d-flex align-items-center p-3"
-                                        style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                                        <div class="media me-3">
-                                            <a href="#">
-                                                <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
-                                                    alt="Item Image" width="50" height="50"
-                                                    style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
-                                            </a>
+                                    <div class="timeline-panel d-flex align-baseline justify-content-start flex-column p-3"
+                                        style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); text-align: left;">
+                                        <div class="d-flex align-items-center">
+                                            <div class="media me-3">
+                                                <a href="#">
+                                                    <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
+                                                        alt="Item Image" width="50" height="50"
+                                                        style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="mb-1" style="font-weight: 600; color: #333;">
+                                                    {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
+                                                </h6>
+                                                <small class="d-block">
+                                                    <i class="fas fa-calendar-alt me-1"></i>
+                                                    {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
+                                                    - <span
+                                                        style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">{{ $repair->status }}</span>
+                                                </small>
+                                            </div>
                                         </div>
-                                        <div class="media-body">
-                                            <h6 class="mb-1" style="font-weight: 600; color: #333;">
-                                                {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
-                                            </h6>
+                                        <style>
+                                            .star-rating {
+                                                direction: rtl;
+                                                display: inline-flex;
+                                            }
 
-                                            <small class="d-block">
-                                                <i class="fas fa-calendar-alt me-1"></i>
-                                                {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
-                                                - <span
-                                                    style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">{{ $repair->status }}</span>
-                                            </small>
+                                            .star-rating input {
+                                                display: none;
+                                            }
+
+                                            .star-rating label {
+                                                font-size: 2rem;
+                                                color: gray;
+                                                cursor: pointer;
+                                                transition: color 0.3s ease-in-out;
+                                            }
+
+                                            .star-rating input:checked~label,
+                                            .star-rating label:hover,
+                                            .star-rating label:hover~label {
+                                                color: gold;
+                                            }
+                                        </style>
+
+                                        <div class="ms-4">
+                                            <form id="ratingForm-{{ $repair->id_repair }}" method="POST"
+                                                class="rating-form">
+                                                <input type="hidden" name="id_item"
+                                                    value="{{ $repair->id_repair }}">
+                                                @php
+                                                    $isReadOnly =
+                                                        isset($repair->repairTeam) && $repair->repairTeam->rating;
+                                                @endphp
+                                                @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
+                                                    <!-- Rating Bintang -->
+                                                    <div class="star-rating d-flex justify-content-end ms-5"
+                                                        data-rating="{{ optional($repair->repairTeam)->rating ?? 0 }}">
+                                                        @for ($i = 6; $i >= 1; $i--)
+                                                            <input type="radio" name="rating"
+                                                                id="star{{ $i }}-{{ $repair->id_repair }}"
+                                                                value="{{ $i }}"
+                                                                {{ optional($repair->repairTeam)->rating == $i ? 'checked' : '' }}
+                                                                {{ $isReadOnly ? 'disabled' : '' }}>
+                                                            <label
+                                                                for="star{{ $i }}-{{ $repair->id_repair }}">&#9733;</label>
+                                                        @endfor
+                                                    </div>
+                                                @endif
+                                                <!-- Komentar -->
+                                                <div class="d-flex align-items-center justify-content-start "
+                                                    style="margin-left: 50px">
+                                                    @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
+                                                        <textarea class="form-control" name="comment" id="comment-{{ $repair->id_repair }}" rows="3"
+                                                            placeholder="Tulis komentar Anda..." {{ $isReadOnly ? 'readonly' : '' }}>{{ optional($repair->repairTeam)->comment }}</textarea>
+                                                    @else
+                                                        @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
+                                                            Komentar: <p class="fw-bold mb-0 me-2">
+                                                                {{ optional($repair->repairTeam)->comment }}</p>
+                                                        @endif
+                                                    @endif
+                                                </div>
+
+                                                @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
+                                                    <button type="submit"
+                                                        class="btn btn-primary mt-3 ms-5">Kirim</button>
+                                                @endif
+                                            </form>
                                         </div>
                                     </div>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
-
-
 
                 </div>
             </div>
@@ -457,3 +524,60 @@
 <!--**********************************
                             Header end ti-comment-alt
                         ***********************************-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $(".rating-form").submit(function(event) {
+            event.preventDefault(); // Mencegah refresh halaman
+
+            var form = $(this);
+            var formData = form.serialize();
+            var repairId = form.find("input[name='id_item']").val();
+
+            $.ajax({
+                url: "{{ route('update.rating.comment') }}",
+                type: "POST",
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function(response) {
+                    if (response.message) {
+                        $("#responseMessage-" + repairId).html(
+                            '<div class="alert alert-success">' + response.message +
+                            '</div>');
+
+                        // Update tampilan rating & komentar tanpa refresh
+                        $("#displayRating-" + repairId).text(response.rating ? response
+                            .rating : "-");
+                        $("#displayComment-" + repairId).text(response.comment ? response
+                            .comment : "-");
+
+                        // Cek radio button untuk update bintang
+                        $("input[name='rating'][value='" + response.rating + "']").prop(
+                            "checked", true);
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".star-rating").forEach(function(ratingDiv) {
+            let rating = ratingDiv.getAttribute("data-rating");
+            let labels = ratingDiv.querySelectorAll("label");
+
+            labels.forEach((label, index) => {
+                let value = labels.length - index;
+                if (value <= rating) {
+                    label.style.color = "gold";
+                }
+            });
+        });
+    });
+</script>

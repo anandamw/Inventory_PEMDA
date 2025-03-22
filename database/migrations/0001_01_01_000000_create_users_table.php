@@ -60,6 +60,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id'); // ini user team
             $table->string('status')->nullable();
             $table->string('repair')->nullable();
+
+            
+            $table->integer('rating')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
 
             $table->foreign('repair_id')->references('id_repair')->on('repairs')->onDelete('cascade');

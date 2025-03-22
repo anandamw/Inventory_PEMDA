@@ -1,18 +1,24 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
+// routes/web.php
+use Illuminate\Support\Facades\Validator;
+
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\QrCodeController;
-// routes/web.php
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RepairController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RekapitulasiController;
+use App\Models\RepairTeam;
 
 Route::middleware('guest')->group(function () {
         Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -84,6 +90,40 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['role:opd'])->group(function () {
                 Route::post('/repair/store', [DashboardController::class, 'storeRepair'])->name('repair.store');
                 Route::get('/Home', [DashboardController::class, 'opdDashboard'])->name('opdhome');
+                Route::post('/update-rating-comment', function (Request $request) {
+                        // Validasi request
+                        $validator = Validator::make($request->all(), [
+                                'id_item' => 'required|exists:repair_teams,repair_id',
+                                'rating' => 'nullable|integer|min:1|max:6',
+                                'comment' => 'nullable|string'
+                        ]);
+
+                        if ($validator->fails()) {
+                                return response()->json(['errors' => $validator->errors()], 422);
+                        }
+
+                        try {
+                                // Update data di database
+                                RepairTeam::where('repair_id', $request->id_item)
+                                        ->update([
+                                                'rating' => $request->rating,
+                                                'comment' => $request->comment,
+                                                'updated_at' => now()
+                                        ]);
+
+                                // Ambil data terbaru
+                                $updatedData = RepairTeam::where('repair_id', $request->id_item)
+                                        ->first();
+
+                                return response()->json([
+                                        'message' => 'Berhasil diperbarui',
+                                        'rating' => $updatedData->rating,
+                                        'comment' => $updatedData->comment
+                                ], 200);
+                        } catch (\Exception $e) {
+                                return response()->json(['error' => $e->getMessage()], 500);
+                        }
+                })->name('update.rating.comment');
         });
 
         Route::middleware(['role:team'])->group(function () {

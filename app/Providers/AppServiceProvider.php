@@ -63,9 +63,10 @@ class AppServiceProvider extends ServiceProvider
 
                     if (auth()->check()) {
                         $userRepairs = Repair::where('user_id', auth()->id())
-                            ->with('admin')
+                            ->with(['admin', 'repairTeam']) // Pastikan memuat relasi repairTeam
                             ->orderBy('scheduled_date', 'desc')
                             ->get();
+
 
                         $scheduledRepairsCount = $userRepairs->where('status', 'scheduled')->count();
 
