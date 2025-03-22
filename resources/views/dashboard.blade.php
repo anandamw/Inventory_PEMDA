@@ -146,17 +146,33 @@
                                                 @foreach ($pendingRepairs as $repair)
                                                     <li>
                                                         <div class="timeline-panel">
-                                                            <div
-                                                                class="d-flex align-items-center justify-content-center me-2">
-                                                                <img class=" rounded-3" alt="image" width="50"
-                                                                    src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/no-profile.jpg') }}">
-                                                            </div>
+
+                                                            @if ($repair->status == 'failed')
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-center me-2">
+                                                                    <img class=" rounded-3" alt="image" width="50"
+                                                                        src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/warning.jpg') }}">
+                                                                </div>
+                                                            @elseif ($repair->status == 'scheduled')
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-center me-2">
+                                                                    <img class=" rounded-3" alt="image" width="50"
+                                                                        src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/calendar.jpg') }}">
+                                                                </div>
+                                                            @else
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-center me-2">
+                                                                    <img class=" rounded-3" alt="image" width="50"
+                                                                        src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/no-profile.jpg') }}">
+                                                                </div>
+                                                            @endif
+
                                                             <div class="media-body">
-                                                                <h5 class="mb-1">{{ $repair->user->name }}
+                                                                <h5 class="mb-1 fw-bold">{{ $repair->user->name }}
                                                                 </h5>
                                                                 <!-- Baris baru untuk jadwal (jika ada) -->
                                                                 @if ($repair->scheduled_date)
-                                                                    <small class="d-block text-success">
+                                                                    <small class="d-block text-success fw-bold">
                                                                         On
                                                                         {{ \Carbon\Carbon::parse($repair->scheduled_date)->format('d-m-Y') }}
                                                                         by <span
@@ -165,6 +181,16 @@
                                                                 @endif
 
                                                                 <p class="mb-1">{{ $repair->repair }}</p>
+                                                                @if ($repair->status == 'failed')
+                                                                    <p class="fw-bold text-danger">Tidak melaksanakan
+                                                                        tugasnya</p>
+                                                                @elseif ($repair->status == 'pending')
+                                                                    <p class="fw-bold text-black">Menunggu konfirmasi</p>
+                                                                @elseif ($repair->status == 'scheduled')
+                                                                    <p class="fw-bold text-warning">Dijadwalkan</p>
+                                                                @elseif ($repair->status == 'completed')
+                                                                    <p class="fw-bold">Selesai</p>
+                                                                @endif
                                                                 <div class="d-flex align-items-center gap-2">
                                                                     <button class="btn btn-primary btn-xs shadow"
                                                                         onclick="openScheduleModal({{ $repair->id_repair }})">
@@ -316,9 +342,19 @@
                                                     <li>
                                                         <div class="timeline-panel p-3 border rounded shadow-sm">
                                                             <div class="d-flex align-items-start mb-2">
-                                                                <div class="media me-2">
-                                                                    🛠️
-                                                                </div>
+
+                                                                @if ($repair->status == 'failed')
+                                                                    <img class="rounded-circle me-2" alt="image"
+                                                                        width="50" 
+                                                                        src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/warning.jpg') }}">
+                                                                @elseif ($repair->status == 'scheduled')
+                                                                    <div class="media me-2">
+                                                                        🛠️
+                                                                    </div>
+                                                                @endif
+
+                                                                {{-- 8888 --}}
+
                                                                 <div class="media-body">
                                                                     <h7 class="mb-1 fw-bold">
                                                                         Perbaikan Dijadwalkan pada Anda

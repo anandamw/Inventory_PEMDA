@@ -206,7 +206,7 @@
                                                                         class="timeline-panel d-flex align-items-center">
                                                                         <div class="media me-3">
                                                                             <a href="{{ url('/inventory') }}">
-                                                                                <img src="{{ asset('assets/images/no-image.png') }}"
+                                                                                <img src="{{ asset('assets/images/warning.jpg') }}"
                                                                                     alt="Item Image" width="50"
                                                                                     style="border-radius: 20%;">
                                                                             </a>
@@ -216,11 +216,12 @@
                                                                                 {{ $item->reporter_name }} |
                                                                                 {{ $item->scheduled_date }}
                                                                             </h6>
-                                                                            <small class="d-block text-black">
-                                                                                {{ $item->repair }} | Tim :
+                                                                            <small class="d-block text-black fw-bold">  
+                                                                                {{ $item->repair }} | Team :
                                                                                 <strong
                                                                                     class="text-danger">{{ $item->team_names }}</strong>
                                                                             </small>
+                                                                            <p class="fw-bold"> Tidak melaksanakan tugasnya</p>
                                                                         </div>
                                                                     </div>
                                                                 </li>
