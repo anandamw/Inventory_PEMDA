@@ -13,7 +13,7 @@ class RatingController extends Controller
 {
 
 
-    public function addrating(Request $request, $id)
+    public function addrating(Request $request)
     {
         // Validasi request
         $validator = Validator::make($request->all(), [

@@ -216,12 +216,13 @@
                                                                                 {{ $item->reporter_name }} |
                                                                                 {{ $item->scheduled_date }}
                                                                             </h6>
-                                                                            <small class="d-block text-black fw-bold">  
+                                                                            <small class="d-block text-black fw-bold">
                                                                                 {{ $item->repair }} | Team :
                                                                                 <strong
                                                                                     class="text-danger">{{ $item->team_names }}</strong>
                                                                             </small>
-                                                                            <p class="fw-bold"> Tidak melaksanakan tugasnya</p>
+                                                                            <p class="fw-bold"> Tidak melaksanakan
+                                                                                tugasnya</p>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -414,12 +415,27 @@
 
                     <div class="tab-pane fade" id="nav-sell" role="tabpanel" aria-labelledby="nav-sell-tab">
                         @php
-                            // Filter hanya repair yang belum completed
-                            $pendingRepairs = $userRepairs->sortByDesc('scheduled_date');
+                            $sortedRepairs = $userRepairs->sortBy(function ($repair) {
+                                // Tentukan urutan berdasarkan status dan apakah sudah memiliki rating & komentar
+                                if ($repair->repairTeam && $repair->repairTeam->status == 'completed') {
+                                    if (!$repair->repairTeam->rating && !$repair->repairTeam->comment) {
+                                        return 3; // Completed tanpa rating dan komentar → Urutan 1 (paling atas)
+                                    }
+                                    return 4; // Completed dengan rating/komentar → Urutan 3
+                                } elseif ($repair->status == 'scheduled') {
+                                    return 2; // Scheduled → Urutan 2
+                                } elseif ($repair->status == 'pending') {
+                                    return 1; // Failed atau Expired → Urutan 4 (paling bawah)
+                                } elseif ($repair->status == 'failed' || $repair->status == 'expired') {
+                                    return 5; // Failed atau Expired → Urutan 4 (paling bawah)
+                                }
+                                return 6; // Status lain (jika ada)
+                            });
                         @endphp
 
+
                         <ul class="list-unstyled">
-                            @foreach ($pendingRepairs as $repair)
+                            @foreach ($sortedRepairs as $repair)
                                 <li>
                                     <div class="timeline-panel d-flex align-baseline justify-content-start flex-column p-3"
                                         style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); text-align: left;">
@@ -492,15 +508,19 @@
                                                     </div>
                                                 @endif
                                                 <!-- Komentar -->
-                                                <div class="d-flex align-items-center justify-content-start "
+                                                <div class="d-flex align-items-center justify-content-start"
                                                     style="margin-left: 50px">
                                                     @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
-                                                        <textarea class="form-control" name="comment" id="comment-{{ $repair->id_repair }}" rows="3"
-                                                            placeholder="Tulis komentar Anda..." {{ $isReadOnly ? 'readonly' : '' }}>{{ optional($repair->repairTeam)->comment }}</textarea>
+                                                        <textarea class="form-control " style="margin-left: -10px" name="comment" id="comment-{{ $repair->id_repair }}"
+                                                            rows="3" placeholder="Tulis komentar Anda..." {{ $isReadOnly ? 'readonly' : '' }}>{{ optional($repair->repairTeam)->comment }}</textarea>
                                                     @else
                                                         @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
-                                                            Komentar: <p class="fw-bold mb-0 me-2">
-                                                                {{ optional($repair->repairTeam)->comment }}</p>
+                                                            <div
+                                                                class="d-flex align-items-center justify-content-center">
+                                                                <div>Komentar:</div>
+                                                                <div class="fw-bold mb-0 ms-2 uppercase">
+                                                                    {{ optional($repair->repairTeam)->comment }}</div>
+                                                            </div>
                                                         @endif
                                                     @endif
                                                 </div>
@@ -535,6 +555,7 @@
             var form = $(this);
             var formData = form.serialize();
             var repairId = form.find("input[name='id_item']").val();
+            var commentField = $("#comment-" + repairId);
 
             $.ajax({
                 url: "{{ route('update.rating.comment') }}",
@@ -552,12 +573,17 @@
                         // Update tampilan rating & komentar tanpa refresh
                         $("#displayRating-" + repairId).text(response.rating ? response
                             .rating : "-");
-                        $("#displayComment-" + repairId).text(response.comment ? response
-                            .comment : "-");
 
-                        // Cek radio button untuk update bintang
-                        $("input[name='rating'][value='" + response.rating + "']").prop(
-                            "checked", true);
+                        // Ganti tampilan textarea menjadi teks statis
+                        if (response.comment) {
+                            commentField.replaceWith(
+                                '<p class="mb-0 me-2">Komentar: ' + response
+                                .comment + '</p>'
+                            );
+                        }
+
+                        // Sembunyikan tombol submit setelah sukses
+                        form.find("button[type='submit']").hide();
                     }
                 },
                 error: function(xhr) {
