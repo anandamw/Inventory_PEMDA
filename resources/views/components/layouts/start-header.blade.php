@@ -354,16 +354,16 @@
                             @if ($scheduledRepairsCount > 0)
                                 <span class="badge bg-danger rounded-circle blink"
                                     style="
-                                font-size: 8px;
-                                width: 14px; /* agak dinaikin biar muat angka */
-                                height: 14px;
-                                aspect-ratio: 1 / 1; /* ini kunci agar bentuknya lingkaran sempurna */
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                transform: translateY(-5px);
-                                padding: 0;
-                                line-height: 1;">
+                                        font-size: 8px;
+                                        width: 14px; /* agak dinaikin biar muat angka */
+                                        height: 14px;
+                                        aspect-ratio: 1 / 1; /* ini kunci agar bentuknya lingkaran sempurna */
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        transform: translateY(-5px);
+                                        padding: 0;
+                                        line-height: 1;">
                                     {{ $scheduledRepairsCount }}
                                 </span>
                             @endif
@@ -436,103 +436,224 @@
 
                         <ul class="list-unstyled">
                             @foreach ($sortedRepairs as $repair)
-                                <li>
-                                    <div class="timeline-panel d-flex align-baseline justify-content-start flex-column p-3"
-                                        style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); text-align: left;">
-                                        <div class="d-flex align-items-center">
-                                            <div class="media me-3">
-                                                <a href="#">
-                                                    <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
-                                                        alt="Item Image" width="50" height="50"
-                                                        style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <h6 class="mb-1" style="font-weight: 600; color: #333;">
-                                                    {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
-                                                </h6>
-                                                <small class="d-block">
-                                                    <i class="fas fa-calendar-alt me-1"></i>
-                                                    {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
-                                                    - <span
-                                                        style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">{{ $repair->status }}</span>
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <style>
-                                            .star-rating {
-                                                direction: rtl;
-                                                display: inline-flex;
-                                            }
-
-                                            .star-rating input {
-                                                display: none;
-                                            }
-
-                                            .star-rating label {
-                                                font-size: 2rem;
-                                                color: gray;
-                                                cursor: pointer;
-                                                transition: color 0.3s ease-in-out;
-                                            }
-
-                                            .star-rating input:checked~label,
-                                            .star-rating label:hover,
-                                            .star-rating label:hover~label {
-                                                color: gold;
-                                            }
-                                        </style>
-
-                                        <div class="ms-4">
-                                            <form id="ratingForm-{{ $repair->id_repair }}" method="POST"
-                                                class="rating-form">
-                                                <input type="hidden" name="id_item"
-                                                    value="{{ $repair->id_repair }}">
-                                                @php
-                                                    $isReadOnly =
-                                                        isset($repair->repairTeam) && $repair->repairTeam->rating;
-                                                @endphp
-                                                @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
-                                                    <!-- Rating Bintang -->
-                                                    <div class="star-rating d-flex justify-content-end ms-5"
-                                                        data-rating="{{ optional($repair->repairTeam)->rating ?? 0 }}">
-                                                        @for ($i = 6; $i >= 1; $i--)
-                                                            <input type="radio" name="rating"
-                                                                id="star{{ $i }}-{{ $repair->id_repair }}"
-                                                                value="{{ $i }}"
-                                                                {{ optional($repair->repairTeam)->rating == $i ? 'checked' : '' }}
-                                                                {{ $isReadOnly ? 'disabled' : '' }}>
-                                                            <label
-                                                                for="star{{ $i }}-{{ $repair->id_repair }}">&#9733;</label>
-                                                        @endfor
+                                @if ($repair->status !== 'expired')
+                                    <li>
+                                        <div class="timeline-panel d-flex align-baseline justify-content-start flex-column p-3"
+                                            style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); text-align: left;">
+                                            <div class="d-flex align-items-center">
+                                                <div class="media me-3">
+                                                    <a href="#">
+                                                        <img src="{{ optional($repair->admin)->profile ? asset($repair->admin->profile) : asset('assets/images/no-profile.jpg') }}"
+                                                            alt="Item Image" width="50" height="50"
+                                                            style="border-radius: 50%; object-fit: cover; border: 2px solid #ddd;">
+                                                    </a>
+                                                </div>
+                                                <div
+                                                    class="media-body d-flex justify-content-between align-items-center">
+                                                    <div class="me-auto detail-card">
+                                                        <h6 class="mb-1" style="font-weight: 600; color: #333;">
+                                                            {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
+                                                            ID: {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
+                                                            {{ $repair->repair ?? 'ID tidak ditemukan' }}
+                                                        </h6>
+                                                        <small class="d-block">
+                                                            <i class="fas fa-calendar-alt me-1"></i>
+                                                            {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
+                                                            - <span
+                                                                style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">
+                                                                {{ $repair->status }}
+                                                            </span>
+                                                        </small>
                                                     </div>
-                                                @endif
-                                                <!-- Komentar -->
-                                                <div class="d-flex align-items-center justify-content-start"
-                                                    style="margin-left: 50px">
-                                                    @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
-                                                        <textarea class="form-control " style="margin-left: -10px" name="comment" id="comment-{{ $repair->id_repair }}"
-                                                            rows="3" placeholder="Tulis komentar Anda..." {{ $isReadOnly ? 'readonly' : '' }}>{{ optional($repair->repairTeam)->comment }}</textarea>
-                                                    @else
-                                                        @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
-                                                            <div
-                                                                class="d-flex align-items-center justify-content-center">
-                                                                <div>Komentar:</div>
-                                                                <div class="fw-bold mb-0 ms-2 uppercase">
-                                                                    {{ optional($repair->repairTeam)->comment }}</div>
-                                                            </div>
-                                                        @endif
-                                                    @endif
+                                                    <button class="btn btn-sm btn-primary show-progress">Show
+                                                        Progress</button>
                                                 </div>
 
-                                                @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
-                                                    <button type="submit"
-                                                        class="btn btn-primary mt-3 ms-5">Kirim</button>
-                                                @endif
-                                            </form>
+
+
+                                                <!-- Timeline (Hidden by Default) -->
+                                                <div class="timeline-card mt-3" style="display: none; width: 100%;">
+                                                    <div class="card">
+                                                        <div
+                                                            class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                                            <h4 class="card-title">Timeline</h4>
+                                                            <button
+                                                                class="btn btn-sm btn-danger close-progress">Close</button>
+                                                        </div>
+                                                        <div class="card-body p-0">
+                                                            <div class="widget-timeline dz-scroll height370 my-4 px-4">
+                                                                <ul class="timeline">
+
+
+
+
+
+                                                                    @if ($repair->status == 'completed')
+                                                                        <li>
+                                                                            <div class="timeline-badge primary"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Permintaan perbaikan
+                                                                                    sedang
+                                                                                    dikirim.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div class="timeline-badge warning"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                <h6 class="mb-0">Perbaikan sedang
+                                                                                    dijadwalkan
+                                                                                    oleh admin.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div class="timeline-badge success"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->completed_at)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Perbaikan telah
+                                                                                    selesai.
+                                                                                </h6>
+                                                                            </a>
+                                                                        </li>
+                                                                    @elseif($repair->status == 'pending')
+                                                                        <li>
+                                                                            <div class="timeline-badge primary"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Permintaan perbaikan
+                                                                                    sedang
+                                                                                    dikirim.</h6>
+                                                                            </a>ID:
+                                                                            {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
+                                                                        </li>
+                                                                    @elseif($repair->status == 'scheduled')
+                                                                        @if ($repair->repairTeam->id = $repair->repairTeam->status == 'failed')
+                                                                            <li>
+
+                                                                                <div class="timeline-badge danger">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan sedang
+                                                                                        dijadwalkan
+                                                                                        ulang. </h6>
+                                                                                </a>
+                                                                            </li>
+                                                                        @endif
+                                                                        <li>
+                                                                            <div class="timeline-badge primary"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Permintaan perbaikan
+                                                                                    sedang
+                                                                                    dikirim.</h6>
+                                                                            </a>
+                                                                        </li>
+
+
+                                                                        <li>
+                                                                            <div class="timeline-badge warning"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                <h6 class="mb-0">Perbaikan sedang
+                                                                                    dijadwalkan
+                                                                                    oleh admin.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                    @else
+                                                                        <li>
+                                                                            <div class="timeline-badge danger"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Perbaikan sedang
+                                                                                    dijadwalkan
+                                                                                    ulang.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                    @endif
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <style>
+                                                .star-rating {
+                                                    direction: rtl;
+                                                    display: inline-flex;
+                                                }
+
+                                                .star-rating input {
+                                                    display: none;
+                                                }
+
+                                                .star-rating label {
+                                                    font-size: 2rem;
+                                                    color: gray;
+                                                    cursor: pointer;
+                                                    transition: color 0.3s ease-in-out;
+                                                }
+
+                                                .star-rating input:checked~label,
+                                                .star-rating label:hover,
+                                                .star-rating label:hover~label {
+                                                    color: gold;
+                                                }
+                                            </style>
+
+                                            <div class="ms-4">
+                                                <form id="ratingForm-{{ $repair->id_repair }}" method="POST"
+                                                    class="rating-form">
+                                                    <input type="hidden" name="id_item"
+                                                        value="{{ $repair->id_repair }}">
+                                                    @php
+                                                        $isReadOnly =
+                                                            isset($repair->repairTeam) && $repair->repairTeam->rating;
+                                                    @endphp
+                                                    @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
+                                                        <!-- Rating Bintang -->
+                                                        <div class="star-rating d-flex justify-content-end ms-5"
+                                                            data-rating="{{ optional($repair->repairTeam)->rating ?? 0 }}">
+                                                            @for ($i = 6; $i >= 1; $i--)
+                                                                <input type="radio" name="rating"
+                                                                    id="star{{ $i }}-{{ $repair->id_repair }}"
+                                                                    value="{{ $i }}"
+                                                                    {{ optional($repair->repairTeam)->rating == $i ? 'checked' : '' }}
+                                                                    {{ $isReadOnly ? 'disabled' : '' }}>
+                                                                <label
+                                                                    for="star{{ $i }}-{{ $repair->id_repair }}">&#9733;</label>
+                                                            @endfor
+                                                        </div>
+                                                    @endif
+                                                    <!-- Komentar -->
+                                                    <div class="d-flex align-items-center justify-content-start"
+                                                        style="margin-left: 50px">
+                                                        @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
+                                                            <textarea class="form-control " style="margin-left: -10px" name="comment" id="comment-{{ $repair->id_repair }}"
+                                                                rows="3" placeholder="Tulis komentar Anda..." {{ $isReadOnly ? 'readonly' : '' }}>{{ optional($repair->repairTeam)->comment }}</textarea>
+                                                        @else
+                                                            @if ($repair->repairTeam && $repair->repairTeam->status == 'completed')
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-center">
+                                                                    <div>Komentar:</div>
+                                                                    <div class="fw-bold mb-0 ms-2 uppercase">
+                                                                        {{ optional($repair->repairTeam)->comment }}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+
+                                                    @if (!$isReadOnly && optional($repair->repairTeam)->status == 'completed')
+                                                        <button type="submit"
+                                                            class="btn btn-primary mt-3 ms-5">Kirim</button>
+                                                    @endif
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </div>
@@ -543,10 +664,40 @@
     </div>
 </div>
 <!--**********************************
-                            Header end ti-comment-alt
-                        ***********************************-->
+                                    Header end ti-comment-alt
+                                ***********************************-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".show-progress").forEach(button => {
+            button.addEventListener("click", function() {
+                let parent = this.closest(".media-body"); // Ambil parent yang sesuai
+                let timelineDiv = parent.nextElementSibling; // Ambil timeline berikutnya
+                let detailCard = parent.querySelector(".detail-card"); // Ambil detail card
 
+                // Sembunyikan tombol, sembunyikan detail, & tampilkan timeline
+                this.style.display = "none";
+                detailCard.style.display = "none";
+                timelineDiv.style.display = "block";
+            });
+        });
+
+        document.querySelectorAll(".close-progress").forEach(button => {
+            button.addEventListener("click", function() {
+                let timelineDiv = this.closest(".timeline-card"); // Ambil timeline yang terkait
+                let showButton = timelineDiv.previousElementSibling.querySelector(
+                    ".show-progress"); // Ambil tombol yang sesuai
+                let detailCard = timelineDiv.previousElementSibling.querySelector(
+                    ".detail-card"); // Ambil detail card
+
+                // Tampilkan tombol, tampilkan detail, & sembunyikan timeline
+                showButton.style.display = "block";
+                detailCard.style.display = "block";
+                timelineDiv.style.display = "none";
+            });
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $(".rating-form").submit(function(event) {

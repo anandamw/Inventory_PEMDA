@@ -21,7 +21,7 @@ use App\Http\Controllers\RekapitulasiController;
 use App\Models\RepairTeam;
 
 Route::middleware('guest')->group(function () {
-        Route::get('/', [AuthController::class, 'index'])->name('login');
+        Route::get('/login', [AuthController::class, 'index'])->name('login');
         Route::post('/scan-qr-code', [AuthController::class, 'scanQrCode'])->name('scanQrCode');
         Route::get('/qrcode', [QrCodeController::class, 'index']);
         Route::post('/register/action', [AuthController::class, 'register_action'])->name('register_action');
@@ -31,8 +31,11 @@ Route::middleware('guest')->group(function () {
 // auth middleware
 Route::middleware(['auth'])->group(function () {
 
-        Route::middleware(['role:admin'])->group(function () {
 
+        Route::get('/', [AuthController::class, 'permission']);
+
+        Route::middleware(['role:admin'])->group(function () {
+                Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
                 Route::get('/history', [HistoryController::class, 'index']);
 
                 Route::get('/item/create', [InventoryController::class, 'create'])->name('item.item_create');
@@ -94,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::middleware(['role:team'])->group(function () {
+                Route::get('/team/dashboard', [DashboardController::class, 'index'])->name('teamHome');
                 Route::get('/item', [InventoryController::class, 'index']);
                 Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
                 Route::post('/save', [SaveController::class, 'store']);
@@ -105,7 +109,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/repairs/{id}/assign', [DashboardController::class, 'assignToTeam'])->name('repairs.assign');
         Route::post('/repairs/{id}/complete', [DashboardController::class, 'complete'])->name('repairs.complete');
 
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
 
         Route::get('/profile', [UserController::class, 'profile']);
         Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');

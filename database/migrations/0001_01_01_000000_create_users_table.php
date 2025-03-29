@@ -61,7 +61,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('repair')->nullable();
 
-            
+
             $table->integer('rating')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();

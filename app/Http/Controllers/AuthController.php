@@ -77,7 +77,7 @@ class AuthController extends Controller
                 $redirectUrl = route('opdhome');
                 break;
             case 'team':
-                $redirectUrl = route('home');
+                $redirectUrl = route('teamHome');
                 break;
             default:
 
@@ -176,5 +176,21 @@ class AuthController extends Controller
     {
         Session::flush();
         return redirect()->route('login')->with('success', 'Logout berhasil');
+    }
+
+    public function permission()
+    {
+
+        $userRole = auth()->user()->role;
+
+        if ($userRole == 'admin') {
+            return redirect('/dashboard');
+        } elseif ($userRole == 'opd') {
+            return redirect('/Home');
+        } elseif ($userRole == 'team') {
+            return redirect('/team/dashboard');
+        } else {
+            return redirect()->route('login')->with('error', 'Unauthorized access.');
+        }
     }
 }

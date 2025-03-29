@@ -84,7 +84,7 @@
                           </a>
                       </li>
                   @elseif(auth()->user()->role == 'team')
-                      <li><a href="/dashboard" class="" aria-expanded="false">
+                      <li><a href="/team/dashboard" class="" aria-expanded="false">
                               <i class="bi bi-speedometer2"></i>
                               <span class="nav-text">Dashboard</span>
                           </a>
@@ -119,8 +119,6 @@
                           </a>
                       </li>
                   @endif
-
-
 
               </ul>
           </div>

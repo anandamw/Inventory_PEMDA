@@ -19,4 +19,6 @@ class RepairTeam extends Model
     {
         return $this->belongsTo(Repair::class, 'repair_id', 'id_repair');
     }
+
+    
 }

@@ -97,6 +97,8 @@ class AppServiceProvider extends ServiceProvider
                             $overdueRepairsCount = $overdueRepairs->count();
                         }
                     }
+
+
                     $view->with('overdueRepairs', $overdueRepairs);
                     $view->with('overdueRepairsCount', $overdueRepairsCount);
                     $view->with('userRepairs', $userRepairs);
