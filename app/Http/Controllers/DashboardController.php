@@ -112,8 +112,9 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+
         $userRepairs = Repair::where('user_id', auth()->id())
-            ->with('admin')
+            ->with(['admin', 'repairTeam'])
             ->orderBy('scheduled_date', 'desc')
             ->get();
 

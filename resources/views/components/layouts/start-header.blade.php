@@ -1,7 +1,6 @@
 <!--**********************************
             Header start
         ***********************************-->
-
 <style>
     .blink {
         animation: blink-animation 1s steps(5, start) infinite;
@@ -449,24 +448,45 @@
                                                     </a>
                                                 </div>
                                                 <div
-                                                    class="media-body d-flex justify-content-between align-items-center">
-                                                    <div class="me-auto detail-card">
+                                                    class="media-body d-flex align-items-center justify-content-between flex-wrap text-start w-100 gap-3">
+
+                                                    <!-- Info Admin -->
+                                                    <div class="detail-card me-3 mb-2">
                                                         <h6 class="mb-1" style="font-weight: 600; color: #333;">
                                                             {{ $repair->admin->name ?? 'Admin Tidak Diketahui' }}
-                                                            ID: {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
-                                                            {{ $repair->repair ?? 'ID tidak ditemukan' }}
                                                         </h6>
                                                         <small class="d-block">
                                                             <i class="fas fa-calendar-alt me-1"></i>
                                                             {{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->translatedFormat('d F Y') : 'Belum Dijadwalkan' }}
-                                                            - <span
+                                                            -
+                                                            <span
                                                                 style="color: {{ $repair->status == 'completed' ? 'green' : ($repair->status == 'scheduled' ? 'orange' : '#6c757d') }};">
-                                                                {{ $repair->status }}
+                                                                {{ ucfirst($repair->status) }}
                                                             </span>
                                                         </small>
                                                     </div>
-                                                    <button class="btn btn-sm btn-primary show-progress">Show
-                                                        Progress</button>
+
+                                                    @if ($repair->teams && $repair->teams->count())
+                                                        <div class="mb-2 me-3 team-info">
+                                                            <small style="font-size: 11px; color: #555;"><strong>Tim
+                                                                    yang mengerjakan:</strong></small>
+                                                            <div class="d-flex flex-wrap mt-1" style="gap: 6px;">
+                                                                @foreach ($repair->teams as $member)
+                                                                    <span class="badge"
+                                                                        style="background-color: #f0f0f0; color: #333; font-size: 10px;">
+                                                                        {{ $member->name }}
+                                                                    </span>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+
+                                                    <!-- Tombol -->
+                                                    <div class="mb-2">
+                                                        <button class="btn btn-sm btn-primary show-progress">Show
+                                                            Progress</button>
+                                                    </div>
                                                 </div>
 
 
@@ -483,12 +503,26 @@
                                                         <div class="card-body p-0">
                                                             <div class="widget-timeline dz-scroll height370 my-4 px-4">
                                                                 <ul class="timeline">
-
-
-
-
+                                                                    @php
+                                                                        $hasExpired =
+                                                                            $repairs
+                                                                                ->where('repair', $repair->repair)
+                                                                                ->where('status', 'expired')
+                                                                                ->count() > 0;
+                                                                    @endphp
 
                                                                     @if ($repair->status == 'completed')
+                                                                        @if ($hasExpired)
+                                                                            <li>
+                                                                                <div class="timeline-badge danger">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan sedang
+                                                                                        dijadwalkan ulang.</h6>
+                                                                                </a>
+                                                                            </li>
+                                                                        @endif
                                                                         <li>
                                                                             <div class="timeline-badge primary"></div>
                                                                             <a class="timeline-panel">
@@ -528,19 +562,35 @@
                                                                             {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
                                                                         </li>
                                                                     @elseif($repair->status == 'scheduled')
-                                                                        @if ($repair->repairTeam->id = $repair->repairTeam->status == 'failed')
+                                                                        @if ($hasExpired)
                                                                             <li>
-
                                                                                 <div class="timeline-badge danger">
                                                                                 </div>
                                                                                 <a class="timeline-panel">
                                                                                     <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
                                                                                     <h6 class="mb-0">Perbaikan sedang
-                                                                                        dijadwalkan
-                                                                                        ulang. </h6>
+                                                                                        dijadwalkan ulang.</h6>
                                                                                 </a>
                                                                             </li>
                                                                         @endif
+
+                                                                        <li>
+                                                                            <div class="timeline-badge primary"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                <h6 class="mb-0">Permintaan perbaikan
+                                                                                    sedang dikirim.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div class="timeline-badge warning"></div>
+                                                                            <a class="timeline-panel">
+                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                <h6 class="mb-0">Perbaikan sedang
+                                                                                    dijadwalkan oleh admin.</h6>
+                                                                            </a>
+                                                                        </li>
+                                                                    @else
                                                                         <li>
                                                                             <div class="timeline-badge primary"></div>
                                                                             <a class="timeline-panel">
@@ -561,7 +611,6 @@
                                                                                     oleh admin.</h6>
                                                                             </a>
                                                                         </li>
-                                                                    @else
                                                                         <li>
                                                                             <div class="timeline-badge danger"></div>
                                                                             <a class="timeline-panel">
@@ -615,7 +664,7 @@
                                                         <!-- Rating Bintang -->
                                                         <div class="star-rating d-flex justify-content-end ms-5"
                                                             data-rating="{{ optional($repair->repairTeam)->rating ?? 0 }}">
-                                                            @for ($i = 6; $i >= 1; $i--)
+                                                            @for ($i = 5; $i >= 1; $i--)
                                                                 <input type="radio" name="rating"
                                                                     id="star{{ $i }}-{{ $repair->id_repair }}"
                                                                     value="{{ $i }}"
@@ -671,28 +720,30 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll(".show-progress").forEach(button => {
             button.addEventListener("click", function() {
-                let parent = this.closest(".media-body"); // Ambil parent yang sesuai
-                let timelineDiv = parent.nextElementSibling; // Ambil timeline berikutnya
-                let detailCard = parent.querySelector(".detail-card"); // Ambil detail card
+                let parent = this.closest(".media-body");
+                let timelineDiv = parent.nextElementSibling;
+                let detailCard = parent.querySelector(".detail-card");
+                let teamInfo = parent.querySelector(".team-info");
 
-                // Sembunyikan tombol, sembunyikan detail, & tampilkan timeline
                 this.style.display = "none";
-                detailCard.style.display = "none";
+                if (detailCard) detailCard.style.display = "none";
+                if (teamInfo) teamInfo.style.display = "none";
                 timelineDiv.style.display = "block";
             });
         });
 
         document.querySelectorAll(".close-progress").forEach(button => {
             button.addEventListener("click", function() {
-                let timelineDiv = this.closest(".timeline-card"); // Ambil timeline yang terkait
+                let timelineDiv = this.closest(".timeline-card");
                 let showButton = timelineDiv.previousElementSibling.querySelector(
-                    ".show-progress"); // Ambil tombol yang sesuai
+                    ".show-progress");
                 let detailCard = timelineDiv.previousElementSibling.querySelector(
-                    ".detail-card"); // Ambil detail card
+                    ".detail-card");
+                let teamInfo = timelineDiv.previousElementSibling.querySelector(".team-info");
 
-                // Tampilkan tombol, tampilkan detail, & sembunyikan timeline
-                showButton.style.display = "block";
-                detailCard.style.display = "block";
+                if (showButton) showButton.style.display = "block";
+                if (detailCard) detailCard.style.display = "block";
+                if (teamInfo) teamInfo.style.display = "block";
                 timelineDiv.style.display = "none";
             });
         });
