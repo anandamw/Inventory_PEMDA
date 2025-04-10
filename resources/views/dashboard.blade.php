@@ -248,6 +248,78 @@
 
                             </div>
 
+
+                            <script>
+                                function fetchRepairs() {
+                                    $.ajax({
+                                        url: '{{ url('/repair/realtime') }}',
+
+                                        method: 'GET',
+                                        success: function(repairs) {
+                                            $('.timeline').empty(); // kosongkan dulu
+
+                                            repairs.forEach(function(data) {
+                                                let imgSrc = data.user.profile ?? '/assets/images/no-profile.jpg';
+
+                                                if (data.status === 'failed') imgSrc = '/assets/images/warning.jpg';
+                                                else if (data.status === 'scheduled') imgSrc = '/assets/images/calendar.jpg';
+
+                                                let statusLabel = '';
+                                                if (data.status === 'failed') {
+                                                    statusLabel =
+                                                        `<p class="fw-bold text-danger">Tidak melaksanakan tugasnya</p>`;
+                                                } else if (data.status === 'pending') {
+                                                    statusLabel = `<p class="fw-bold text-black">Menunggu konfirmasi</p>`;
+                                                } else if (data.status === 'scheduled') {
+                                                    statusLabel = `<p class="fw-bold text-warning">Dijadwalkan</p>`;
+                                                } else if (data.status === 'completed') {
+                                                    statusLabel = `<p class="fw-bold">Selesai</p>`;
+                                                }
+
+                                                const html = `
+                                                    <li>
+                                                        <div class="timeline-panel">
+                                                            <div class="d-flex align-items-center justify-content-center me-2">
+                                                                <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h5 class="mb-1 fw-bold">${data.user.name}</h5>
+                                                                ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                            by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </small>` : ''}
+                                                                <p class="mb-1">${data.repair}</p>
+                                                                ${statusLabel}
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
+                                                                    <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
+                                                                    <a href="javascript:void(0)" class="btn btn-info btn-xs btn-warning"
+                                                                        onclick="openTeamModal(${data.id_repair})"
+                                                                        data-repair='${JSON.stringify(data)}'>
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                `;
+
+                                                $('.timeline').append(html);
+                                            });
+                                        },
+                                        error: function(err) {
+                                            console.error('Failed to fetch repair data', err);
+                                        }
+                                    });
+                                }
+
+                                // Panggil setiap 10 detik
+                                setInterval(fetchRepairs, 3000);
+
+                                // Pertama kali load
+                                fetchRepairs();
+                            </script>
+
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
                                 aria-labelledby="repairActionModalLabel" aria-hidden="true">
@@ -345,7 +417,7 @@
 
                                                                 @if ($repair->status == 'failed')
                                                                     <img class="rounded-circle me-2" alt="image"
-                                                                        width="50" 
+                                                                        width="50"
                                                                         src="{{ $repair->user->profile ? asset($repair->user->profile) : asset('assets/images/warning.jpg') }}">
                                                                 @elseif ($repair->status == 'scheduled')
                                                                     <div class="media me-2">
@@ -436,6 +508,112 @@
                                     </div>
                                 </div>
                             </div>
+                            <script>
+                                function fetchTeamRepairs() {
+                                    $.ajax({
+                                        url: '{{ url('/team-repair/realtime') }}',
+                                        method: 'GET',
+                                        success: function(repairs) {
+                                            const container = $('#DZ_W_Todo3');
+                                            container.empty();
+
+                                            if (repairs.length === 0) {
+                                                container.html(`
+                        <div class="text-center my-4">
+                            <img src="/assets/images/no-messages.png" alt="No Messages" style="width: 130px;">
+                        </div>
+                    `);
+                                                return;
+                                            }
+
+                                            let html = '<ul class="timeline">';
+
+                                            repairs.forEach(function(repair) {
+                                                const user = repair.user || {};
+                                                const instansi = user.instansi?.nama_instansi || '-';
+                                                const profile = user.profile ? `/${user.profile}` :
+                                                    '/assets/images/warning.jpg';
+                                                const dateObj = new Date(repair.scheduled_date);
+
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0);
+
+                                                const scheduled = new Date(dateObj);
+                                                scheduled.setHours(0, 0, 0, 0);
+
+                                                const isPast = scheduled < today;
+
+
+                                                const formattedDate = new Intl.DateTimeFormat('id-ID', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                }).format(dateObj);
+
+                                                const repairData = {
+                                                    user: {
+                                                        name: user.name,
+                                                        instansi: instansi,
+                                                        nip: user.nip
+                                                    },
+                                                    repair: repair.repair,
+                                                    scheduled_date: formattedDate,
+                                                    teams: (repair.teams || []).map(t => t.name)
+                                                };
+
+                                                html += `
+                        <li>
+                            <div class="timeline-panel p-3 border rounded shadow-sm">
+                                <div class="d-flex align-items-start mb-2">
+                                    ${repair.status === 'failed'
+                                        ? `<img class="rounded-circle me-2" alt="image" width="50" src="${profile}">`
+                                        : `<div class="media me-2">🛠️</div>`}
+
+                                    <div class="media-body">
+                                        <h7 class="mb-1 fw-bold">Perbaikan Dijadwalkan pada Anda</h7>
+                                        <small class="text-success d-block">
+                                            <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                                            | <span><strong>${instansi}</strong></span>
+                                        </small>
+                                        <small class="text-muted d-block"><strong>Diminta oleh:</strong> ${user.name || '-'} (NIP: ${user.nip || '-'})</small>
+                                        <small class="text-muted d-block mb-2"><strong>Permintaan:</strong> ${repair.repair || 'Tidak ada deskripsi'}</small>
+
+                                        <div class="d-flex align-items-center gap-2 mt-2">
+                                            ${isPast
+                                                ? `<button type="submit" class="btn btn-danger btn-sm" disabled>Failed</button>`
+                                                : `
+                                                                                                                                                                    <form action="/repairs/complete/${repair.id_repair}" method="POST" class="d-inline">
+                                                                                                                                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                                                                                                                                        <button type="submit" class="btn btn-success btn-sm">Selesai</button>
+                                                                                                                                                                    </form>
+                                                                                                                                                                    <a href="javascript:void(0)" class="btn btn-warning btn-xs"
+                                                                                                                                                                        onclick="openTeamModal(${repair.id_repair})"
+                                                                                                                                                                        data-repair='${JSON.stringify(repairData)}'>
+                                                                                                                                                                        <i class="fas fa-eye"></i>
+                                                                                                                                                                    </a>`}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                                            });
+
+                                            html += '</ul>';
+                                            container.html(html);
+                                        },
+                                        error: function(err) {
+                                            console.error('Gagal mengambil data team repair', err);
+                                        }
+                                    });
+                                }
+
+                                // Jalankan realtime
+                                setInterval(fetchTeamRepairs, 5000);
+                                fetchTeamRepairs();
+                            </script>
+
+
 
                         @endif
 

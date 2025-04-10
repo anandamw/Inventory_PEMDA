@@ -1,15 +1,17 @@
 <?php
 
+use App\Models\Repair;
+use App\Models\RepairTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\SaveController;
-use App\Http\Controllers\UserController;
 // routes/web.php
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\SaveController;
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AssetController;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RepairController;
@@ -18,7 +20,6 @@ use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RekapitulasiController;
-use App\Models\RepairTeam;
 
 Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -35,6 +36,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [AuthController::class, 'permission']);
 
         Route::middleware(['role:admin'])->group(function () {
+                Route::get('/repair/realtime', function () {
+                        $repairs = Repair::with(['user', 'admin'])
+                                ->whereNotIn('status', ['completed', 'expired'])
+                                ->latest()
+                                ->get();
+
+                        return response()->json($repairs);
+                });
                 Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
                 Route::get('/history', [HistoryController::class, 'index']);
 
@@ -97,6 +106,21 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::middleware(['role:team'])->group(function () {
+
+                Route::get('/team-repair/realtime', function () {
+                        $teamRepairs = Repair::whereHas('teams', function ($query) {
+                                $query->where('users.id', auth()->id());  // cek user login apakah bagian dari team
+                        })
+                                ->with(['user', 'admin'])
+                                ->whereNotIn('status', ['completed', 'expired']) // Menyembunyikan status 'completed' dan 'expired'
+                                ->orderBy('scheduled_date', 'desc')
+                                ->get();
+
+                        return response()->json($teamRepairs);
+                });
+
+
+
                 Route::get('/team/dashboard', [DashboardController::class, 'index'])->name('teamHome');
                 Route::get('/item', [InventoryController::class, 'index']);
                 Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');

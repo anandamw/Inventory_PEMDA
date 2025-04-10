@@ -394,7 +394,6 @@
             var lastResult = "";
 
             function onScanSuccess(decodedText) {
-                console.log("🔍 Scanned Data: ", decodedText); // Debug scanned data
 
                 if (decodedText !== lastResult) {
                     lastResult = decodedText;
@@ -402,18 +401,17 @@
 
                     let token;
                     try {
-                        console.log("🛠️ Trying to parse JSON...");
+
                         let data = JSON.parse(decodedText);
                         token = data.token;
-                        console.log("✅ JSON parsed successfully: ", token);
+
                     } catch (e) {
-                        console.log("⚠️ JSON Parsing Error:", e);
-                        console.log("🛠️ Assuming raw token format...");
+
                         token = decodedText;
                     }
 
                     if (token) {
-                        console.log("✅ Token extracted: ", token);
+
                         $("#qr-reader-results").append("<br><strong>Token:</strong> " + token);
 
                         $.ajax({
@@ -449,7 +447,7 @@
                             }
                         });
                     } else {
-                        console.log("❌ Invalid token format!");
+
                         $("#qr-reader-results").append(
                             "<br><span class='text-danger'>Invalid token format.</span>"
                         );
