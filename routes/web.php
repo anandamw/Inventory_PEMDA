@@ -119,8 +119,7 @@ Route::middleware(['auth'])->group(function () {
                         return response()->json($teamRepairs);
                 });
 
-
-
+                Route::post('/repairs/complete/{id}', [DashboardController::class, 'complete'])->name('repairs.complete');
                 Route::get('/team/dashboard', [DashboardController::class, 'index'])->name('teamHome');
                 Route::get('/item', [InventoryController::class, 'index']);
                 Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');

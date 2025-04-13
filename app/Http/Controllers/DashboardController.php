@@ -118,7 +118,18 @@ class DashboardController extends Controller
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-        return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams'));
+        // Ambil repair team dengan rating
+        $repairTeams = \App\Models\RepairTeam::whereNotNull('rating')->get();
+
+        // Hitung rata-rata rating per user
+        $ratarating = $repairTeams->groupBy('user_id')->map(function ($items) {
+            $totalRating = $items->sum('rating');
+            $totalJobs = $items->count();
+            return $totalJobs > 0 ? $totalRating / $totalJobs : 0;
+        });
+
+
+        return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams', 'ratarating'));
     }
 
 

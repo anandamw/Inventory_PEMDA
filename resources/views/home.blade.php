@@ -25,12 +25,19 @@
                                                         <i class="fa fa-caret-up scale5 me-2 text-success"></i>
                                                         {{ $user->name }} ({{ ucfirst($user->role) }})
                                                     </p>
-                                                    <div class="d-flex gap-4"> 
-                                                    <h4 class="heading mb-0">{{ $user->nip }}</h4>
-                                                    <span class="badge bg-primary" style="font-size: 10px;">
-                                                        {{ $repair->repairTeam->rating ?? '-' }} <i class="fas fa-star"></i> / 5
-                                                        <i class="fas fa-star"></i>
-                                                    </span>
+                                                    <div class="d-flex gap-4">
+                                                        <h4 class="heading mb-0">{{ $user->nip }}</h4>
+                                                        <!-- Cek jika rating tersedia -->
+                                                        @if ($user->role != 'admin')
+                                                            <span class="badge bg-primary" style="font-size: 10px;">
+                                                                {{ number_format(floatval($ratarating[$user->id] ?? 0), 1) }}
+                                                                <i class="fas fa-star"></i> / 5
+                                                                <i class="fas fa-star"></i>
+                                                            </span>
+                                                        @else
+                                                            <span class="badge bg-secondary" style="font-size: 10px;">No
+                                                                Rating</span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 <img src="{{ optional($user)->profile ? asset($user->profile) : asset('assets/images/no-profile.jpg') }}"
@@ -41,6 +48,7 @@
                                         </div>
                                     </li>
                                 @endforeach
+
                             </ul>
 
                         </div>
