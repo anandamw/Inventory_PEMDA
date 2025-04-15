@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Repair;
 use App\Models\RateUser;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +15,10 @@ class RepairController extends Controller
     /**
      * Display a listing of the resource.
      */
-  
+
     public function index()
     {
         $headerText = 'Rekap Perbaikan';
-
         // **1. Ambil data Repair yang sudah completed**
         $query = Repair::with(['user', 'user.instansi', 'teams'])
             ->where('status', 'completed');
@@ -38,21 +38,45 @@ class RepairController extends Controller
 
         // **4. Ambil rekap data tim perbaikan dari repair_teams**
         $rateUser = DB::table('repair_teams')
-            ->join('users', 'repair_teams.user_id', '=', 'users.id') // Perbaiki nama tabel
+            ->join('users', 'repair_teams.user_id', '=', 'users.id')
             ->select(
                 'users.name',
                 'users.nip',
+                'users.id',
                 DB::raw('COUNT(repair_teams.id) as total_repairs'),
                 DB::raw('SUM(CASE WHEN repair_teams.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
                 DB::raw('SUM(CASE WHEN repair_teams.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
-                DB::raw('SUM(CASE WHEN repair_teams.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs')
+                DB::raw('SUM(CASE WHEN repair_teams.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs'),
+                DB::raw('AVG(repair_teams.rating) as avg_rating'),
+                DB::raw('SUM(repair_teams.rating) as total_rating') // ⬅️ ini tambahan
             )
-            ->where('users.role', 'team') // Hanya ambil user dengan role "team"
-            ->groupBy('users.name', 'users.nip')
+            ->where('users.role', 'team')
+            ->groupBy('users.name', 'users.nip', 'users.id')
+            ->orderByDesc(DB::raw('SUM(repair_teams.rating)')) // Urutkan berdasarkan total_rating tertinggi
             ->get();
 
+        $rateUserTeam = DB::table('repair_teams')
+            ->join('users', 'repair_teams.user_id', '=', 'users.id')
+            ->join('repairs', 'repair_teams.repair_id', '=', 'repairs.id_repair')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.nip',
+                'repair_teams.rating',
+                'repair_teams.comment',
+                'repair_teams.updated_at',
+                'repairs.repair',
+                'repairs.scheduled_date',
+            )
+            ->where('users.role', 'team')
+            ->where('repair_teams.status', 'completed')
+            ->whereNotNull('repair_teams.rating') // Pastikan hanya ambil yang ada rating
+            ->get();
+
+
+
         // **5. Return view dengan data yang sudah diperbaiki**
-        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser'));
+        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser', 'rateUserTeam'));
     }
 
 

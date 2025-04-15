@@ -40,12 +40,13 @@
                                                             data-id="{{ $ins->id_instansi }}"
                                                             data-nama="{{ $ins->nama_instansi }}">
                                                             <i class="fas fa-pencil-alt"></i>
-                                                        </button> 
-                                                        <a href="{{ route('instansi.destroy', $ins->id_instansi) }}" data-confirm-delete="true">
-                                                        <button type="button"
-                                                            class="btn btn-danger shadow btn-xs sharp btn-delete">
-                                                        <i class="fa fa-trash" style="color: aliceblue"></i>
-                                                        </button></a>
+                                                        </button>
+                                                        <a href="{{ route('instansi.destroy', $ins->id_instansi) }}"
+                                                            data-confirm-delete="true">
+                                                            <button type="button"
+                                                                class="btn btn-danger shadow btn-xs sharp btn-delete">
+                                                                <i class="fa fa-trash" style="color: aliceblue"></i>
+                                                            </button></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -59,6 +60,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Modal Add Instansi -->
     <div class="modal fade" id="addInstansiModal" tabindex="-1" aria-labelledby="addInstansiModalLabel" aria-hidden="true">
