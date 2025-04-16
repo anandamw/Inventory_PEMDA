@@ -41,7 +41,7 @@
                       </li>
                       <li><a href="/history" class="" aria-expanded="false">
                               <i class="bi bi-clock-history"></i>
-                              <span class="nav-text">History</span>
+                              <span class="nav-text">History Item</span>
                           </a>
                       </li>
                       <li><a href="/user" class="" aria-expanded="false">

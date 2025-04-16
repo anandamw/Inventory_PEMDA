@@ -371,7 +371,7 @@
                 `;
 
                     ordersTableBody.appendChild(newRow);
-                    checkEmptyCart();
+                    checkEmptyCarsavet();
                     updateTotal();
                 });
             });

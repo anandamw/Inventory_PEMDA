@@ -72,14 +72,22 @@
                                                 <th class="text-center">Total Repairs</th>
                                                 <th class="text-center">Completed Repairs</th>
                                                 <th class="text-center">Failed Repairs</th>
-                                                <th class="text-center">Total Rating</th>
+
                                                 <th class="text-center">Average Rating</th>
 
                                                 <th class="text-center">Details</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($rateUser as $index => $tech)
+
+                                            @php
+                                                $sortedRateUser = collect($rateUser)
+                                                    ->sortByDesc(function ($tech) use ($ratarating) {
+                                                        return floatval($ratarating[$tech->id] ?? 0);
+                                                    })
+                                                    ->values();
+                                            @endphp
+                                            @foreach ($sortedRateUser as $index => $tech)
                                                 <tr>
                                                     <td class="text-center">{{ $index + 1 }}</td>
                                                     <td class="text-center">{{ $tech->name }}</td>
@@ -88,11 +96,14 @@
                                                     <td class="text-center text-success">{{ $tech->completed_repairs }}
                                                     </td>
                                                     <td class="text-center text-danger">{{ $tech->failed_repairs }}</td>
-                                                    <td class="text-center">{{ number_format($tech->total_rating, 2) }}
+
+                                                    <td class="text-center">
+                                                        {{ number_format(floatval($ratarating[$tech->id] ?? 0), 1) }}
                                                     </td>
-                                                    <td class="text-center">{{ number_format($tech->avg_rating, 2) }}</td>
+
                                                     <td class="text-center text-danger">
-                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        <button type="button" class="btn btn-primary"
+                                                            data-bs-toggle="modal"
                                                             data-bs-target="#exampleModaltech{{ $tech->id }}">
                                                             <i class="fas fa-info-circle"></i>
                                                         </button>

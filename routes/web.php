@@ -92,7 +92,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/order/update-status', [DashboardController::class, 'updateStatus'])->name('order-items.updateStatus');
                 Route::get('/admin/item', [InventoryController::class, 'index']);
                 Route::put('/admin/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
-                Route::post('/admin/save', [SaveController::class, 'store']);
                 Route::post('/admin/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
                 Route::post('/admin/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
                 Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
@@ -123,12 +122,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/team/dashboard', [DashboardController::class, 'index'])->name('teamHome');
                 Route::get('/item', [InventoryController::class, 'index']);
                 Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
-                Route::post('/save', [SaveController::class, 'store']);
                 Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
                 Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
                 Route::post('/mark-notification-completed/{repairId}', [DashboardController::class, 'markCompleted']);
         });
 
+        Route::post('/save', [SaveController::class, 'store']);
         Route::post('/repairs/{id}/assign', [DashboardController::class, 'assignToTeam'])->name('repairs.assign');
         Route::post('/repairs/{id}/complete', [DashboardController::class, 'complete'])->name('repairs.complete');
 

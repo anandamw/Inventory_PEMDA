@@ -47,13 +47,43 @@ class RepairController extends Controller
                 DB::raw('SUM(CASE WHEN repair_teams.status = "completed" THEN 1 ELSE 0 END) as completed_repairs'),
                 DB::raw('SUM(CASE WHEN repair_teams.status = "failed" THEN 1 ELSE 0 END) as failed_repairs'),
                 DB::raw('SUM(CASE WHEN repair_teams.status = "scheduled" THEN 1 ELSE 0 END) as scheduled_repairs'),
+
                 DB::raw('AVG(repair_teams.rating) as avg_rating'),
+
                 DB::raw('SUM(repair_teams.rating) as total_rating') // ⬅️ ini tambahan
             )
             ->where('users.role', 'team')
             ->groupBy('users.name', 'users.nip', 'users.id')
             ->orderByDesc(DB::raw('SUM(repair_teams.rating)')) // Urutkan berdasarkan total_rating tertinggi
             ->get();
+
+        // Ambil semua tim dengan rating
+        $repairTeams = \App\Models\RepairTeam::whereNotNull('rating')->get();
+
+        // Hitung rata-rata rating keseluruhan (C)
+        $totalRating = $repairTeams->sum('rating');
+        $totalJobs = $repairTeams->count();
+        $C = $totalJobs > 0 ? $totalRating / $totalJobs : 0;
+
+        // Hitung rata-rata jumlah pekerjaan per user untuk dijadikan $m
+        $jobPerUser = $repairTeams->groupBy('user_id')->map->count();
+        $m = $jobPerUser->avg(); // rata-rata jumlah pekerjaan per user
+
+        // Hitung weighted rating per user
+        $ratarating = $repairTeams->groupBy('user_id')->map(function ($items) use ($C, $m) {
+            $v = $items->count(); // jumlah pekerjaan user
+            $R = $items->avg('rating'); // rata-rata rating user
+
+            // Weighted Rating (semakin banyak pekerjaan, semakin mendekati R)
+            $WR = (($v / ($v + $m)) * $R) + (($m / ($v + $m)) * $C);
+            return $WR;
+        });
+
+
+
+
+
+
 
         $rateUserTeam = DB::table('repair_teams')
             ->join('users', 'repair_teams.user_id', '=', 'users.id')
@@ -76,7 +106,7 @@ class RepairController extends Controller
 
 
         // **5. Return view dengan data yang sudah diperbaiki**
-        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser', 'rateUserTeam'));
+        return view('perbaikan.perbaikan', compact('headerText', 'repairs', 'rateUser', 'rateUserTeam', 'ratarating'));
     }
 
 
