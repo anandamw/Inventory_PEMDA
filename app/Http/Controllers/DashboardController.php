@@ -118,15 +118,29 @@ class DashboardController extends Controller
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-        // Ambil repair team dengan rating
+
+        // Ambil semua tim dengan rating
         $repairTeams = \App\Models\RepairTeam::whereNotNull('rating')->get();
 
-        // Hitung rata-rata rating per user
-        $ratarating = $repairTeams->groupBy('user_id')->map(function ($items) {
-            $totalRating = $items->sum('rating');
-            $totalJobs = $items->count();
-            return $totalJobs > 0 ? $totalRating / $totalJobs : 0;
+        // Hitung rata-rata rating keseluruhan (C)
+        $totalRating = $repairTeams->sum('rating');
+        $totalJobs = $repairTeams->count();
+        $C = $totalJobs > 0 ? $totalRating / $totalJobs : 0;
+
+        // Hitung rata-rata jumlah pekerjaan per user untuk dijadikan $m
+        $jobPerUser = $repairTeams->groupBy('user_id')->map->count();
+        $m = $jobPerUser->avg(); // rata-rata jumlah pekerjaan per user
+
+        // Hitung weighted rating per user
+        $ratarating = $repairTeams->groupBy('user_id')->map(function ($items) use ($C, $m) {
+            $v = $items->count(); // jumlah pekerjaan user
+            $R = $items->avg('rating'); // rata-rata rating user
+
+            // Weighted Rating (semakin banyak pekerjaan, semakin mendekati R)
+            $WR = (($v / ($v + $m)) * $R) + (($m / ($v + $m)) * $C);
+            return $WR;
         });
+
 
 
         return view('home', compact('headerText', 'repairs', 'userRepairs', 'totalInventories', 'users', 'totalQuantity', 'totalTeams', 'ratarating'));
