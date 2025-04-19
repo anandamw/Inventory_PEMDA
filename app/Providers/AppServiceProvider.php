@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Asset;
 use App\Models\Repair;
 use App\Models\Inventory;
+use App\Models\RepairTeam;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
@@ -53,12 +54,48 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if (!app()->runningInConsole() || app()->runningUnitTests()) {
+            if (Schema::hasTable('repair_teams') && Schema::hasTable('repairs') && Schema::hasTable('users')) {
+                // Weighted Rating
+                $repairTeams = RepairTeam::whereNotNull('rating')->get();
+                $totalRating = $repairTeams->sum('rating');
+                $totalJobs = $repairTeams->count();
+                $C = $totalJobs > 0 ? $totalRating / $totalJobs : 0;
+
+                $jobPerUser = $repairTeams->groupBy('user_id')->map->count();
+                $m = $jobPerUser->avg();
+
+                $weightedRatings = $repairTeams->groupBy('user_id')->map(function ($items) use ($C, $m) {
+                    $v = $items->count();
+                    $R = $items->avg('rating');
+                    $WR = (($v / ($v + $m)) * $R) + (($m / ($v + $m)) * $C);
+                    return round($WR, 2);
+                });
+
+                // Share Weighted Ratings ke seluruh view
+                View::share('weightedRatings', $weightedRatings);
+
+                // Ambil semua ratings dan repair terkait
+                $allUserRatings = RepairTeam::with('repair')
+                    ->whereNotNull('rating')
+                    ->get();
+
+                // Share ratings dan repairs ke seluruh view
+                View::share('allUserRatings', $allUserRatings);
+            }
+        }
+
+
+        if (!app()->runningInConsole() || app()->runningUnitTests()) {
+
             if (Schema::hasTable('repairs')) {
                 View::composer('*', function ($view) {
                     $userRepairs = collect();
                     $scheduledRepairsCount = 0;
                     $overdueRepairs = collect();
                     $overdueRepairsCount = 0;
+
+
+
 
 
                     if (auth()->check()) {

@@ -35,8 +35,7 @@
                                                                 <i class="fas fa-star"></i>
                                                             </span>
                                                         @else
-                                                            <span class="badge bg-secondary" style="font-size: 10px;">No
-                                                                Rating</span>
+                                                            <span class="badge bg-secondary" style="font-size: 10px;">Admin</span>
                                                         @endif
                                                     </div>
                                                 </div>

@@ -30,11 +30,14 @@
     <div class="header-content">
         <nav class="navbar navbar-expand">
             <div class="collapse navbar-collapse justify-content-between">
-                <div class="header-left">
+                <div class="header-left d-flex align-items-center justify-content-between">
                     <div class="dashboard_bar">
                         {{ $headerText }}
                     </div>
+
+
                 </div>
+
                 <div class="navbar-nav header-right">
 
                     <div class="dz-side-menu">
@@ -313,6 +316,27 @@
                             </ul>
                         @endif
 
+                        @php
+                            $userRatings = $allUserRatings->where('user_id', auth()->id());
+                        @endphp
+
+                        <!-- Tombol untuk membuka modal - hanya tampil di HP -->
+                        @if (isset($weightedRatings[auth()->id()]))
+                            <button type="button"
+                                class="badge bg-primary d-inline-flex d-md-none align-items-center justify-content-center"
+                                style="font-size: 13px; padding: 6px 8px; border-radius: 4px; min-width: 34px; height: 34px;"
+                                data-bs-toggle="modal" data-bs-target="#exampleModaltech{{ auth()->id() }}">
+                                {{ number_format(floatval($weightedRatings[auth()->id()]), 1) }}
+                                <i class="fas fa-star ms-1"></i>
+                            </button>
+                        @endif
+
+
+
+
+
+
+
                         <ul></ul>
                         <ul>
                             <li class="nav-item dropdown header-profile">
@@ -355,10 +379,108 @@
                         </ul>
                     </div>
                 </div>
+                @if (isset($weightedRatings[auth()->id()]))
+                    <div class="d-none d-md-flex ms-auto align-items-center">
+
+                        <button type="button"
+                            class="badge bg-primary d-flex align-items-center justify-content-center"
+                            style="font-size: 13px; padding: 6px 10px; border-radius: 5px; min-width: 60px; height: 36px;"
+                            data-bs-toggle="modal" data-bs-target="#exampleModaltech{{ auth()->id() }}"><span
+                                class="me-2" style="font-size: 15px;">Ratingku :</span>
+                            {{ number_format(floatval($weightedRatings[auth()->id()]), 1) }}
+                            <i class="fas fa-star ms-1"></i>
+                        </button>
+                    </div>
+                @endif
+
             </div>
         </nav>
     </div>
 </div>
+<!-- Modal -->
+<style>
+    .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        flex-wrap: nowrap;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 1.5rem;
+        color: gray;
+        cursor: default;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .star-rating input:checked~label,
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+        color: gold;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModaltech{{ auth()->id() }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal Rating</h1>
+                <button type="button" class="btn-close" style="color: white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+
+            <div class="modal-body py-2">
+                <div class="table-responsive">
+                    <table class="table align-middle text-nowrap">
+                        <thead class="table-white bg-primary text-white">
+                            <tr>
+                                <th>No</th>
+                                <th>Comment</th>
+                                <th>Rating</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $userRatings = $allUserRatings->where('user_id', auth()->id());
+                            @endphp
+                            @foreach ($userRatings as $index => $rate)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $rate->comment ?? 'No comment' }}</td>
+                                    <td>
+                                        <div class="star-rating">
+                                            @for ($i = 5; $i >= 1; $i--)
+                                                <input type="radio" name="rating_{{ $index }}"
+                                                    id="star{{ $i }}_{{ $index }}"
+                                                    value="{{ $i }}"
+                                                    {{ $rate->rating == $i ? 'checked' : '' }} disabled>
+                                                <label
+                                                    for="star{{ $i }}_{{ $index }}">&#9733;</label>
+                                            @endfor
+                                        </div>
+                                    </td>
+                                    <td>{{ \Carbon\Carbon::parse($rate->updated_at)->format('Y-m-d') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="tradeModal" tabindex="-1" aria-labelledby="tradeModalLabel" aria-hidden="true">
