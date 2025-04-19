@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Repair;
 use App\Models\Inventory;
 use App\Models\OrderItem;
+use App\Models\RepairTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
