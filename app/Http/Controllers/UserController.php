@@ -136,11 +136,12 @@ class UserController extends Controller
             'role' => 'required'
         ]);
 
+     
         $user = User::findOrFail($id);
         $user->update([
             'name' => $request->name,
             'nip' => $request->nip,
-            'instansi_id' => $request->instansi,
+            'id_instansi' => $request->instansi,
             'role' => $request->role
         ]);
 

@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label fw-bold">Instansi</label>
-                                        <textarea class="form-control border rounded" rows="3" readonly>{{ Auth::user()->instansi->nama_instansi }}</textarea>
+                                        <textarea class="form-control border rounded" rows="3" readonly>{{ Auth::user()->instansi->nama_instansi  ?? 'Tidak ada Instansi'}}</textarea>
                                     </div>
                                 </div>
 

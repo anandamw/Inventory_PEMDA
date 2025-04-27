@@ -124,7 +124,7 @@
                             <div class="card border-0 shadow-lg pb-0 hover-card"
                                 style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
                                 <div class="card-header border-0 pb-0">
-                                    <h5 class="card-title heading">Messages admin</h5>
+                                    <h5 class="card-title heading">Messages</h5>
                                 </div>
                                 <div class="card-body p-0">
                                     <div id="DZ_W_Todo3" class="widget-media dz-scroll height200 my-4 px-4">
@@ -249,78 +249,7 @@
                             </div>
 
 
-                            <script>
-                                function fetchRepairs() {
-                                    $.ajax({
-                                        url: '{{ url('/repair/realtime') }}',
 
-                                        method: 'GET',
-                                        success: function(repairs) {
-                                            $('.timeline').empty(); // kosongkan dulu
-
-                                            repairs.forEach(function(data) {
-                                                let imgSrc = data.user.profile ?? '/assets/images/no-profile.jpg';
-
-                                                if (data.status === 'failed') imgSrc = '/assets/images/warning.jpg';
-                                                else if (data.status === 'scheduled') imgSrc = '/assets/images/calendar.jpg';
-
-                                                let statusLabel = '';
-                                                if (data.status === 'failed') {
-                                                    statusLabel =
-                                                        `<p class="fw-bold text-danger">Tidak melaksanakan tugasnya</p>`;
-                                                } else if (data.status === 'pending') {
-                                                    statusLabel = `<p class="fw-bold text-black">Menunggu konfirmasi</p>`;
-                                                } else if (data.status === 'scheduled') {
-                                                    statusLabel = `<p class="fw-bold text-warning">Dijadwalkan</p>`;
-                                                } else if (data.status === 'completed') {
-                                                    statusLabel = `<p class="fw-bold">Selesai</p>`;
-                                                }
-
-                                                const html = `
-                                                    <li>
-                                                        <div class="timeline-panel">
-                                                            <div class="d-flex align-items-center justify-content-center me-2">
-                                                                <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
-                                                            </div>
-                                                            <div class="media-body">
-                                                                <h5 class="mb-1 fw-bold">${data.user.name}</h5>
-                                                                ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            On ${data.scheduled_date}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </small>` : ''}
-                                                                <p class="mb-1">${data.repair}</p>
-                                                                ${statusLabel}
-                                                                <div class="d-flex align-items-center gap-2">
-                                                                    <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
-                                                                    <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
-                                                                        <a href="javascript:void(0)"
-                                                                        class="btn btn-info btn-xs btn-warning"
-                                                                        onclick="openTeamModal({{ $repair->id_repair }})"
-                                                                        data-repair='@json($repairData)'>
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </a>
-                                                                   
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                `;
-
-                                                $('.timeline').append(html);
-                                            });
-                                        },
-                                        error: function(err) {
-                                            console.error('Failed to fetch repair data', err);
-                                        }
-                                    });
-                                }
-
-                                // Panggil setiap 10 detik
-                                setInterval(fetchRepairs, 3000);
-
-                                // Pertama kali load
-                                fetchRepairs();
-                            </script>
 
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
@@ -400,7 +329,7 @@
                             <div class="card border-0 shadow-lg pb-0 hover-card"
                                 style="box-shadow: 0 8px 15px rgba(0,0,0,0.15); border-radius: 20px;">
                                 <div class="card-header border-0 pb-0">
-                                    <h5 class="card-title heading">Messages team</h5>
+                                    <h5 class="card-title heading">Messages</h5>
                                 </div>
                                 <div class="card-body p-0">
                                     <div id="DZ_W_Todo3" class="widget-media dz-scroll height200 my-4 px-4">
@@ -520,6 +449,81 @@
                 </div>
             </div>
 
+
+
+            @if (!empty($repair))
+                <script>
+                    function fetchRepairs() {
+                        $.ajax({
+                            url: '{{ url('/repair/realtime') }}',
+
+                            method: 'GET',
+                            success: function(repairs) {
+                                $('.timeline').empty(); // kosongkan dulu
+
+                                repairs.forEach(function(data) {
+                                    let imgSrc = data.user.profile ?? '/assets/images/no-profile.jpg';
+
+                                    if (data.status === 'failed') imgSrc = '/assets/images/warning.jpg';
+                                    else if (data.status === 'scheduled') imgSrc = '/assets/images/calendar.jpg';
+
+                                    let statusLabel = '';
+                                    if (data.status === 'failed') {
+                                        statusLabel =
+                                            `<p class="fw-bold text-danger">Tidak melaksanakan tugasnya</p>`;
+                                    } else if (data.status === 'pending') {
+                                        statusLabel = `<p class="fw-bold text-black">Menunggu konfirmasi</p>`;
+                                    } else if (data.status === 'scheduled') {
+                                        statusLabel = `<p class="fw-bold text-warning">Dijadwalkan</p>`;
+                                    } else if (data.status === 'completed') {
+                                        statusLabel = `<p class="fw-bold">Selesai</p>`;
+                                    }
+
+                                    const html = `
+                                    <li>
+                                        <div class="timeline-panel">
+                                            <div class="d-flex align-items-center justify-content-center me-2">
+                                                <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="mb-1 fw-bold">${data.user.name}</h5>
+                                                ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </small>` : ''}
+                                                <p class="mb-1">${data.repair}</p>
+                                                ${statusLabel}
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
+                                                    <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
+                                                        <a href="javascript:void(0)"
+                                                        class="btn btn-info btn-xs btn-warning"
+                                                        onclick="openTeamModal({{ $repair->id_repair }})"
+                                                        data-repair='@json($repairData)'>
+                                                        <i class="fas fa-eye"></i>
+                                                    </a> 
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `;
+
+                                    $('.timeline').append(html);
+                                });
+                            },
+                            error: function(err) {
+                                console.error('Failed to fetch repair data', err);
+                            }
+                        });
+                    }
+
+                    // Panggil setiap 10 detik
+                    setInterval(fetchRepairs, 3000);
+
+                    // Pertama kali load
+                    fetchRepairs();
+                </script>
+            @endif
 
 
 
@@ -882,7 +886,8 @@
                                                                                 data-inventory-id="{{ $getItem->id_inventories }}"
                                                                                 onclick="updateItems({{ $item->id_orders }}, this)">
                                                                                 <i class="fa fa-shopping-basket me-2"></i>
-                                                                                Save
+                                                                                Save {{ $item->id_orders   }}
+                                                                                {{ $getItem->id_inventories  }}
                                                                             </a>
                                                                         </div>
                                                                     </td>
@@ -1034,7 +1039,7 @@
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
                 let newQuantity = parseInt(input.value) || 0;
-
+                
                 updatedItems.push({
                     id_order_items: itemId,
                     quantity: newQuantity
@@ -1194,4 +1199,5 @@
             }
         }
     </script>
+
 @endsection

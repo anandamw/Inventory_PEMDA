@@ -173,9 +173,7 @@ class DashboardController extends Controller
                 'orders.users_id',
                 DB::raw('MAX(order_items.status) as status')
             )
-            ->where('users.role', Auth::user()->role)
-
-            ->groupBy(
+            ->where('users.role', Auth::user()->role)->groupBy(
                 'orders.id_orders',
                 'users.name',
                 'users.nip',
@@ -360,7 +358,7 @@ class DashboardController extends Controller
         $repair = Repair::findOrFail($id);
 
         // Cek apakah user tergabung dalam tim yang menangani perbaikan ini
-        $isUserInTeam = \DB::table('repair_teams')
+        $isUserInTeam = DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
             ->where('user_id', auth()->id())
             ->exists();

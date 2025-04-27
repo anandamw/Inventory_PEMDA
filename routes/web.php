@@ -91,10 +91,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/history/dashboard-update', [DashboardController::class, 'updateHistoryDashboard'])->name('history.dashboard.update');
                 Route::put('/order/update-status', [DashboardController::class, 'updateStatus'])->name('order-items.updateStatus');
                 Route::get('/admin/item', [InventoryController::class, 'index']);
-                Route::put('/admin/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
-                Route::post('/admin/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
-                Route::post('/admin/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
-                Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
         });
 
 
@@ -121,9 +117,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/repairs/complete/{id}', [DashboardController::class, 'complete'])->name('repairs.complete');
                 Route::get('/team/dashboard', [DashboardController::class, 'index'])->name('teamHome');
                 Route::get('/item', [InventoryController::class, 'index']);
-                Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
-                Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
-                Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
+
                 Route::post('/mark-notification-completed/{repairId}', [DashboardController::class, 'markCompleted']);
         });
 
@@ -134,7 +128,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/profile', [UserController::class, 'profile']);
         Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');
-
+        Route::put('/order/update-items-dashboard', [DashboardController::class, 'updateItemsDashboard'])->name('order-items.dashboard');
+        Route::post('/update-order-items', [DashboardController::class, 'updateOrderItems'])->name('update.items');
+        Route::post('/update-order-items-status', [DashboardController::class, 'updateOrderItemsStatus'])->name('update.items');
+        Route::get('/fetch-orders/{filter}', [RekapitulasiController::class, 'fetchOrders'])->name('orders.fetch');
 
         Route::get('/logout', [AuthController::class, 'logout']);
 });

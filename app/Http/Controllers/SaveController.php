@@ -15,8 +15,7 @@ class SaveController extends Controller
 {
     public function store(Request $request)
     {
-        \Log::info('Request received: ', $request->all());
-
+       
         try {
             // Validasi request
             $request->validate([
@@ -67,8 +66,7 @@ class SaveController extends Controller
                 'message' => 'Pesanan berhasil disimpan!',
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error saving order: ' . $e->getMessage());
-
+           
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),

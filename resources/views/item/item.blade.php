@@ -454,7 +454,9 @@
                                 title: "Berhasil!",
                                 text: data.message
                             }).then(() => {
-                                window.location.reload();
+                                 
+                                window.location.href = "/dashboard";
+
                             });
                         } else {
                             Swal.fire({
