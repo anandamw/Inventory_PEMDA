@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
+
+
     public function updateOrderItems(Request $request)
     {
         try {
@@ -136,13 +138,27 @@ class DashboardController extends Controller
 
             // Tambahkan item baru ke tabel order_items
             foreach ($request->newItems as $newItem) {
-                OrderItem::create([
-                    'orders_id' => $request->orderId,
-                    'inventories_id' => $newItem['inventories_id'],
-                    'quantity' => $newItem['quantity'],
-                    'status' => $request->status ?? 'pending',
-                    'users_id' => auth()->user()->id
-                ]);
+                // Cek apakah sudah ada item dengan order_id + inventory_id yang sama
+                $existingOrderItem = OrderItem::where('orders_id', $request->orderId)
+                    ->where('inventories_id', $newItem['inventories_id'])
+                    ->where('status', $request->status ?? 'pending')
+                    ->first();
+
+                if ($existingOrderItem) {
+                    // Kalau ada, tambahkan quantity
+                    $existingOrderItem->update([
+                        'quantity' => $existingOrderItem->quantity + $newItem['quantity']
+                    ]);
+                } else {
+                    // Kalau tidak ada, buat baru
+                    OrderItem::create([
+                        'orders_id' => $request->orderId,
+                        'inventories_id' => $newItem['inventories_id'],
+                        'quantity' => $newItem['quantity'],
+                        'status' => $request->status ?? 'pending',
+                        'users_id' => auth()->user()->id
+                    ]);
+                }
 
                 // Kurangi stok inventory sesuai jumlah item baru
                 Inventory::where('id_inventories', $newItem['inventories_id'])
@@ -207,13 +223,7 @@ class DashboardController extends Controller
     public function index()
     {
         $headerText = 'Dashboard';
-        // $items = Inventory::whereNotIn('id_inventories', function ($query) {
-        //     $query->select('inventories_id')
-        //         ->from('order_items')
-        //         ->where('status', 'pending');
-        // })
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+
 
 
         $items = Inventory::orderBy('created_at', 'desc')->get();
