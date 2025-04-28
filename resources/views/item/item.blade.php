@@ -454,7 +454,12 @@
                                 title: "Berhasil!",
                                 text: data.message
                             }).then(() => {
-                                window.location.reload();
+
+
+                                window.location.href = "/";
+
+
+
                             });
                         } else {
                             Swal.fire({

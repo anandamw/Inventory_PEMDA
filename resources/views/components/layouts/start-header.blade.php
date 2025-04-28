@@ -641,140 +641,161 @@
 
 
                                                 <!-- Timeline (Hidden by Default) -->
-                                                <div class="timeline-card mt-3" style="display: none; width: 100%;">
-                                                    <div class="card">
-                                                        <div
-                                                            class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                                            <h4 class="card-title">Timeline</h4>
-                                                            <button
-                                                                class="btn btn-sm btn-danger close-progress">Close</button>
-                                                        </div>
-                                                        <div class="card-body p-0">
-                                                            <div class="widget-timeline dz-scroll height370 my-4 px-4">
-                                                                <ul class="timeline">
-                                                                    @php
-                                                                        $hasExpired =
-                                                                            $repairs
-                                                                                ->where('repair', $repair->repair)
-                                                                                ->where('status', 'expired')
-                                                                                ->count() > 0;
-                                                                    @endphp
+                                                @if (!Request::is('profile'))
+                                                    <div class="timeline-card mt-3"
+                                                        style="display: none; width: 100%;">
+                                                        <div class="card">
+                                                            <div
+                                                                class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                                                <h4 class="card-title">Timeline</h4>
+                                                                <button
+                                                                    class="btn btn-sm btn-danger close-progress">Close</button>
+                                                            </div>
+                                                            <div class="card-body p-0">
+                                                                <div
+                                                                    class="widget-timeline dz-scroll height370 my-4 px-4">
+                                                                    <ul class="timeline">
+                                                                        @php
+                                                                            $hasExpired =
+                                                                                $repairs
+                                                                                    ->where('repair', $repair->repair)
+                                                                                    ->where('status', 'expired')
+                                                                                    ->count() > 0;
+                                                                        @endphp
 
-                                                                    @if ($repair->status == 'completed')
-                                                                        @if ($hasExpired)
+                                                                        @if ($repair->status == 'completed')
+                                                                            @if ($hasExpired)
+                                                                                <li>
+                                                                                    <div class="timeline-badge danger">
+                                                                                    </div>
+                                                                                    <a class="timeline-panel">
+                                                                                        <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
+                                                                                        <h6 class="mb-0">Perbaikan
+                                                                                            sedang
+                                                                                            dijadwalkan ulang.</h6>
+                                                                                    </a>
+                                                                                </li>
+                                                                            @endif
+                                                                            <li>
+                                                                                <div class="timeline-badge primary">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Permintaan
+                                                                                        perbaikan
+                                                                                        sedang
+                                                                                        dikirim.</h6>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="timeline-badge warning">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan sedang
+                                                                                        dijadwalkan
+                                                                                        oleh admin.</h6>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="timeline-badge success">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->completed_at)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan telah
+                                                                                        selesai.
+                                                                                    </h6>
+                                                                                </a>
+                                                                            </li>
+                                                                        @elseif($repair->status == 'pending')
+                                                                            <li>
+                                                                                <div class="timeline-badge primary">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Permintaan
+                                                                                        perbaikan
+                                                                                        sedang
+                                                                                        dikirim.</h6>
+                                                                                </a>ID:
+                                                                                {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
+                                                                            </li>
+                                                                        @elseif($repair->status == 'scheduled')
+                                                                            @if ($hasExpired)
+                                                                                <li>
+                                                                                    <div class="timeline-badge danger">
+                                                                                    </div>
+                                                                                    <a class="timeline-panel">
+                                                                                        <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
+                                                                                        <h6 class="mb-0">Perbaikan
+                                                                                            sedang
+                                                                                            dijadwalkan ulang.</h6>
+                                                                                    </a>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li>
+                                                                                <div class="timeline-badge primary">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Permintaan
+                                                                                        perbaikan
+                                                                                        sedang dikirim.</h6>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="timeline-badge warning">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan sedang
+                                                                                        dijadwalkan oleh admin.</h6>
+                                                                                </a>
+                                                                            </li>
+                                                                        @else
+                                                                            <li>
+                                                                                <div class="timeline-badge primary">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
+                                                                                    <h6 class="mb-0">Permintaan
+                                                                                        perbaikan
+                                                                                        sedang
+                                                                                        dikirim.</h6>
+                                                                                </a>
+                                                                            </li>
+
+
+                                                                            <li>
+                                                                                <div class="timeline-badge warning">
+                                                                                </div>
+                                                                                <a class="timeline-panel">
+                                                                                    <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
+                                                                                    <h6 class="mb-0">Perbaikan sedang
+                                                                                        dijadwalkan
+                                                                                        oleh admin.</h6>
+                                                                                </a>
+                                                                            </li>
                                                                             <li>
                                                                                 <div class="timeline-badge danger">
                                                                                 </div>
                                                                                 <a class="timeline-panel">
                                                                                     <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
                                                                                     <h6 class="mb-0">Perbaikan sedang
-                                                                                        dijadwalkan ulang.</h6>
+                                                                                        dijadwalkan
+                                                                                        ulang.</h6>
                                                                                 </a>
                                                                             </li>
                                                                         @endif
-                                                                        <li>
-                                                                            <div class="timeline-badge primary"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Permintaan perbaikan
-                                                                                    sedang
-                                                                                    dikirim.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="timeline-badge warning"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
-                                                                                <h6 class="mb-0">Perbaikan sedang
-                                                                                    dijadwalkan
-                                                                                    oleh admin.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="timeline-badge success"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->completed_at)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Perbaikan telah
-                                                                                    selesai.
-                                                                                </h6>
-                                                                            </a>
-                                                                        </li>
-                                                                    @elseif($repair->status == 'pending')
-                                                                        <li>
-                                                                            <div class="timeline-badge primary"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Permintaan perbaikan
-                                                                                    sedang
-                                                                                    dikirim.</h6>
-                                                                            </a>ID:
-                                                                            {{ $repair->repairTeam->id ?? 'ID tidak ditemukan' }}
-                                                                        </li>
-                                                                    @elseif($repair->status == 'scheduled')
-                                                                        @if ($hasExpired)
-                                                                            <li>
-                                                                                <div class="timeline-badge danger">
-                                                                                </div>
-                                                                                <a class="timeline-panel">
-                                                                                    <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
-                                                                                    <h6 class="mb-0">Perbaikan sedang
-                                                                                        dijadwalkan ulang.</h6>
-                                                                                </a>
-                                                                            </li>
-                                                                        @endif
-
-                                                                        <li>
-                                                                            <div class="timeline-badge primary"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Permintaan perbaikan
-                                                                                    sedang dikirim.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="timeline-badge warning"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
-                                                                                <h6 class="mb-0">Perbaikan sedang
-                                                                                    dijadwalkan oleh admin.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                    @else
-                                                                        <li>
-                                                                            <div class="timeline-badge primary"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->created_at)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Permintaan perbaikan
-                                                                                    sedang
-                                                                                    dikirim.</h6>
-                                                                            </a>
-                                                                        </li>
-
-
-                                                                        <li>
-                                                                            <div class="timeline-badge warning"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ $repair->scheduled_date ? \Carbon\Carbon::parse($repair->scheduled_date)->diffForHumans() : 'Belum Dijadwalkan' }}</span>
-                                                                                <h6 class="mb-0">Perbaikan sedang
-                                                                                    dijadwalkan
-                                                                                    oleh admin.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <div class="timeline-badge danger"></div>
-                                                                            <a class="timeline-panel">
-                                                                                <span>{{ \Carbon\Carbon::parse($repair->reschedule_date)->diffForHumans() }}</span>
-                                                                                <h6 class="mb-0">Perbaikan sedang
-                                                                                    dijadwalkan
-                                                                                    ulang.</h6>
-                                                                            </a>
-                                                                        </li>
-                                                                    @endif
-                                                                </ul>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @endif
+
+
                                             </div>
                                             <style>
                                                 .star-rating {

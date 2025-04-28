@@ -330,11 +330,8 @@
                             </div>
 
 
-                            <script>
-                                function fetchRepairs() {
-                                    $.ajax({
-                                        url: '{{ url('/repair/realtime') }}',
 
+<<<<<<< HEAD
                                         method: 'GET',
                                         success: function(repairs) {
                                             $('.timeline').empty(); // kosongkan dulu
@@ -400,6 +397,8 @@
                                 // Pertama kali load
                                 fetchRepairs();
                             </script>
+=======
+>>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
 
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
@@ -574,6 +573,84 @@
                                                                                 <i class="fas fa-eye"></i>
                                                                             </a>
                                                                         </div>
+
+
+
+
+
+                                                                        @if (!empty($repair))
+                                                                            <script>
+                                                                                function fetchRepairs() {
+                                                                                    $.ajax({
+                                                                                        url: '{{ url('/repair/realtime') }}',
+
+                                                                                        method: 'GET',
+                                                                                        success: function(repairs) {
+                                                                                            $('.timeline').empty(); // kosongkan dulu
+
+                                                                                            repairs.forEach(function(data) {
+                                                                                                let imgSrc = data.user.profile ?? '/assets/images/no-profile.jpg';
+
+                                                                                                if (data.status === 'failed') imgSrc = '/assets/images/warning.jpg';
+                                                                                                else if (data.status === 'scheduled') imgSrc = '/assets/images/calendar.jpg';
+
+                                                                                                let statusLabel = '';
+                                                                                                if (data.status === 'failed') {
+                                                                                                    statusLabel =
+                                                                                                        `<p class="fw-bold text-danger">Tidak melaksanakan tugasnya</p>`;
+                                                                                                } else if (data.status === 'pending') {
+                                                                                                    statusLabel = `<p class="fw-bold text-black">Menunggu konfirmasi</p>`;
+                                                                                                } else if (data.status === 'scheduled') {
+                                                                                                    statusLabel = `<p class="fw-bold text-warning">Dijadwalkan</p>`;
+                                                                                                } else if (data.status === 'completed') {
+                                                                                                    statusLabel = `<p class="fw-bold">Selesai</p>`;
+                                                                                                }
+
+                                                                                                const html = `
+                                                                                            <li>
+                                                                                                <div class="timeline-panel">
+                                                                                                    <div class="d-flex align-items-center justify-content-center me-2">
+                                                                                                        <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
+                                                                                                    </div>
+                                                                                                    <div class="media-body">
+                                                                                                        <h5 class="mb-1 fw-bold">${data.user.name}</h5>
+                                                                                                        ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </small>` : ''}
+                                                                                                        <p class="mb-1">${data.repair}</p>
+                                                                                                        ${statusLabel}
+                                                                                                        <div class="d-flex align-items-center gap-2">
+                                                                                                            <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
+                                                                                                            <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
+                                                                                                                <a href="javascript:void(0)"
+                                                                                                                class="btn btn-info btn-xs btn-warning"
+                                                                                                                onclick="openTeamModal({{ $repair->id_repair }})"
+                                                                                                                data-repair='@json($repairData)'>
+                                                                                                                <i class="fas fa-eye"></i>
+                                                                                                            </a> 
+                                                                                                         </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </li>
+                                                                                        `;
+
+                                                                                                $('.timeline').append(html);
+                                                                                            });
+                                                                                        },
+                                                                                        error: function(err) {
+                                                                                            console.error('Failed to fetch repair data', err);
+                                                                                        }
+                                                                                    });
+                                                                                }
+
+                                                                                // Panggil setiap 10 detik
+                                                                                setInterval(fetchRepairs, 3000);
+
+                                                                                // Pertama kali load
+                                                                                fetchRepairs();
+                                                                            </script>
+                                                                        @endif
                                                                     @endif
 
 
@@ -589,6 +666,7 @@
                                     </div>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             <script>
                                 function fetchTeamRepairs() {
                                     $.ajax({
@@ -693,6 +771,8 @@
                                 setInterval(fetchTeamRepairs, 5000);
                                 fetchTeamRepairs();
                             </script>
+=======
+>>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
 
 
 
@@ -702,6 +782,8 @@
 
                 </div>
             </div>
+
+
 
 
 
@@ -867,29 +949,26 @@
                                     </thead>
 
                                     <tbody id="orders" class="text-center">
-                                        @foreach ($orders as $get)
+                                        @foreach ($orders as $getOrders)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $get->name }}</td>
-                                                {{-- <td>
-                                                    <img src="{{ $get->img_item ? asset($get->img_item) : asset('assets/images/no-image.png') }}"
-                                                        alt="Item Image" width="50">
-                                                </td> --}}
-                                                <td>{{ $get->events }}</td>
-                                                <td>{{ $get->phone }}</td>
+                                                <td>{{ $getOrders->name }}</td>
+
+                                                <td>{{ $getOrders->events }}</td>
+                                                <td>{{ $getOrders->phone }}</td>
 
 
-                                                @if ($get->status == 'success')
+                                                @if ($getOrders->status == 'success')
                                                     <td><i class="fa fa-circle text-success me-1"></i> Successful</td>
-                                                @elseif($get->status == 'canceled')
+                                                @elseif($getOrders->status == 'canceled')
                                                     <td><i class="fa fa-circle text-danger me-1"></i> Canceled</td>
-                                                @elseif($get->status == 'pending')
+                                                @elseif($getOrders->status == 'pending')
                                                     <td><i class="fa fa-circle text-warning me-1"></i> Pending</td>
                                                 @endif
 
 
 
-                                                <td>{{ $get->created_at }}</td>
+                                                <td>{{ $getOrders->created_at }}</td>
 
 
                                                 <td class="text-end ps-0">
@@ -907,7 +986,7 @@
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <button type="button" class="dropdown-item"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#exampleModal{{ $get->id_orders }}">
+                                                                data-bs-target="#exampleModal{{ $getOrders->id_orders }}">
                                                                 Edit
                                                             </button>
                                                         </div>
@@ -1005,16 +1084,16 @@
                                     </table>
                                     @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
                                         <h6>Barang Yang Ditambahkan:</h6>
-                                        <table class="table table-bordered" id="tableadd">
+                                        <table class="table table-bordered" id="tableadd-{{ $item->id_orders }}">
                                             <thead>
                                                 <tr>
-
                                                     <th>Item</th>
                                                     <th>Quantity</th>
-                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {{-- Kalau belum ada, tampilkan pesan kosong --}}
                                                 <tr id="emptyRow">
                                                     <td colspan="3" class="text-center">Tidak ada item ditambahkan</td>
                                                 </tr>
@@ -1024,6 +1103,7 @@
 
                                     <p>Acara: <span id="datetime">{{ $item->events }}</span></p>
                                 </div>
+
 
                                 @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
                                     <div class="col-lg-12">
@@ -1049,28 +1129,30 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($items as $getItem)
-                                                                <tr>
-                                                                    <td>{{ $loop->iteration }}</td>
-                                                                    <td>
-                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                            alt="Item Image" width="50">
-                                                                    </td>
-                                                                    <td>{{ $getItem->item_name }}</td>
-                                                                    <td>{{ $getItem->quantity }}</td>
-                                                                    <td>
-                                                                        <div class="shopping-cart">
-                                                                            <a class="btn btn-primary"
-                                                                                href="javascript:void(0);"
-                                                                                data-order-id="{{ $item->id_orders }}"
-                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                                <i class="fa fa-shopping-basket me-2"></i>
-                                                                                Save
-                                                                            </a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
+                                                       
+                                                                    <tr>
+                                                                        <td>{{ $loop->iteration }}</td>
+                                                                        <td>
+                                                                            <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                                alt="Item Image" width="50">
+                                                                        </td>
+                                                                        <td>{{ $getItem->item_name }}</td>
+                                                                        <td>{{ $getItem->quantity }}</td>
+                                                                        <td>
+                                                                            <div class="shopping-cart">
+                                                                                <a class="btn btn-primary"
+                                                                                    href="javascript:void(0);"
+                                                                                    data-order-id="{{ $item->id_orders }}"
+                                                                                    data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                    onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                    <i
+                                                                                        class="fa fa-shopping-basket me-2"></i>
+                                                                                    Save
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                             @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1121,20 +1203,23 @@
             let updatedItems = [];
             let newItems = [];
 
+            // Updated items yang sudah ada
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
-                let newQuantity = parseInt(input.value) || 0;
-
-                updatedItems.push({
-                    id_order_items: itemId,
-                    quantity: newQuantity
-                });
+                if (itemId) { // Hanya update item yang sudah punya ID
+                    let newQuantity = parseInt(input.value) || 0;
+                    updatedItems.push({
+                        id_order_items: itemId,
+                        quantity: newQuantity
+                    });
+                }
             });
 
-            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
+            // New items yang baru ditambahkan
+            document.querySelectorAll("#tableadd-" + orderId + " tbody tr").forEach(row => {
                 if (row.id !== "emptyRow") {
                     let inventoryId = row.dataset.inventoryId;
-                    let itemName = row.cells[1].textContent.trim();
+                    let itemName = row.cells[1]?.textContent.trim() || '';
                     let quantityInput = row.querySelector(".quantity-input");
                     let quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
@@ -1192,7 +1277,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Terjadi kesalahan",
-                        text: data.error
+                        text: data.error || "Terjadi kesalahan saat menyimpan perubahan."
                     });
                 }
             } catch (error) {
@@ -1200,12 +1285,11 @@
                 Swal.fire({
                     icon: "error",
                     title: "Gagal!",
-                    text: "Gagal menyimpan perubahan."
+                    text: "Gagal menyimpan perubahan. Coba lagi nanti."
                 });
             }
         }
     </script>
-
 
 
     {{-- simpan perubahan --}}
@@ -1214,29 +1298,35 @@
             let updatedItems = [];
             let newItems = [];
 
+            // Ambil semua input quantity yang ada di halaman
             document.querySelectorAll(".quantity-input").forEach(input => {
                 let itemId = input.getAttribute("data-q-id");
                 let newQuantity = parseInt(input.value) || 0;
 
-                updatedItems.push({
-                    id_order_items: itemId,
-                    quantity: newQuantity
-                });
+                if (itemId) { // cek supaya tidak error
+                    updatedItems.push({
+                        id_order_items: itemId,
+                        quantity: newQuantity
+                    });
+                }
             });
 
-            document.querySelectorAll("#tableadd tbody tr").forEach(row => {
+            // Ambil semua baris di tabel tambahan berdasarkan orderId
+            document.querySelectorAll(`#tableadd-${orderId} tbody tr`).forEach(row => {
                 if (row.id !== "emptyRow") {
                     let inventoryId = row.dataset.inventoryId;
-                    let itemName = row.cells[1].textContent.trim();
+                    let itemName = row.cells[1]?.textContent.trim() || "";
                     let quantityInput = row.querySelector(".quantity-input");
                     let quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
 
-                    newItems.push({
-                        inventories_id: inventoryId,
-                        item_name: itemName,
-                        quantity: quantity,
-                        orders_id: orderId
-                    });
+                    if (inventoryId) {
+                        newItems.push({
+                            inventories_id: inventoryId,
+                            item_name: itemName,
+                            quantity: quantity,
+                            orders_id: orderId
+                        });
+                    }
                 }
             });
 
@@ -1254,8 +1344,7 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            "content")
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                     },
                     body: JSON.stringify({
                         orderId: orderId,
@@ -1283,7 +1372,7 @@
                     Swal.fire({
                         icon: "error",
                         title: "Terjadi kesalahan",
-                        text: data.error
+                        text: data.error || "Gagal menyimpan perubahan."
                     });
                 }
             } catch (error) {
@@ -1300,75 +1389,81 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Tangani klik di seluruh body
             document.body.addEventListener("click", function(event) {
+                // Increment
                 if (event.target.classList.contains("increment")) {
-                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
-                    input.value = parseInt(input.value) + 1;
+                    changeQuantity(event.target, 1);
                 }
 
+                // Decrement
                 if (event.target.classList.contains("decrement")) {
-                    let input = event.target.closest(".quantity-control").querySelector(".quantity-input");
-                    if (parseInt(input.value) > 1) {
-                        input.value = parseInt(input.value) - 1;
-                    }
+                    changeQuantity(event.target, -1);
+                }
+
+                // Delete item
+                if (event.target.classList.contains("delete-item")) {
+                    deleteItem(event.target);
                 }
             });
         });
+
+        function changeQuantity(button, amount) {
+            let input = button.closest(".quantity-control").querySelector(".quantity-input");
+            let currentValue = parseInt(input.value) || 0;
+            let newValue = currentValue + amount;
+            if (newValue < 1) newValue = 1; // minimum 1
+            input.value = newValue;
+        }
 
         function updateItems(orderId, button) {
             let row = button.closest("tr");
             let inventoryId = button.getAttribute("data-inventory-id");
             let itemName = row.cells[2].textContent.trim();
-            let tableBody = document.querySelector("#tableadd tbody");
+            let tableBody = document.querySelector("#tableadd-" + orderId + " tbody");
 
-            // Cek apakah item sudah ada di tabel
+            if (!tableBody) {
+                alert("Table not found for Order ID: " + orderId);
+                return;
+            }
+
+            // Cek apakah item sudah ada
             let existingRow = [...tableBody.rows].find(r => r.dataset.inventoryId === inventoryId);
 
             if (existingRow) {
-                // Jika item sudah ada, tambahkan quantity
                 let quantityInput = existingRow.querySelector(".quantity-input");
                 quantityInput.value = parseInt(quantityInput.value) + 1;
             } else {
-                // Jika item belum ada, tambahkan baris baru
+                // Tambah item baru
                 let newRow = document.createElement("tr");
                 newRow.dataset.inventoryId = inventoryId;
                 newRow.innerHTML = `
                 <td class="d-none">${inventoryId}</td>
-                
                 <td>${itemName}</td>
                 <td class="py-2 text-center">
                     <div class="input-group quantity-control">
-                        <button class="btn btn-outline-primary btn-sm decrement" onclick="changeQuantity(this, -1)">-</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm decrement">-</button>
                         <input type="number" name="quantity[]" class="form-control text-center quantity-input" min="1" value="1">
-                        <button class="btn btn-outline-primary btn-sm increment" onclick="changeQuantity(this, 1)">+</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm increment">+</button>
                     </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteItem(this)">Delete</button>
+                    <button type="button" class="btn btn-danger btn-sm delete-item">Delete</button>
                 </td>
             `;
                 tableBody.appendChild(newRow);
             }
 
-            // Hapus "Tidak ada item ditambahkan" jika ada
+            // Hapus pesan "emptyRow" kalau ada
             let emptyRow = document.getElementById("emptyRow");
             if (emptyRow) emptyRow.remove();
         }
 
-        function changeQuantity(button, amount) {
-            let input = button.closest(".quantity-control").querySelector(".quantity-input");
-            let newValue = parseInt(input.value) + amount;
-            if (newValue > 0) {
-                input.value = newValue;
-            }
-        }
-
         function deleteItem(button) {
             let row = button.closest("tr");
+            let tableBody = row.parentElement; // tbody
             row.remove();
 
-            // Jika tabel kosong setelah penghapusan, tampilkan pesan default
-            let tableBody = document.querySelector("#tableadd tbody");
             if (tableBody.rows.length === 0) {
                 let emptyRow = document.createElement("tr");
                 emptyRow.id = "emptyRow";
@@ -1377,4 +1472,6 @@
             }
         }
     </script>
+
+
 @endsection

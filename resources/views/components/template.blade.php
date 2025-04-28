@@ -44,7 +44,7 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper">
+    <div id="main-wrapper" >
         @include('components.layouts.nav-header')
         @include('components.layouts.checkbox')
         @include('components.layouts.start-header')
@@ -53,8 +53,6 @@
             Content body start
         ***********************************-->
         @yield('content')
-
-
 
         <!-- Modal About -->
         <div class="modal fade" id="exampleModalCenter">

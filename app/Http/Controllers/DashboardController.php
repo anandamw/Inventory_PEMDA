@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Repair;
 use App\Models\Inventory;
 use App\Models\OrderItem;
+use App\Models\RepairTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
+
+
     public function updateOrderItems(Request $request)
     {
         try {
@@ -26,24 +29,59 @@ class DashboardController extends Controller
 
             // Update item yang sudah ada di tabel order_items
             foreach ($request->updatedItems as $item) {
-                $update = OrderItem::where('id_order_items', $item['id_order_items'])
-                    ->update(['quantity' => $item['quantity']]);
+                $orderItem = OrderItem::find($item['id_order_items']);
+                if ($orderItem) {
+                    $oldQuantity = $orderItem->quantity;
+                    $newQuantity = $item['quantity'];
+                    $quantityDifference = $newQuantity - $oldQuantity;
 
-                if (!$update) {
-                    \Log::error("Gagal update item ID: " . $item['id_order_items']);
+                    // Update quantity di order_items
+                    $orderItem->update(['quantity' => $newQuantity]);
+
+                    // Jika ada penambahan, kurangi stok inventory
+                    if ($quantityDifference > 0) {
+                        Inventory::where('id_inventories', $orderItem->inventories_id)
+                            ->decrement('quantity', $quantityDifference);
+                    }
+                    // Jika ada pengurangan, tambahkan ke stok inventory
+                    elseif ($quantityDifference < 0) {
+                        Inventory::where('id_inventories', $orderItem->inventories_id)
+                            ->increment('quantity', abs($quantityDifference));
+                    }
+                } else {
+                    \Log::error("Item tidak ditemukan ID: " . $item['id_order_items']);
                 }
             }
 
             // Tambahkan item baru ke tabel order_items
             foreach ($request->newItems as $newItem) {
-                OrderItem::create([
-                    'orders_id' => $newItem['orders_id'],
-                    'inventories_id' => $newItem['inventories_id'],
-                    'quantity' => $newItem['quantity'],
-                    'status' => 'pending',
-                    'users_id' => auth()->user()->id
-                ]);
+                // Cek apakah sudah ada item dengan order_id + inventory_id yang sama dan status pending
+                $existingOrderItem = OrderItem::where('orders_id', $newItem['orders_id'])
+                    ->where('inventories_id', $newItem['inventories_id'])
+                    ->where('status', 'pending')
+                    ->first();
+
+                if ($existingOrderItem) {
+                    // Kalau ada, tambahkan quantity
+                    $existingOrderItem->update([
+                        'quantity' => $existingOrderItem->quantity + $newItem['quantity']
+                    ]);
+                } else {
+                    // Kalau tidak ada, buat baru
+                    OrderItem::create([
+                        'orders_id' => $newItem['orders_id'],
+                        'inventories_id' => $newItem['inventories_id'],
+                        'quantity' => $newItem['quantity'],
+                        'status' => 'pending',
+                        'users_id' => auth()->user()->id
+                    ]);
+                }
+
+                // Kurangi stok inventory sesuai jumlah item baru
+                Inventory::where('id_inventories', $newItem['inventories_id'])
+                    ->decrement('quantity', $newItem['quantity']);
             }
+
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
@@ -55,46 +93,81 @@ class DashboardController extends Controller
     public function updateOrderItemsStatus(Request $request)
     {
         try {
-            \Log::info('Menerima request update status', ['request' => $request->all()]);
+            \Log::info("Request masuk:", $request->all()); // Log data request untuk debug
 
             // Validasi input
             $request->validate([
-                'orderId' => 'required|exists:orders,id_orders', // Pastikan pakai id_orders
+                'orderId' => 'required|exists:orders,id_orders',
                 'updatedItems.*.id_order_items' => 'nullable|exists:order_items,id_order_items',
                 'updatedItems.*.quantity' => 'required|integer|min:1',
                 'newItems.*.inventories_id' => 'required|exists:inventories,id_inventories',
                 'newItems.*.quantity' => 'required|integer|min:1',
-                'status' => 'nullable|string|in:pending,success,canceled' // Pastikan status valid
+                'status' => 'nullable|string|in:pending,success,canceled'
             ]);
 
-            // 🔹 Update status semua order_items berdasarkan orders_id
+            // Update status semua order_items berdasarkan orders_id
             if ($request->has('status')) {
                 OrderItem::where('orders_id', $request->orderId)->update(['status' => $request->status]);
             }
 
-            // 🔹 Update existing items
+            // Update existing items
             foreach ($request->updatedItems as $item) {
                 if (!empty($item['id_order_items'])) {
-                    OrderItem::where('id_order_items', $item['id_order_items'])->update([
-                        'quantity' => $item['quantity']
-                    ]);
+                    $orderItem = OrderItem::find($item['id_order_items']);
+                    if ($orderItem) {
+                        $oldQuantity = $orderItem->quantity;
+                        $newQuantity = $item['quantity'];
+                        $quantityDifference = $newQuantity - $oldQuantity;
+
+                        // Update quantity di order_items
+                        $orderItem->update(['quantity' => $newQuantity]);
+
+                        // Update stok inventory
+                        if ($quantityDifference > 0) {
+                            Inventory::where('id_inventories', $orderItem->inventories_id)
+                                ->decrement('quantity', $quantityDifference);
+                        } elseif ($quantityDifference < 0) {
+                            Inventory::where('id_inventories', $orderItem->inventories_id)
+                                ->increment('quantity', abs($quantityDifference));
+                        }
+                    } else {
+                        \Log::error("Item tidak ditemukan ID: " . $item['id_order_items']);
+                    }
                 }
             }
 
-            // 🔹 Insert new items
-            foreach ($request->newItems as $item) {
-                OrderItem::create([
-                    'inventories_id' => $item['inventories_id'],
-                    'quantity' => $item['quantity'],
-                    'orders_id' => $request->orderId,
-                    'status' => $item['status'] ?? 'pending',
-                    'users_id' => auth()->user()->id // Pastikan users_id tidak null
-                ]);
+            // Tambahkan item baru ke tabel order_items
+            foreach ($request->newItems as $newItem) {
+                // Cek apakah sudah ada item dengan order_id + inventory_id yang sama
+                $existingOrderItem = OrderItem::where('orders_id', $request->orderId)
+                    ->where('inventories_id', $newItem['inventories_id'])
+                    ->where('status', $request->status ?? 'pending')
+                    ->first();
+
+                if ($existingOrderItem) {
+                    // Kalau ada, tambahkan quantity
+                    $existingOrderItem->update([
+                        'quantity' => $existingOrderItem->quantity + $newItem['quantity']
+                    ]);
+                } else {
+                    // Kalau tidak ada, buat baru
+                    OrderItem::create([
+                        'orders_id' => $request->orderId,
+                        'inventories_id' => $newItem['inventories_id'],
+                        'quantity' => $newItem['quantity'],
+                        'status' => $request->status ?? 'pending',
+                        'users_id' => auth()->user()->id
+                    ]);
+                }
+
+                // Kurangi stok inventory sesuai jumlah item baru
+                Inventory::where('id_inventories', $newItem['inventories_id'])
+                    ->decrement('quantity', $newItem['quantity']);
             }
 
             return response()->json(['success' => true, 'message' => 'Perubahan berhasil disimpan.']);
         } catch (\Exception $e) {
-            \Log::error('Gagal memperbarui pesanan', ['error' => $e->getMessage()]);
+            \Log::error("Error updateOrderItemsStatus: " . $e->getMessage()); // Log error untuk debug
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
@@ -150,13 +223,11 @@ class DashboardController extends Controller
     public function index()
     {
         $headerText = 'Dashboard';
-        $items = Inventory::whereNotIn('id_inventories', function ($query) {
-            $query->select('inventories_id')
-                ->from('order_items')
-                ->where('status', 'pending');
-        })
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+
+
+        $items = Inventory::orderBy('created_at', 'desc')->get();
+
 
         $orders = DB::table('orders')
             ->join('users', 'orders.users_id', '=', 'users.id')
@@ -172,9 +243,7 @@ class DashboardController extends Controller
                 'orders.users_id',
                 DB::raw('MAX(order_items.status) as status')
             )
-            ->where('users.role', Auth::user()->role)
-
-            ->groupBy(
+            ->where('users.role', Auth::user()->role)->groupBy(
                 'orders.id_orders',
                 'users.name',
                 'users.nip',
@@ -200,7 +269,7 @@ class DashboardController extends Controller
                 'order_items.id_order_items',
                 'order_items.status',
                 'inventories.item_name',
-                'inventories.id_inventories', // Tambahkan ini agar bisa digunakan untuk filtering di Blade
+                'inventories.id_inventories',
                 'orders.*'
             )
             ->get();
@@ -375,7 +444,7 @@ class DashboardController extends Controller
         $repair = Repair::findOrFail($id);
 
         // Cek apakah user tergabung dalam tim yang menangani perbaikan ini
-        $isUserInTeam = \DB::table('repair_teams')
+        $isUserInTeam = DB::table('repair_teams')
             ->where('repair_id', $repair->id_repair)
             ->where('user_id', auth()->id())
             ->exists();
