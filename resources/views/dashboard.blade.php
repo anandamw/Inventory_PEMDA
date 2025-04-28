@@ -80,9 +80,15 @@
                 </div>
 
 
+                <!-- Optional: Add custom CSS for better effects -->
+
+
+                <!-- Optional: Add custom CSS for better effects -->
+
+
                 <div class="col-xl-4">
                     <div class="col-xl-12 col-lg-6">
-                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'team')
+                        @if (auth()->user()->role == 'team')
                             <div class="card bg-primary text-white shadow-lg position-relative overflow-hidden hover-card"
                                 style="border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); border-radius: 20px;">
 
@@ -117,6 +123,81 @@
                                     </div>
                                 </div>
                             </div>
+                        @endif
+
+                        @if (auth()->user()->role == 'admin')
+                        <div class="card h-auto shadow-lg border-0 rounded-4">
+                            <div class="card-body px-2 pt-2 mt-2"> <!-- Mengurangi padding pada card-body -->
+                                <nav class="buy-sell">
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active fw-bold" id="nav-item-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-item" type="button" role="tab"
+                                            aria-controls="nav-item" aria-selected="true">Data Item</button>
+                                        <button class="nav-link fw-bold" id="nav-team-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-team" type="button" role="tab"
+                                            aria-controls="nav-team" aria-selected="false">Data Team</button>
+                                    </div>
+                                </nav>
+
+                                <div class="tab-content mt-2 p-0" id="nav-tabContent">
+                                    <!-- TAB 1: DATA ITEM -->
+                                    <div class="tab-pane fade show active" id="nav-item" role="tabpanel"
+                                        aria-labelledby="nav-item-tab">
+                                        <div class="card-body pt-0 pb-1"> <!-- Mengurangi padding bawah -->
+                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                                <!-- Mengurangi max-height -->
+                                                <table class="table table-sell verticle-middle mb-0">
+                                                    <thead
+                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                        <tr class="text-white">
+                                                            <th scope="col">Code</th>
+                                                            <th class="text-center" scope="col">Item</th>
+                                                            <th class="text-end" scope="col">Stok</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($dataItem as $item)
+                                                            <tr class="text-primary hover-shadow">
+                                                                <td>{{ $item->code_item }}</td>
+                                                                <td class="text-center">{{ $item->item_name }}</td>
+                                                                <td class="text-end">{{ $item->quantity }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- TAB 2: DATA TEAM -->
+                                    <div class="tab-pane fade" id="nav-team" role="tabpanel"
+                                        aria-labelledby="nav-team-tab">
+                                        <div class="card-body pt-0 pb-1">
+                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                                <!-- Mengurangi max-height -->
+                                                <table class="table table-sell verticle-middle mb-0">
+                                                    <thead
+                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                        <tr class="text-white">
+                                                            <th scope="col">Nama</th>
+                                                            <th class="text-end" scope="col">Repair</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($jobCountPerUser as $user)
+                                                            <tr class="text-primary hover-shadow">
+                                                                <td>{{ $user->name }}</td>
+                                                                <td class="text-end">{{ $user->total_jobs }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- /.tab-content -->
+                            </div>
+                        </div>
                         @endif
 
                         @if (auth()->user()->role == 'admin')
@@ -250,6 +331,74 @@
 
 
 
+<<<<<<< HEAD
+                                        method: 'GET',
+                                        success: function(repairs) {
+                                            $('.timeline').empty(); // kosongkan dulu
+
+                                            repairs.forEach(function(data) {
+                                                let imgSrc = data.user.profile ?? '/assets/images/no-profile.jpg';
+
+                                                if (data.status === 'failed') imgSrc = '/assets/images/warning.jpg';
+                                                else if (data.status === 'scheduled') imgSrc = '/assets/images/calendar.jpg';
+
+                                                let statusLabel = '';
+                                                if (data.status === 'failed') {
+                                                    statusLabel =
+                                                        `<p class="fw-bold text-danger">Tidak melaksanakan tugasnya</p>`;
+                                                } else if (data.status === 'pending') {
+                                                    statusLabel = `<p class="fw-bold text-black">Menunggu konfirmasi</p>`;
+                                                } else if (data.status === 'scheduled') {
+                                                    statusLabel = `<p class="fw-bold text-warning">Dijadwalkan</p>`;
+                                                } else if (data.status === 'completed') {
+                                                    statusLabel = `<p class="fw-bold">Selesai</p>`;
+                                                }
+
+                                                const html = `
+                                                    <li>
+                                                        <div class="timeline-panel">
+                                                            <div class="d-flex align-items-center justify-content-center me-2">
+                                                                <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h5 class="mb-1 fw-bold">${data.user.name}</h5>
+                                                                ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </small>` : ''}
+                                                                <p class="mb-1">${data.repair}</p>
+                                                                ${statusLabel}
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
+                                                                    <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
+                                                                    <a href="javascript:void(0)" class="btn btn-info btn-xs btn-warning"
+                                                                        onclick="openTeamModal(${data.id_repair})"
+                                                                        data-repair='${JSON.stringify(data)}'>
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                `;
+
+                                                $('.timeline').append(html);
+                                            });
+                                        },
+                                        error: function(err) {
+                                            console.error('Failed to fetch repair data', err);
+                                        }
+                                    });
+                                }
+
+                                // Panggil setiap 10 detik
+                                setInterval(fetchRepairs, 3000);
+
+                                // Pertama kali load
+                                fetchRepairs();
+                            </script>
+=======
+>>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
 
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
@@ -517,6 +666,113 @@
                                     </div>
                                 </div>
                             </div>
+<<<<<<< HEAD
+                            <script>
+                                function fetchTeamRepairs() {
+                                    $.ajax({
+                                        url: '{{ url('/team-repair/realtime') }}',
+                                        method: 'GET',
+                                        success: function(repairs) {
+                                            const container = $('#DZ_W_Todo3');
+                                            container.empty();
+
+                                            if (repairs.length === 0) {
+                                                container.html(`
+                        <div class="text-center my-4">
+                            <img src="/assets/images/no-messages.png" alt="No Messages" style="width: 130px;">
+                        </div>
+                    `);
+                                                return;
+                                            }
+
+                                            let html = '<ul class="timeline">';
+
+                                            repairs.forEach(function(repair) {
+                                                const user = repair.user || {};
+                                                const instansi = user.instansi?.nama_instansi || '-';
+                                                const profile = user.profile ? `/${user.profile}` :
+                                                    '/assets/images/warning.jpg';
+                                                const dateObj = new Date(repair.scheduled_date);
+
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0);
+
+                                                const scheduled = new Date(dateObj);
+                                                scheduled.setHours(0, 0, 0, 0);
+
+                                                const isPast = scheduled < today;
+
+
+                                                const formattedDate = new Intl.DateTimeFormat('id-ID', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                }).format(dateObj);
+
+                                                const repairData = {
+                                                    user: {
+                                                        name: user.name,
+                                                        instansi: instansi,
+                                                        nip: user.nip
+                                                    },
+                                                    repair: repair.repair,
+                                                    scheduled_date: formattedDate,
+                                                    teams: (repair.teams || []).map(t => t.name)
+                                                };
+
+                                                html += `
+                        <li>
+                            <div class="timeline-panel p-3 border rounded shadow-sm">
+                                <div class="d-flex align-items-start mb-2">
+                                    ${repair.status === 'failed'
+                                        ? `<img class="rounded-circle me-2" alt="image" width="50" src="${profile}">`
+                                        : `<div class="media me-2">🛠️</div>`}
+
+                                    <div class="media-body">
+                                        <h7 class="mb-1 fw-bold">Perbaikan Dijadwalkan pada Anda</h7>
+                                        <small class="text-success d-block">
+                                            <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                                            | <span><strong>${instansi}</strong></span>
+                                        </small>
+                                        <small class="text-muted d-block"><strong>Diminta oleh:</strong> ${user.name || '-'} (NIP: ${user.nip || '-'})</small>
+                                        <small class="text-muted d-block mb-2"><strong>Permintaan:</strong> ${repair.repair || 'Tidak ada deskripsi'}</small>
+
+                                        <div class="d-flex align-items-center gap-2 mt-2">
+                                            ${isPast
+                                                ? `<button type="submit" class="btn btn-danger btn-sm" disabled>Failed</button>`
+                                                : `
+                                                                                                                                                                                                                                                                                                                                                                                                    <form action="/repairs/complete/${repair.id_repair}" method="POST" class="d-inline">
+                                                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                                                                                                                                                                                                                                                                                                                                                                        <button type="submit" class="btn btn-success btn-sm">Selesai</button>
+                                                                                                                                                                                                                                                                                                                                                                                                    </form>
+                                                                                                                                                                                                                                                                                                                                                                                                    <a href="javascript:void(0)" class="btn btn-warning btn-xs"
+                                                                                                                                                                                                                                                                                                                                                                                                        onclick="openTeamModal(${repair.id_repair})"
+                                                                                                                                                                                                                                                                                                                                                                                                        data-repair='${JSON.stringify(repairData)}'>
+                                                                                                                                                                                                                                                                                                                                                                                                        <i class="fas fa-eye"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                    </a>`}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                                            });
+
+                                            html += '</ul>';
+                                            container.html(html);
+                                        },
+                                        error: function(err) {
+                                            console.error('Gagal mengambil data team repair', err);
+                                        }
+                                    });
+                                }
+
+                                // Jalankan realtime
+                                setInterval(fetchTeamRepairs, 5000);
+                                fetchTeamRepairs();
+                            </script>
+=======
+>>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
 
 
 

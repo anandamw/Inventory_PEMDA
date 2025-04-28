@@ -373,7 +373,23 @@ class DashboardController extends Controller
             ->orderBy('scheduled_date', 'desc')
             ->get();
 
-        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount', 'repairs', 'userRepairs', 'teams', 'teamRepairs'));
+
+        // Rekap jumlah pekerjaan (repair) per teknisi
+        $jobCountPerUser = DB::table('repair_teams')
+            ->join('users', 'repair_teams.user_id', '=', 'users.id')
+            ->select(
+                'users.name',
+                'users.nip',
+                'users.id',
+                DB::raw('COUNT(repair_teams.repair_id) as total_jobs')
+            )
+            ->where('users.role', 'team')
+            ->groupBy('users.name', 'users.nip', 'users.id')
+            ->orderByDesc('total_jobs')
+            ->get();
+
+
+        return view('dashboard', compact('items', 'headerText', 'dataItem', 'dataLatest', 'orders', 'orderItem', 'lowStockCount', 'repairs', 'userRepairs', 'teams', 'teamRepairs', 'jobCountPerUser'));
     }
 
     /**
