@@ -126,78 +126,79 @@
                         @endif
 
                         @if (auth()->user()->role == 'admin')
-                        <div class="card h-auto shadow-lg border-0 rounded-4">
-                            <div class="card-body px-2 pt-2 mt-2"> <!-- Mengurangi padding pada card-body -->
-                                <nav class="buy-sell">
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button class="nav-link active fw-bold" id="nav-item-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-item" type="button" role="tab"
-                                            aria-controls="nav-item" aria-selected="true">Data Item</button>
-                                        <button class="nav-link fw-bold" id="nav-team-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-team" type="button" role="tab"
-                                            aria-controls="nav-team" aria-selected="false">Data Team</button>
-                                    </div>
-                                </nav>
+                            <div class="card h-auto shadow-lg border-0 rounded-4">
+                                <div class="card-body px-2 pt-2 mt-2"> <!-- Mengurangi padding pada card-body -->
+                                    <nav class="buy-sell">
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <button class="nav-link active fw-bold" id="nav-item-tab" data-bs-toggle="tab"
+                                                data-bs-target="#nav-item" type="button" role="tab"
+                                                aria-controls="nav-item" aria-selected="true">Data Item</button>
+                                            <button class="nav-link fw-bold" id="nav-team-tab" data-bs-toggle="tab"
+                                                data-bs-target="#nav-team" type="button" role="tab"
+                                                aria-controls="nav-team" aria-selected="false">Data Team</button>
+                                        </div>
+                                    </nav>
 
-                                <div class="tab-content mt-2 p-0" id="nav-tabContent">
-                                    <!-- TAB 1: DATA ITEM -->
-                                    <div class="tab-pane fade show active" id="nav-item" role="tabpanel"
-                                        aria-labelledby="nav-item-tab">
-                                        <div class="card-body pt-0 pb-1"> <!-- Mengurangi padding bawah -->
-                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
-                                                <!-- Mengurangi max-height -->
-                                                <table class="table table-sell verticle-middle mb-0">
-                                                    <thead
-                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
-                                                        <tr class="text-white">
-                                                            <th scope="col">Code</th>
-                                                            <th class="text-center" scope="col">Item</th>
-                                                            <th class="text-end" scope="col">Stok</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($dataItem as $item)
-                                                            <tr class="text-primary hover-shadow">
-                                                                <td>{{ $item->code_item }}</td>
-                                                                <td class="text-center">{{ $item->item_name }}</td>
-                                                                <td class="text-end">{{ $item->quantity }}</td>
+                                    <div class="tab-content mt-2 p-0" id="nav-tabContent">
+                                        <!-- TAB 1: DATA ITEM -->
+                                        <div class="tab-pane fade show active" id="nav-item" role="tabpanel"
+                                            aria-labelledby="nav-item-tab">
+                                            <div class="card-body pt-0 pb-1"> <!-- Mengurangi padding bawah -->
+                                                <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                                    <!-- Mengurangi max-height -->
+                                                    <table class="table table-sell verticle-middle mb-0">
+                                                        <thead
+                                                            style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                            <tr class="text-white">
+                                                                <th scope="col">Code</th>
+                                                                <th class="text-center" scope="col">Item</th>
+                                                                <th class="text-end" scope="col">Stok</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($dataItem as $item)
+                                                                <tr class="text-primary hover-shadow">
+                                                                    <td>{{ $item->code_item }}</td>
+                                                                    <td class="text-center">{{ $item->item_name }}</td>
+                                                                    <td class="text-end">{{ $item->quantity }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- TAB 2: DATA TEAM -->
-                                    <div class="tab-pane fade" id="nav-team" role="tabpanel"
-                                        aria-labelledby="nav-team-tab">
-                                        <div class="card-body pt-0 pb-1">
-                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
-                                                <!-- Mengurangi max-height -->
-                                                <table class="table table-sell verticle-middle mb-0">
-                                                    <thead
-                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
-                                                        <tr class="text-white">
-                                                            <th scope="col">Nama</th>
-                                                            <th class="text-end" scope="col">Repair</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($jobCountPerUser as $user)
-                                                            <tr class="text-primary hover-shadow">
-                                                                <td>{{ $user->name }}</td>
-                                                                <td class="text-end">{{ $user->total_jobs }}</td>
+                                        <!-- TAB 2: DATA TEAM -->
+                                        <div class="tab-pane fade" id="nav-team" role="tabpanel"
+                                            aria-labelledby="nav-team-tab">
+                                            <div class="card-body pt-0 pb-1">
+                                                <div class="table-responsive"
+                                                    style="max-height: 180px; overflow-y: auto;">
+                                                    <!-- Mengurangi max-height -->
+                                                    <table class="table table-sell verticle-middle mb-0">
+                                                        <thead
+                                                            style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                            <tr class="text-white">
+                                                                <th scope="col">Nama</th>
+                                                                <th class="text-end" scope="col">Repair</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($jobCountPerUser as $user)
+                                                                <tr class="text-primary hover-shadow">
+                                                                    <td>{{ $user->name }}</td>
+                                                                    <td class="text-end">{{ $user->total_jobs }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div> <!-- /.tab-content -->
+                                    </div> <!-- /.tab-content -->
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                         @if (auth()->user()->role == 'admin')
@@ -328,10 +329,11 @@
                                 </div>
 
                             </div>
+                            {{-- <script>
+                                function fetchRepairs() {
+                                    $.ajax({
+                                        url: '{{ url('/repair/realtime') }}',
 
-
-
-<<<<<<< HEAD
                                         method: 'GET',
                                         success: function(repairs) {
                                             $('.timeline').empty(); // kosongkan dulu
@@ -355,32 +357,34 @@
                                                 }
 
                                                 const html = `
-                                                    <li>
-                                                        <div class="timeline-panel">
-                                                            <div class="d-flex align-items-center justify-content-center me-2">
-                                                                <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
-                                                            </div>
-                                                            <div class="media-body">
-                                                                <h5 class="mb-1 fw-bold">${data.user.name}</h5>
-                                                                ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            On ${data.scheduled_date}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </small>` : ''}
-                                                                <p class="mb-1">${data.repair}</p>
-                                                                ${statusLabel}
-                                                                <div class="d-flex align-items-center gap-2">
-                                                                    <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
-                                                                    <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
-                                                                    <a href="javascript:void(0)" class="btn btn-info btn-xs btn-warning"
-                                                                        onclick="openTeamModal(${data.id_repair})"
-                                                                        data-repair='${JSON.stringify(data)}'>
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                `;
+                                                                            <li>
+                                                                                <div class="timeline-panel">
+                                                                                    <div class="d-flex align-items-center justify-content-center me-2">
+                                                                                        <img class="rounded-3" alt="image" width="50" src="${imgSrc}">
+                                                                                    </div>
+                                                                                    <div class="media-body">
+                                                                                        <h5 class="mb-1 fw-bold">${data.user.name}</h5>
+                                                                                        ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </small>` : ''}
+                                                                                        <p class="mb-1">${data.repair}</p>
+                                                                                        ${statusLabel}
+                                                                                        <div class="d-flex align-items-center gap-2">
+                                                                                            <button class="btn btn-primary btn-xs shadow" onclick="openScheduleModal(${data.id_repair})">Reply</button>
+                                                                                            <a href="/repair/delete/${data.id_repair}" class="btn btn-danger btn-xs">Delete</a>
+                                                                                                <a href="javascript:void(0)"
+                                                                                                class="btn btn-info btn-xs btn-warning"
+                                                                                                onclick="openTeamModal({{ $repair->id_repair }})"
+                                                                                                data-repair='@json($repairData)'>
+                                                                                                <i class="fas fa-eye"></i>
+                                                                                            </a>
+                                                                                           
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        `;
 
                                                 $('.timeline').append(html);
                                             });
@@ -396,9 +400,9 @@
 
                                 // Pertama kali load
                                 fetchRepairs();
-                            </script>
-=======
->>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
+                            </script> --}}
+
+
 
                             <!-- Modal Perbaikan -->
                             <div class="modal fade" id="repairActionModal" tabindex="-1"
@@ -615,9 +619,9 @@
                                                                                                     <div class="media-body">
                                                                                                         <h5 class="mb-1 fw-bold">${data.user.name}</h5>
                                                                                                         ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    On ${data.scheduled_date}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </small>` : ''}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </small>` : ''}
                                                                                                         <p class="mb-1">${data.repair}</p>
                                                                                                         ${statusLabel}
                                                                                                         <div class="d-flex align-items-center gap-2">
@@ -666,114 +670,6 @@
                                     </div>
                                 </div>
                             </div>
-<<<<<<< HEAD
-                            <script>
-                                function fetchTeamRepairs() {
-                                    $.ajax({
-                                        url: '{{ url('/team-repair/realtime') }}',
-                                        method: 'GET',
-                                        success: function(repairs) {
-                                            const container = $('#DZ_W_Todo3');
-                                            container.empty();
-
-                                            if (repairs.length === 0) {
-                                                container.html(`
-                        <div class="text-center my-4">
-                            <img src="/assets/images/no-messages.png" alt="No Messages" style="width: 130px;">
-                        </div>
-                    `);
-                                                return;
-                                            }
-
-                                            let html = '<ul class="timeline">';
-
-                                            repairs.forEach(function(repair) {
-                                                const user = repair.user || {};
-                                                const instansi = user.instansi?.nama_instansi || '-';
-                                                const profile = user.profile ? `/${user.profile}` :
-                                                    '/assets/images/warning.jpg';
-                                                const dateObj = new Date(repair.scheduled_date);
-
-                                                const today = new Date();
-                                                today.setHours(0, 0, 0, 0);
-
-                                                const scheduled = new Date(dateObj);
-                                                scheduled.setHours(0, 0, 0, 0);
-
-                                                const isPast = scheduled < today;
-
-
-                                                const formattedDate = new Intl.DateTimeFormat('id-ID', {
-                                                    day: 'numeric',
-                                                    month: 'long',
-                                                    year: 'numeric'
-                                                }).format(dateObj);
-
-                                                const repairData = {
-                                                    user: {
-                                                        name: user.name,
-                                                        instansi: instansi,
-                                                        nip: user.nip
-                                                    },
-                                                    repair: repair.repair,
-                                                    scheduled_date: formattedDate,
-                                                    teams: (repair.teams || []).map(t => t.name)
-                                                };
-
-                                                html += `
-                        <li>
-                            <div class="timeline-panel p-3 border rounded shadow-sm">
-                                <div class="d-flex align-items-start mb-2">
-                                    ${repair.status === 'failed'
-                                        ? `<img class="rounded-circle me-2" alt="image" width="50" src="${profile}">`
-                                        : `<div class="media me-2">🛠️</div>`}
-
-                                    <div class="media-body">
-                                        <h7 class="mb-1 fw-bold">Perbaikan Dijadwalkan pada Anda</h7>
-                                        <small class="text-success d-block">
-                                            <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
-                                            | <span><strong>${instansi}</strong></span>
-                                        </small>
-                                        <small class="text-muted d-block"><strong>Diminta oleh:</strong> ${user.name || '-'} (NIP: ${user.nip || '-'})</small>
-                                        <small class="text-muted d-block mb-2"><strong>Permintaan:</strong> ${repair.repair || 'Tidak ada deskripsi'}</small>
-
-                                        <div class="d-flex align-items-center gap-2 mt-2">
-                                            ${isPast
-                                                ? `<button type="submit" class="btn btn-danger btn-sm" disabled>Failed</button>`
-                                                : `
-                                                                                                                                                                                                                                                                                                                                                                                                    <form action="/repairs/complete/${repair.id_repair}" method="POST" class="d-inline">
-                                                                                                                                                                                                                                                                                                                                                                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                                                                                                                                                                                                                                                                                                                                                                        <button type="submit" class="btn btn-success btn-sm">Selesai</button>
-                                                                                                                                                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                                                                                                                                                    <a href="javascript:void(0)" class="btn btn-warning btn-xs"
-                                                                                                                                                                                                                                                                                                                                                                                                        onclick="openTeamModal(${repair.id_repair})"
-                                                                                                                                                                                                                                                                                                                                                                                                        data-repair='${JSON.stringify(repairData)}'>
-                                                                                                                                                                                                                                                                                                                                                                                                        <i class="fas fa-eye"></i>
-                                                                                                                                                                                                                                                                                                                                                                                                    </a>`}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                                            });
-
-                                            html += '</ul>';
-                                            container.html(html);
-                                        },
-                                        error: function(err) {
-                                            console.error('Gagal mengambil data team repair', err);
-                                        }
-                                    });
-                                }
-
-                                // Jalankan realtime
-                                setInterval(fetchTeamRepairs, 5000);
-                                fetchTeamRepairs();
-                            </script>
-=======
->>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
-
 
 
                         @endif
@@ -783,6 +679,111 @@
                 </div>
             </div>
 
+
+            {{-- <script>
+                function fetchTeamRepairs() {
+                    $.ajax({
+                        url: '{{ url('/team-repair/realtime') }}',
+                        method: 'GET',
+                        success: function(repairs) {
+                            const container = $('#DZ_W_Todo3');
+                            container.empty();
+
+                            if (repairs.length === 0) {
+                                container.html(`
+        <div class="text-center my-4">
+            <img src="/assets/images/no-messages.png" alt="No Messages" style="width: 130px;">
+        </div>
+    `);
+                                return;
+                            }
+
+                            let html = '<ul class="timeline">';
+
+                            repairs.forEach(function(repair) {
+                                const user = repair.user || {};
+                                const instansi = user.instansi?.nama_instansi || '-';
+                                const profile = user.profile ? `/${user.profile}` :
+                                    '/assets/images/warning.jpg';
+                                const dateObj = new Date(repair.scheduled_date);
+
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+
+                                const scheduled = new Date(dateObj);
+                                scheduled.setHours(0, 0, 0, 0);
+
+                                const isPast = scheduled < today;
+
+
+                                const formattedDate = new Intl.DateTimeFormat('id-ID', {
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric'
+                                }).format(dateObj);
+
+                                const repairData = {
+                                    user: {
+                                        name: user.name,
+                                        instansi: instansi,
+                                        nip: user.nip
+                                    },
+                                    repair: repair.repair,
+                                    scheduled_date: formattedDate,
+                                    teams: (repair.teams || []).map(t => t.name)
+                                };
+
+                                html += `
+        <li>
+            <div class="timeline-panel p-3 border rounded shadow-sm">
+                <div class="d-flex align-items-start mb-2">
+                    ${repair.status === 'failed'
+                        ? `<img class="rounded-circle me-2" alt="image" width="50" src="${profile}">`
+                        : `<div class="media me-2">🛠️</div>`}
+
+                    <div class="media-body">
+                        <h7 class="mb-1 fw-bold">Perbaikan Dijadwalkan pada Anda</h7>
+                        <small class="text-success d-block">
+                            <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                            | <span><strong>${instansi}</strong></span>
+                        </small>
+                        <small class="text-muted d-block"><strong>Diminta oleh:</strong> ${user.name || '-'} (NIP: ${user.nip || '-'})</small>
+                        <small class="text-muted d-block mb-2"><strong>Permintaan:</strong> ${repair.repair || 'Tidak ada deskripsi'}</small>
+
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            ${isPast
+                                ? `<button type="submit" class="btn btn-danger btn-sm" disabled>Failed</button>`
+                                : `
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <form action="/repairs/complete/${repair.id_repair}" method="POST" class="d-inline">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button type="submit" class="btn btn-success btn-sm">Selesai</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </form>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <a href="javascript:void(0)" class="btn btn-warning btn-xs"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            onclick="openTeamModal(${repair.id_repair})"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            data-repair='${JSON.stringify(repairData)}'>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <i class="fas fa-eye"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </a>`}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    `;
+                            });
+
+                            html += '</ul>';
+                            container.html(html);
+                        },
+                        error: function(err) {
+                            console.error('Gagal mengambil data team repair', err);
+                        }
+                    });
+                }
+
+                // Jalankan realtime
+                setInterval(fetchTeamRepairs, 5000);
+                fetchTeamRepairs();
+            </script> --}}
 
 
 
@@ -1082,7 +1083,7 @@
                                                                     onclick="handleDeleteClick(this)">
                                                                     <i class="fas fa-undo"></i> Return
                                                                 </div>
-                                                             @endif
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -1538,5 +1539,160 @@
         }
     </script>
 
+    <script src="{{ asset('/sw.js') }}"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    console.log("Service worker registration succeeded:", registration);
+                },
+                (error) => {
+                    console.error(`Service worker registration failed: ${error}`);
+                },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
 
+        // Check if the app is installed
+        let deferredPrompt;
+        window.addEventListener("beforeinstallprompt", (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show the modal with animation
+            const modal = document.getElementById("installModal");
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+
+            document.getElementById("installButton").addEventListener("click", () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === "accepted") {
+                            console.log("User accepted the install prompt");
+                        } else {
+                            console.log("User dismissed the install prompt");
+                        }
+                        deferredPrompt = null;
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Modal for Install Prompt -->
+    <!-- Modal for Install Prompt -->
+    <div class="modal fade" id="installModal" tabindex="-1" aria-labelledby="installModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fs-3" id="installModalLabel">Install Our App</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="{{ asset('icon512_rounded.png') }}" alt="App Icon" class="img-fluid mb-3"
+                        style="max-width: 120px;">
+                    <h4>Take Items, Everything Becomes Easier!</h4>
+                    <p class="text-muted">
+                        Website pengambilan barang: Solusi cepat, transparan, dan efisien untuk mengelola dan mempermudah
+                        proses pengambilan barang milik instansi, dengan fitur pelacakan dan pengajuan yang mudah diakses.
+                    </p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-primary px-5 py-2" id="installButton">Install</button>
+                    <button type="button" class="btn btn-outline-secondary px-5 py-2"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Custom Modal Styling */
+        #installModal .modal-content {
+            border-radius: 20px;
+            /* More rounded corners */
+            background-color: #f9f9f9;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            /* Soft shadow */
+        }
+
+        #installModal .modal-header {
+            background-color: #f0f8ff;
+            /* Light blue background */
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+            /* More padding for modern spacing */
+        }
+
+        #installModal .modal-title {
+            font-size: 1.75rem;
+            /* Larger title for better readability */
+            color: #333;
+            /* Darker color for the title */
+            font-weight: bold;
+        }
+
+        #installModal .modal-body {
+            padding: 2rem 2.5rem;
+            /* More spacious padding */
+            text-align: center;
+        }
+
+        #installModal .modal-body p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        #installButton {
+            background-color: #0069d9;
+            border-color: #0069d9;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+            border-radius: 50px;
+            /* Round button */
+        }
+
+        #installButton:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+            transform: translateY(-2px);
+            /* Subtle hover animation */
+        }
+
+        #installButton:focus {
+            outline: none;
+        }
+
+        #installModal .modal-footer .btn {
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1rem;
+        }
+
+        #installModal .btn-outline-secondary {
+            border: 2px solid #ddd;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #installModal .btn-outline-secondary:hover {
+            background-color: #f0f8ff;
+            color: #0069d9;
+        }
+
+        /* Add some responsive behavior for small screens */
+        @media (max-width: 576px) {
+            #installModal .modal-dialog {
+                margin: 20px;
+            }
+
+            #installModal .modal-content {
+                border-radius: 15px;
+                /* Less rounded corners on small screens */
+            }
+        }
+    </style>
 @endsection
