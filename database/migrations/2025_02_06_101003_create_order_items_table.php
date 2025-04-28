@@ -14,17 +14,15 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->unsignedBigInteger("id_order_items")->autoIncrement();
 
-
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
 
             $table->unsignedBigInteger("inventories_id");
-            $table->foreign("inventories_id")->references("id_inventories")->on("inventories");
+            $table->foreign("inventories_id")->references("id_inventories")->on("inventories")->onDelete('cascade');
 
             $table->integer('quantity');
 
             $table->unsignedBigInteger("orders_id");
-            $table->foreign("orders_id")->references("id_orders")->on("orders");
-
+            $table->foreign("orders_id")->references("id_orders")->on("orders")->onDelete('cascade');
 
             $table->enum('status', ['pending', 'success', 'canceled'])->default('pending');
 

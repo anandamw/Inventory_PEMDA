@@ -125,6 +125,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/repairs/{id}/assign', [DashboardController::class, 'assignToTeam'])->name('repairs.assign');
         Route::post('/repairs/{id}/complete', [DashboardController::class, 'complete'])->name('repairs.complete');
 
+        Route::post('/return-item', [DashboardController::class, 'returnDeleteItem'])->name('return.item');
 
         Route::get('/profile', [UserController::class, 'profile']);
         Route::post('/upload-profile', [UserController::class, 'post_profile'])->name('upload.image');

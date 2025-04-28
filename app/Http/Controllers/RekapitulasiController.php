@@ -15,7 +15,13 @@ class RekapitulasiController extends Controller
     public function index()
     {
 
-        $orders = Order::with('user')->orderBy('id_orders')->get();
+
+        $orders = DB::table('orders')
+            ->join('users', 'orders.users_id', '=', 'users.id')
+            ->join('order_items', 'orders.id_orders', '=', 'order_items.orders_id')
+            ->select('orders.*', 'users.profile', 'users.nip', 'users.name', 'order_items.quantity', 'order_items.status', 'order_items.inventories_id')
+            ->orderBy('orders.created_at', 'desc')
+            ->get();
 
 
 

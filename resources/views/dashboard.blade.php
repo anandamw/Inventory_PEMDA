@@ -466,9 +466,9 @@
                                                                                                     <div class="media-body">
                                                                                                         <h5 class="mb-1 fw-bold">${data.user.name}</h5>
                                                                                                         ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                On ${data.scheduled_date}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </small>` : ''}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </small>` : ''}
                                                                                                         <p class="mb-1">${data.repair}</p>
                                                                                                         ${statusLabel}
                                                                                                         <div class="d-flex align-items-center gap-2">
@@ -479,7 +479,7 @@
                                                                                                                 onclick="openTeamModal({{ $repair->id_repair }})"
                                                                                                                 data-repair='@json($repairData)'>
                                                                                                                 <i class="fas fa-eye"></i>
-                                                                                                            </a> 
+                                                                                                            </a>
                                                                                                          </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -818,14 +818,81 @@
                                                             @elseif($data->status == 'canceled')
                                                                 <i class="fa fa-circle text-danger me-1"></i> Canceled
                                                             @elseif($data->status == 'pending')
-                                                                <i class="fa fa-circle text-warning me-1"></i> Pending
-                                                            @endif
+                                                                <div class="py-2 text-center px-3 bg-warning rounded-3 text-white"
+                                                                    style="cursor: pointer;"
+                                                                    data-itemtt-id="{{ $data->id_order_items }}"
+                                                                    data-quantitytt="{{ $data->quantity }}"
+                                                                    data-inventorytt-id="{{ $data->id_inventories }}"
+                                                                    onclick="handleDeleteClick(this)">
+                                                                    <i class="fas fa-undo"></i> Return
+                                                                </div>
+                                                             @endif
                                                         </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    <script>
+                                        async function handleDeleteClick(element) {
+                                            const idOrderItems = element.getAttribute('data-itemtt-id');
+                                            const quantity = element.getAttribute('data-quantitytt');
+                                            const inventoriesId = element.getAttribute('data-inventorytt-id');
+                                            await returnItem(idOrderItems, quantity, inventoriesId, element);
+                                        }
+
+                                        async function returnItem(idOrderItems, quantity, inventoriesId, element) {
+                                            try {
+                                                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                                const response = await fetch(`/return-item`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': csrfToken
+                                                    },
+                                                    body: JSON.stringify({
+                                                        id_order_items: idOrderItems,
+                                                        quantity: quantity,
+                                                        id_inventory: inventoriesId
+                                                    })
+                                                });
+
+                                                if (!response.ok) {
+                                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                                }
+
+                                                const data = await response.json();
+
+                                                if (data.success) {
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Success',
+                                                        text: data.message
+                                                    }).then(() => {
+                                                        const itemRow = element.closest('tr');
+                                                        if (itemRow) {
+                                                            itemRow.remove();
+                                                        }
+                                                    });
+                                                } else {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Error',
+                                                        text: data.error || 'Failed to return the item.'
+                                                    });
+                                                }
+                                            } catch (error) {
+                                                console.error('Error:', error);
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error',
+                                                    text: 'An error occurred while returning the item.'
+                                                });
+                                            }
+                                        }
+                                    </script>
                                     @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
                                         <h6>Barang Yang Ditambahkan:</h6>
                                         <table class="table table-bordered" id="tableadd-{{ $item->id_orders }}">
@@ -873,30 +940,28 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($items as $getItem)
-                                                       
-                                                                    <tr>
-                                                                        <td>{{ $loop->iteration }}</td>
-                                                                        <td>
-                                                                            <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50">
-                                                                        </td>
-                                                                        <td>{{ $getItem->item_name }}</td>
-                                                                        <td>{{ $getItem->quantity }}</td>
-                                                                        <td>
-                                                                            <div class="shopping-cart">
-                                                                                <a class="btn btn-primary"
-                                                                                    href="javascript:void(0);"
-                                                                                    data-order-id="{{ $item->id_orders }}"
-                                                                                    data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                                    onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                                    <i
-                                                                                        class="fa fa-shopping-basket me-2"></i>
-                                                                                    Save
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                             @endforeach
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </td>
+                                                                    <td>{{ $getItem->item_name }}</td>
+                                                                    <td>{{ $getItem->quantity }}</td>
+                                                                    <td>
+                                                                        <div class="shopping-cart">
+                                                                            <a class="btn btn-primary"
+                                                                                href="javascript:void(0);"
+                                                                                data-order-id="{{ $item->id_orders }}"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                <i class="fa fa-shopping-basket me-2"></i>
+                                                                                Save
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
