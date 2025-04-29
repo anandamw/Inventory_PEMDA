@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AuthController extends Controller
@@ -32,27 +33,19 @@ class AuthController extends Controller
     // login
     public function scanQrCode(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'token' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Token tidak boleh kosong.'
-            ], 400);
-        }
 
         $token = $request->input('token');
-
-        // Cari user berdasarkan token
         $user = User::where('token', $token)->first();
+
 
         if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Token tidak valid atau pengguna tidak ditemukan.'
+                'message' => 'Anda tidak terdaftar.'
             ], 401);
         }
 
@@ -64,11 +57,11 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // Jika berhasil login
         Auth::login($user);
 
         // Redirect berdasarkan role
         $role = $user->role;
-
         switch ($role) {
             case 'admin':
                 $redirectUrl = route('home');
@@ -80,7 +73,6 @@ class AuthController extends Controller
                 $redirectUrl = route('teamHome');
                 break;
             default:
-
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Role pengguna tidak valid.'
@@ -93,7 +85,6 @@ class AuthController extends Controller
             'redirect_url' => $redirectUrl
         ]);
     }
-
 
     public function register_action(Request $request)
     {

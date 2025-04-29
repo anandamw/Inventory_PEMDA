@@ -60,13 +60,16 @@
                                 <button class="btn btn-success px-4 py-2 rounded-pill shadow-sm" onclick="exportToExcel()">
                                     <i class="bi bi-file-earmark-excel"></i> Export to Excel
                                 </button>
-                                <select id="filterSelect" class="form-select rounded-pill ps-4 shadow-sm" style="width: 170px;">
-                                    <option value="month" selected>This Month</option>
+                                <select id="filterSelect" class="form-select rounded-pill ps-4 shadow-sm"
+                                    style="width: 170px;">
+                                    <option selected disabled>Filter Date</option>
+                                    <option value="month">This Month</option>
                                     <option value="week">Last 7 Days</option>
                                     <option value="day">Today</option>
                                 </select>
-                                   <!-- Input untuk memilih bulan (disembunyikan awalnya) -->
-                                   <input type="month" id="monthPicker" class="form-control rounded-pill shadow-sm" style="display: none; width: 180px;">
+                                <!-- Input untuk memilih bulan (disembunyikan awalnya) -->
+                                <input type="month" id="monthPicker" class="form-control rounded-pill shadow-sm"
+                                    style="display: none; width: 180px;">
                             </div>
                         </div>
 
@@ -77,9 +80,9 @@
                                     <thead class="text-center">
                                         <tr>
                                             <th class="text-center">Event</th>
-                                            <th class="text-center">Profile</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Date</th>
+                                            <th class="text-center">No Hp</th>
+                                            <th class="text-center">Nama</th>
+                                            <th class="text-center">Tanggal</th>
                                             <th class="text-center">Print</th>
                                             <th class="text-center">Detail</th>
                                         </tr>
@@ -88,11 +91,9 @@
                                         @foreach ($orders as $item)
                                             <tr>
                                                 <td>{{ $item->events }}</td>
-                                                <td>
-                                                    <img src="{{ $item->profile ? asset($item->profile) : asset('assets/images/no-profile.jpg') }}"
-                                                        width="50" alt="Profil">
-                                                </td>
-                                                <td>{{ $item->user->name }}</td>
+                                                <td>{{ $item->phone }}</td>
+
+                                                <td>{{ $item->name }}</td>
                                                 <td>{{ $item->created_at }}</td>
                                                 <td class="text-center d-flex justify-content-center align-items-center">
                                                     <a href="javascript:void(0)"
@@ -212,9 +213,9 @@
                             </div>
                             <hr>
                             <h5 class="fw-bold mb-2">Detail Pengambilan</h5>
-                            <p class="mb-1"><strong>NAMA:</strong> {{ $item->user->name }}</p>
-                            <p class="mb-1"><strong>NIP:</strong> {{ $item->user->nip }}</p>
-                            <p class="mb-5"><strong>TANGGAL:</strong> {{ $item->created_at->translatedFormat('d F Y') }}
+                            <p class="mb-1"><strong>NAMA:</strong> {{ $item->name }}</p>
+                            <p class="mb-1"><strong>NIP:</strong> {{ $item->nip }}</p>
+                            <p class="mb-5"><strong>TANGGAL:</strong> {{ $item->created_at }}
                             </p>
                         </div>
                     </div>
@@ -326,56 +327,95 @@ display: none;">
     </script>
 
     <script>
-        function exportToExcel() {
-            let filterValue = document.getElementById("filterSelect").value;
-            let loadingOverlay = document.getElementById("loading-overlay");
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("rekaptable");
+            const searchInput = document.getElementById("tableSearch");
+            const filterSelect = document.getElementById("filterSelect");
+            const monthPicker = document.getElementById("monthPicker");
 
-            // Tampilkan animasi loading
-            loadingOverlay.style.display = "flex";
 
-            fetch(`/fetch-orders/${filterValue}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        alert("Tidak ada data yang sesuai dengan filter yang dipilih.");
-                        loadingOverlay.style.display = "none"; // Sembunyikan loading
-                        return;
-                    }
 
-                    let wb = XLSX.utils.book_new();
-                    let wsData = [];
+            // Event listener untuk filter select
+            filterSelect.addEventListener("change", function() {
+                if (this.value === "month") {
+                    monthPicker.style.display = "block";
+                } else {
+                    monthPicker.style.display = "none";
+                }
+            });
 
-                    // Header
-                    wsData.push(["Nama User", "Event", "No. HP", "Item", "Jumlah", "Status", "Tanggal Order"]);
-
-                    // Data
-                    data.forEach(order => {
-                        wsData.push([
-                            order.user_name,
-                            order.events,
-                            order.phone,
-                            order.item_name,
-                            order.quantity,
-                            order.status.charAt(0).toUpperCase() + order.status.slice(1),
-                            new Date(order.created_at).toISOString().split('T')[0]
-                        ]);
-                    });
-
-                    // Buat worksheet dan tambahkan ke workbook
-                    let ws = XLSX.utils.aoa_to_sheet(wsData);
-                    XLSX.utils.book_append_sheet(wb, ws, "Rekapitulasi Order");
-
-                    // Simpan file
-                    XLSX.writeFile(wb, "rekapitulasi_order.xlsx");
-
-                    // Sembunyikan loading setelah proses selesai
-                    loadingOverlay.style.display = "none";
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                    alert("Gagal mengekspor data!");
-                    loadingOverlay.style.display = "none";
+            // Event listener untuk input bulan
+            monthPicker.addEventListener("change", function() {
+                const selectedMonth = this.value;
+                dataTable.filter((row) => {
+                    const date = new Date(row.cells[3].innerText);
+                    return date.toISOString().startsWith(selectedMonth);
                 });
+            });
+        });
+
+        function exportToExcel() {
+            const table = document.getElementById("rekaptable");
+            const clonedTable = table.cloneNode(true);
+
+            // Remove the "Print" and "Detail" columns
+            const headers = clonedTable.querySelectorAll("thead th");
+            const rows = clonedTable.querySelectorAll("tbody tr");
+
+            headers[4].remove(); // Remove "Print" column
+            headers[5].remove(); // Remove "Detail" column
+
+            rows.forEach(row => {
+            row.children[4].remove(); // Remove "Print" column data
+            row.children[4].remove(); // Remove "Detail" column data (index shifts after removal)
+            });
+
+            const workbook = XLSX.utils.table_to_book(clonedTable, {
+            sheet: "Sheet1"
+            });
+            XLSX.writeFile(workbook, "rekapitulasi.xlsx");
+        }
+        // Fungsi untuk menampilkan loading overlay
+        function showLoading() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+        // Fungsi untuk menyembunyikan loading overlay
+        function hideLoading() {
+            document.getElementById("loading-overlay").style.display = "none";
+        }
+        // Event listener untuk tombol filter
+        document.getElementById("filterSelect").addEventListener("change", function() {
+            const selectedValue = this.value;
+            const table = document.getElementById("rekaptable");
+            const rows = table.querySelectorAll("tbody tr");
+            const today = new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            rows.forEach(row => {
+                const dateCell = row.querySelector("td:nth-child(4)");
+                const dateText = dateCell.innerText;
+                const dateParts = dateText.split(" ");
+                const date = new Date(dateParts[2], getMonthNumber(dateParts[1]), dateParts[0]);
+                if (selectedValue === "day" && date.toDateString() === today.toDateString()) {
+                    row.style.display = "";
+                } else if (selectedValue === "week" && date >= sevenDaysAgo && date <= today) {
+                    row.style.display = "";
+                } else if (selectedValue === "month" && date >= monthStart && date <= monthEnd) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+        // Fungsi untuk mengonversi nama bulan menjadi angka
+        function getMonthNumber(monthName) {
+            const monthNames = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
+            return monthNames.indexOf(monthName);
         }
     </script>
 @endsection

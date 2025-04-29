@@ -126,78 +126,79 @@
                         @endif
 
                         @if (auth()->user()->role == 'admin')
-                        <div class="card h-auto shadow-lg border-0 rounded-4">
-                            <div class="card-body px-2 pt-2 mt-2"> <!-- Mengurangi padding pada card-body -->
-                                <nav class="buy-sell">
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <button class="nav-link active fw-bold" id="nav-item-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-item" type="button" role="tab"
-                                            aria-controls="nav-item" aria-selected="true">Data Item</button>
-                                        <button class="nav-link fw-bold" id="nav-team-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-team" type="button" role="tab"
-                                            aria-controls="nav-team" aria-selected="false">Data Team</button>
-                                    </div>
-                                </nav>
+                            <div class="card h-auto shadow-lg border-0 rounded-4">
+                                <div class="card-body px-2 pt-2 mt-2"> <!-- Mengurangi padding pada card-body -->
+                                    <nav class="buy-sell">
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <button class="nav-link active fw-bold" id="nav-item-tab" data-bs-toggle="tab"
+                                                data-bs-target="#nav-item" type="button" role="tab"
+                                                aria-controls="nav-item" aria-selected="true">Data Item</button>
+                                            <button class="nav-link fw-bold" id="nav-team-tab" data-bs-toggle="tab"
+                                                data-bs-target="#nav-team" type="button" role="tab"
+                                                aria-controls="nav-team" aria-selected="false">Data Team</button>
+                                        </div>
+                                    </nav>
 
-                                <div class="tab-content mt-2 p-0" id="nav-tabContent">
-                                    <!-- TAB 1: DATA ITEM -->
-                                    <div class="tab-pane fade show active" id="nav-item" role="tabpanel"
-                                        aria-labelledby="nav-item-tab">
-                                        <div class="card-body pt-0 pb-1"> <!-- Mengurangi padding bawah -->
-                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
-                                                <!-- Mengurangi max-height -->
-                                                <table class="table table-sell verticle-middle mb-0">
-                                                    <thead
-                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
-                                                        <tr class="text-white">
-                                                            <th scope="col">Code</th>
-                                                            <th class="text-center" scope="col">Item</th>
-                                                            <th class="text-end" scope="col">Stok</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($dataItem as $item)
-                                                            <tr class="text-primary hover-shadow">
-                                                                <td>{{ $item->code_item }}</td>
-                                                                <td class="text-center">{{ $item->item_name }}</td>
-                                                                <td class="text-end">{{ $item->quantity }}</td>
+                                    <div class="tab-content mt-2 p-0" id="nav-tabContent">
+                                        <!-- TAB 1: DATA ITEM -->
+                                        <div class="tab-pane fade show active" id="nav-item" role="tabpanel"
+                                            aria-labelledby="nav-item-tab">
+                                            <div class="card-body pt-0 pb-1"> <!-- Mengurangi padding bawah -->
+                                                <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                                    <!-- Mengurangi max-height -->
+                                                    <table class="table table-sell verticle-middle mb-0">
+                                                        <thead
+                                                            style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                            <tr class="text-white">
+                                                                <th scope="col">Code</th>
+                                                                <th class="text-center" scope="col">Item</th>
+                                                                <th class="text-end" scope="col">Stok</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($dataItem as $item)
+                                                                <tr class="text-primary hover-shadow">
+                                                                    <td>{{ $item->code_item }}</td>
+                                                                    <td class="text-center">{{ $item->item_name }}</td>
+                                                                    <td class="text-end">{{ $item->quantity }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- TAB 2: DATA TEAM -->
-                                    <div class="tab-pane fade" id="nav-team" role="tabpanel"
-                                        aria-labelledby="nav-team-tab">
-                                        <div class="card-body pt-0 pb-1">
-                                            <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
-                                                <!-- Mengurangi max-height -->
-                                                <table class="table table-sell verticle-middle mb-0">
-                                                    <thead
-                                                        style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
-                                                        <tr class="text-white">
-                                                            <th scope="col">Nama</th>
-                                                            <th class="text-end" scope="col">Repair</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($jobCountPerUser as $user)
-                                                            <tr class="text-primary hover-shadow">
-                                                                <td>{{ $user->name }}</td>
-                                                                <td class="text-end">{{ $user->total_jobs }}</td>
+                                        <!-- TAB 2: DATA TEAM -->
+                                        <div class="tab-pane fade" id="nav-team" role="tabpanel"
+                                            aria-labelledby="nav-team-tab">
+                                            <div class="card-body pt-0 pb-1">
+                                                <div class="table-responsive"
+                                                    style="max-height: 180px; overflow-y: auto;">
+                                                    <!-- Mengurangi max-height -->
+                                                    <table class="table table-sell verticle-middle mb-0">
+                                                        <thead
+                                                            style="position: sticky; top: 0; background-color: var(--primary); z-index: 2; border-radius: 10px;">
+                                                            <tr class="text-white">
+                                                                <th scope="col">Nama</th>
+                                                                <th class="text-end" scope="col">Repair</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($jobCountPerUser as $user)
+                                                                <tr class="text-primary hover-shadow">
+                                                                    <td>{{ $user->name }}</td>
+                                                                    <td class="text-end">{{ $user->total_jobs }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div> <!-- /.tab-content -->
+                                    </div> <!-- /.tab-content -->
+                                </div>
                             </div>
-                        </div>
                         @endif
 
                         @if (auth()->user()->role == 'admin')
@@ -328,6 +329,10 @@
                                 </div>
 
                             </div>
+                            {{-- <script>
+                                function fetchRepairs() {
+                                    $.ajax({
+                                        url: '{{ url('/repair/realtime') }}',
 
 
 
@@ -547,9 +552,9 @@
                                                                                                     <div class="media-body">
                                                                                                         <h5 class="mb-1 fw-bold">${data.user.name}</h5>
                                                                                                         ${data.scheduled_date ? `<small class="d-block text-success fw-bold">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                On ${data.scheduled_date}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </small>` : ''}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        On ${data.scheduled_date}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        by <span class="text-danger">${data.admin?.name ?? 'Unknown Admin'}</span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </small>` : ''}
                                                                                                         <p class="mb-1">${data.repair}</p>
                                                                                                         ${statusLabel}
                                                                                                         <div class="d-flex align-items-center gap-2">
@@ -560,7 +565,7 @@
                                                                                                                 onclick="openTeamModal({{ $repair->id_repair }})"
                                                                                                                 data-repair='@json($repairData)'>
                                                                                                                 <i class="fas fa-eye"></i>
-                                                                                                            </a> 
+                                                                                                            </a>
                                                                                                          </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -899,7 +904,14 @@
                                                             @elseif($data->status == 'canceled')
                                                                 <i class="fa fa-circle text-danger me-1"></i> Canceled
                                                             @elseif($data->status == 'pending')
-                                                                <i class="fa fa-circle text-warning me-1"></i> Pending
+                                                                <div class="py-2 text-center px-3 bg-warning rounded-3 text-white"
+                                                                    style="cursor: pointer;"
+                                                                    data-itemtt-id="{{ $data->id_order_items }}"
+                                                                    data-quantitytt="{{ $data->quantity }}"
+                                                                    data-inventorytt-id="{{ $data->id_inventories }}"
+                                                                    onclick="handleDeleteClick(this)">
+                                                                    <i class="fas fa-undo"></i> Return
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     </td>
@@ -907,6 +919,66 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+
+                                    <script>
+                                        async function handleDeleteClick(element) {
+                                            const idOrderItems = element.getAttribute('data-itemtt-id');
+                                            const quantity = element.getAttribute('data-quantitytt');
+                                            const inventoriesId = element.getAttribute('data-inventorytt-id');
+                                            await returnItem(idOrderItems, quantity, inventoriesId, element);
+                                        }
+
+                                        async function returnItem(idOrderItems, quantity, inventoriesId, element) {
+                                            try {
+                                                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                                const response = await fetch(`/return-item`, {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': csrfToken
+                                                    },
+                                                    body: JSON.stringify({
+                                                        id_order_items: idOrderItems,
+                                                        quantity: quantity,
+                                                        id_inventory: inventoriesId
+                                                    })
+                                                });
+
+                                                if (!response.ok) {
+                                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                                }
+
+                                                const data = await response.json();
+
+                                                if (data.success) {
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Success',
+                                                        text: data.message
+                                                    }).then(() => {
+                                                        const itemRow = element.closest('tr');
+                                                        if (itemRow) {
+                                                            itemRow.remove();
+                                                        }
+                                                    });
+                                                } else {
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Error',
+                                                        text: data.error || 'Failed to return the item.'
+                                                    });
+                                                }
+                                            } catch (error) {
+                                                console.error('Error:', error);
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error',
+                                                    text: 'An error occurred while returning the item.'
+                                                });
+                                            }
+                                        }
+                                    </script>
                                     @if ($orderItem->where('orders_id', $item->id_orders)->where('status', '!=', 'success')->count() > 0)
                                         <h6>Barang Yang Ditambahkan:</h6>
                                         <table class="table table-bordered" id="tableadd-{{ $item->id_orders }}">
@@ -954,30 +1026,28 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($items as $getItem)
-                                                       
-                                                                    <tr>
-                                                                        <td>{{ $loop->iteration }}</td>
-                                                                        <td>
-                                                                            <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
-                                                                                alt="Item Image" width="50">
-                                                                        </td>
-                                                                        <td>{{ $getItem->item_name }}</td>
-                                                                        <td>{{ $getItem->quantity }}</td>
-                                                                        <td>
-                                                                            <div class="shopping-cart">
-                                                                                <a class="btn btn-primary"
-                                                                                    href="javascript:void(0);"
-                                                                                    data-order-id="{{ $item->id_orders }}"
-                                                                                    data-inventory-id="{{ $getItem->id_inventories }}"
-                                                                                    onclick="updateItems({{ $item->id_orders }}, this)">
-                                                                                    <i
-                                                                                        class="fa fa-shopping-basket me-2"></i>
-                                                                                    Save
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                             @endforeach
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <img src="{{ $getItem->img_item ? asset('uploads/items/' . $getItem->img_item) : asset('assets/images/no-image.png') }}"
+                                                                            alt="Item Image" width="50">
+                                                                    </td>
+                                                                    <td>{{ $getItem->item_name }}</td>
+                                                                    <td>{{ $getItem->quantity }}</td>
+                                                                    <td>
+                                                                        <div class="shopping-cart">
+                                                                            <a class="btn btn-primary"
+                                                                                href="javascript:void(0);"
+                                                                                data-order-id="{{ $item->id_orders }}"
+                                                                                data-inventory-id="{{ $getItem->id_inventories }}"
+                                                                                onclick="updateItems({{ $item->id_orders }}, this)">
+                                                                                <i class="fa fa-shopping-basket me-2"></i>
+                                                                                Save
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1298,5 +1368,160 @@
         }
     </script>
 
+    <script src="{{ asset('/sw.js') }}"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    console.log("Service worker registration succeeded:", registration);
+                },
+                (error) => {
+                    console.error(`Service worker registration failed: ${error}`);
+                },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
 
+        // Check if the app is installed
+        let deferredPrompt;
+        window.addEventListener("beforeinstallprompt", (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show the modal with animation
+            const modal = document.getElementById("installModal");
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+
+            document.getElementById("installButton").addEventListener("click", () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === "accepted") {
+                            console.log("User accepted the install prompt");
+                        } else {
+                            console.log("User dismissed the install prompt");
+                        }
+                        deferredPrompt = null;
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Modal for Install Prompt -->
+    <!-- Modal for Install Prompt -->
+    <div class="modal fade" id="installModal" tabindex="-1" aria-labelledby="installModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fs-3" id="installModalLabel">Install Our App</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="{{ asset('icon512_rounded.png') }}" alt="App Icon" class="img-fluid mb-3"
+                        style="max-width: 120px;">
+                    <h4>Take Items, Everything Becomes Easier!</h4>
+                    <p class="text-muted">
+                        Website pengambilan barang: Solusi cepat, transparan, dan efisien untuk mengelola dan mempermudah
+                        proses pengambilan barang milik instansi, dengan fitur pelacakan dan pengajuan yang mudah diakses.
+                    </p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-primary px-5 py-2" id="installButton">Install</button>
+                    <button type="button" class="btn btn-outline-secondary px-5 py-2"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Custom Modal Styling */
+        #installModal .modal-content {
+            border-radius: 20px;
+            /* More rounded corners */
+            background-color: #f9f9f9;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            /* Soft shadow */
+        }
+
+        #installModal .modal-header {
+            background-color: #f0f8ff;
+            /* Light blue background */
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+            /* More padding for modern spacing */
+        }
+
+        #installModal .modal-title {
+            font-size: 1.75rem;
+            /* Larger title for better readability */
+            color: #333;
+            /* Darker color for the title */
+            font-weight: bold;
+        }
+
+        #installModal .modal-body {
+            padding: 2rem 2.5rem;
+            /* More spacious padding */
+            text-align: center;
+        }
+
+        #installModal .modal-body p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        #installButton {
+            background-color: #0069d9;
+            border-color: #0069d9;
+            transition: background-color 0.3s, transform 0.3s ease-in-out;
+            border-radius: 50px;
+            /* Round button */
+        }
+
+        #installButton:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+            transform: translateY(-2px);
+            /* Subtle hover animation */
+        }
+
+        #installButton:focus {
+            outline: none;
+        }
+
+        #installModal .modal-footer .btn {
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1rem;
+        }
+
+        #installModal .btn-outline-secondary {
+            border: 2px solid #ddd;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #installModal .btn-outline-secondary:hover {
+            background-color: #f0f8ff;
+            color: #0069d9;
+        }
+
+        /* Add some responsive behavior for small screens */
+        @media (max-width: 576px) {
+            #installModal .modal-dialog {
+                margin: 20px;
+            }
+
+            #installModal .modal-content {
+                border-radius: 15px;
+                /* Less rounded corners on small screens */
+            }
+        }
+    </style>
 @endsection

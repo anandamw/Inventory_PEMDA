@@ -21,6 +21,46 @@ use Illuminate\Support\Facades\Validator;
 class DashboardController extends Controller
 {
 
+    public function returnDeleteItem(Request $request)
+    {
+        // Validasi data yang diterima dari frontend
+        $request->validate([
+            'id_order_items' => 'required|exists:order_items,id_order_items', // Pastikan id_order_items ada
+            'quantity' => 'required|integer|min:1', // Pastikan quantity valid
+
+        ]);
+
+        // 1. Cari order item berdasarkan id_order_items
+        $orderItem = OrderItem::find($request->id_order_items);
+
+        if (!$orderItem) {
+            return response()->json(['success' => false, 'error' => 'Order item not found.'], 404);
+        }
+
+        // 2. Hapus data order item
+        $orderItem->delete();
+
+        $idInventory = $orderItem->inventories_id;
+
+        // 3. Tambahkan quantity yang dikembalikan ke inventory
+        $inventory = Inventory::find($idInventory);
+
+        if (!$inventory) {
+            return response()->json(['success' => false, 'error' => 'Inventory not found.'], 404);
+        }
+
+        // Menambahkan quantity yang dikembalikan ke inventory
+        $inventory->increment('quantity', $request->quantity);
+
+        // Mengembalikan response sukses
+        return response()->json([
+            'success' => true,
+            'message' => 'Item berhasil dikembalikan ke inventory!'
+        ]);
+    }
+
+
+
 
     public function updateOrderItems(Request $request)
     {
@@ -232,6 +272,7 @@ class DashboardController extends Controller
         $orders = DB::table('orders')
             ->join('users', 'orders.users_id', '=', 'users.id')
             ->join('order_items', 'order_items.orders_id', '=', 'orders.id_orders')
+            ->join('inventories', 'order_items.inventories_id', '=', 'inventories.id_inventories')
             ->select(
                 'users.name',
                 'users.nip',
@@ -241,6 +282,7 @@ class DashboardController extends Controller
                 'orders.id_orders',
                 'orders.created_at',
                 'orders.users_id',
+                // 'inventories.id_inventories',
                 DB::raw('MAX(order_items.status) as status')
             )
             ->where('users.role', Auth::user()->role)->groupBy(
@@ -251,7 +293,8 @@ class DashboardController extends Controller
                 'orders.events',
                 'orders.phone',
                 'orders.created_at',
-                'orders.users_id'
+                'orders.users_id',
+                // 'inventories.id_inventories'
             )
             ->orderByRaw("
         CASE 

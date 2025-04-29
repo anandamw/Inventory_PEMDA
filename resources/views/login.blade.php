@@ -249,6 +249,8 @@
             z-index: 2;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.5/dist/sweetalert2.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -314,19 +316,39 @@
 
                         </datalist>
 
-                        <button type="submit" id="submit-form" class="btn"
-                            style="width: 50%; background-color:#008B8B; color:white; border-radius:50;">Submit</button>
-                        <div id="back-to-qr" class="btn-back btn"
-                            style="width: 50%; background-color:#be0000; color:white; border-radius:50;">Back to
+                        <button type="submit" id="submit-form" class="btn animated-btn"
+                            style=" width: 50%; color: #e2e2e2;  font-weight: bold; background: linear-gradient(90deg, #008B8B, #59dede, #008B8B); background-size: 200% 100%; animation: gradient-animation 3s infinite;">Submit</button>
+                        <div id="back-to-qr" class="btn-back btn animated-btn"
+                            style=" width: 50%; color: #e2e2e2;  font-weight: bold; background: linear-gradient(90deg, #8b1500, #de5959, #8b1500); background-size: 200% 100%; animation: gradient-animation 3s infinite;">
+                            Back to
                             QR</div>
+
+
                     </div>
                 </form> <!-- Tambahkan tempat untuk menampilkan pesan -->
                 <div id="message" style="color: white; text-align: center; margin-top: 10px;"></div>
 
                 <!-- Tombol untuk mengganti tampilan -->
                 <div class="mt-5">
-                    <button id="get-qr" class="btn btn-light border-4 col-6 mt-0" style="color: #008B8B;">Get
+                    <button id="get-qr" class="btn btn-light border-4 col-6 mt-0"
+                        style="color: #e2e2e2;  font-weight: bold; background: linear-gradient(90deg, #008B8B, #59dede, #008B8B); background-size: 200% 100%; animation: gradient-animation 3s infinite;">Get
                         QR</button>
+
+                    <style>
+                        @keyframes gradient-animation {
+                            0% {
+                                background-position: 0% 50%;
+                            }
+
+                            50% {
+                                background-position: 100% 50%;
+                            }
+
+                            100% {
+                                background-position: 0% 50%;
+                            }
+                        }
+                    </style>
                 </div>
             </div>
         </div>
@@ -335,6 +357,7 @@
     <!-- jQuery UI (untuk Autocomplete) -->
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.5/dist/sweetalert2.all.min.js"></script>
 
     <script>
         $(function() {
@@ -422,29 +445,34 @@
                                 token: token,
                                 _token: $('meta[name="csrf-token"]').attr('content')
                             },
-                            beforeSend: function() {
-                                console.log("📡 Sending token to server...");
-                            },
+
                             success: function(response) {
-                                console.log("✅ Server Response: ", response);
-                                if (response.redirect_url) {
-                                    console.log("🔗 Redirecting to:", response.redirect_url);
+                                console.log(response);
+                                if (response.status === "success" && response.redirect_url) {
                                     window.location.href = response.redirect_url;
                                 } else {
-                                    console.log("⚠️ No redirection URL provided.");
-                                    $("#qr-reader-results").append(
-                                        "<br><span class='text-warning'>No redirection URL provided.</span>"
-                                    );
+
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Informasi',
+                                        text: 'Anda belum Terdaftar.'
+                                    });
                                 }
                             },
                             error: function(xhr) {
-                                console.error("❌ AJAX Error:", xhr);
+
                                 var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
                                     "Unknown error occurred.";
-                                $("#qr-reader-results").append(
-                                    "<br><span class='text-danger'>Error: " + errorMessage +
-                                    "</span>"
-                                );
+
+                                // Menampilkan pesan error dengan SweetAlert
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal Login',
+                                    text: errorMessage, // Pesan error dari response
+                                });
+
+                                // Jika tidak menggunakan SweetAlert, tampilkan pesan di div
+                                $("#message").text(errorMessage).css("color", "red").show();
                             }
                         });
                     } else {
