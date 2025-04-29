@@ -144,7 +144,7 @@
             <div class="copyright">
                 <p>
                     Copyright © Developed by
-                    <a href="https://mywebsite-fri.vercel.app/" target="_blank">FriemZ </a>&
+                    <a href="https://mywebsite-friemz.turbo-main.com/" target="_blank">FriemZ </a>&
                     <a href="https://anandamw.turbo-main.com/" target="_blank">Anandamw</a>
                     2025
                 </p>

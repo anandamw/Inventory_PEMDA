@@ -11,12 +11,8 @@
 <link href="{{ asset('') }}assets/vendor/nouislider/nouislider.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
-<<<<<<< HEAD
- 
-=======
 
 
->>>>>>> b0b73e9936fa16be3695b774f94ebeaf9106d829
 <style>
     .dataTables_wrapper .dataTables_paginate .paginate_button {
         padding: 5px 10px;
