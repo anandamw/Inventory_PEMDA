@@ -329,11 +329,7 @@
                                 </div>
 
                             </div>
-                            {{-- <script>
-                                function fetchRepairs() {
-                                    $.ajax({
-                                        url: '{{ url('/repair/realtime') }}',
-
+                          
 
 
 
